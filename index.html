@@ -73,6 +73,32 @@
             box-shadow: 0 5px 20px rgba(229, 9, 20, 0.3);
         }
 
+        /* Slideshow Styles */
+        .slide-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            z-index: 0;
+        }
+        .slide-image.active {
+            opacity: 1;
+        }
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7); /* Darkens images so text is readable */
+            background: linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.8) 100%);
+            z-index: 1;
+        }
+
         /* Utility */
         .hidden-section {
             display: none !important;
@@ -98,7 +124,7 @@
 <body class="flex flex-col min-h-screen">
 
     <!-- NAVIGATION -->
-    <nav class="w-full bg-black border-b border-gray-900 sticky top-0 z-50">
+    <nav class="w-full bg-black/90 backdrop-blur-sm border-b border-gray-900 sticky top-0 z-50">
         <div class="container mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center">
             <!-- LOGO TEXT -->
             <div class="text-2xl font-black tracking-widest text-red-600 cursor-pointer mb-4 md:mb-0" onclick="navigateTo('home')">
@@ -136,17 +162,28 @@
 
         <!-- 1. HOME SECTION -->
         <div id="section-home" class="animate-fade-in">
-            <!-- Hero -->
-            <div class="flex flex-col items-center justify-center py-32 text-center mb-8">
-                <h1 class="text-6xl md:text-8xl font-black mb-6 text-white tracking-tighter">
-                    APNA <span class="text-red-600">ADDA</span>
-                </h1>
-                <p class="text-xl md:text-2xl text-gray-400 font-light tracking-wide max-w-2xl mx-auto mb-10">
-                    Technology for Everyday Growth.
-                </p>
-                <button onclick="scrollToHomeApps()" class="px-8 py-4 bg-transparent border-2 border-red-600 text-red-600 font-bold rounded-full hover:bg-red-600 hover:text-white transition transform hover:scale-105">
-                    EXPLORE APPS
-                </button>
+            
+            <!-- HERO WITH SLIDESHOW -->
+            <div class="relative w-full rounded-2xl overflow-hidden mb-8 border border-gray-800">
+                <!-- Background Slideshow -->
+                <div id="heroSlideshow" class="absolute inset-0 w-full h-full bg-gray-900">
+                    <!-- Slides injected via JS -->
+                </div>
+                <!-- Dark Overlay -->
+                <div class="hero-overlay"></div>
+
+                <!-- Hero Content -->
+                <div class="relative z-10 flex flex-col items-center justify-center py-32 text-center px-4">
+                    <h1 class="text-6xl md:text-8xl font-black mb-6 text-white tracking-tighter drop-shadow-2xl">
+                        APNA <span class="text-red-600">ADDA</span>
+                    </h1>
+                    <p class="text-xl md:text-2xl text-gray-200 font-light tracking-wide max-w-2xl mx-auto mb-10 drop-shadow-md">
+                        Technology for Everyday Growth.
+                    </p>
+                    <button onclick="scrollToHomeApps()" class="px-8 py-4 bg-red-600/20 backdrop-blur-md border-2 border-red-600 text-white font-bold rounded-full hover:bg-red-600 transition transform hover:scale-105 shadow-lg">
+                        EXPLORE APPS
+                    </button>
+                </div>
             </div>
 
             <!-- Home Page Apps Grid -->
@@ -245,7 +282,113 @@
             </div>
         </div>
 
-        <!-- 5. LOGIN / SIGNUP SECTION -->
+        <!-- 5. PRIVACY POLICY SECTION -->
+        <div id="section-privacy" class="hidden-section animate-fade-in">
+            <div class="max-w-4xl mx-auto bg-gray-900 border border-gray-800 rounded-lg p-8 md:p-12 shadow-2xl">
+                <h2 class="text-3xl font-bold mb-6 text-red-600 border-b border-gray-700 pb-4">Privacy Policy</h2>
+                
+                <div class="text-gray-300 leading-relaxed space-y-6">
+                    <p class="text-sm text-gray-500 font-bold">Effective Date: 07 DECEMBER 2025</p>
+
+                    <p>
+                        APNA ADDA (“we,” “our,” or “us”) respects your privacy and is committed to protecting the personal information of users who visit our website and use our applications and services. This Privacy Policy explains how we collect, use, disclose, and safeguard your information.
+                    </p>
+                    <p>
+                        By using our website or services, you agree to the terms of this Privacy Policy.
+                    </p>
+
+                    <div>
+                        <h3 class="text-xl font-bold text-white mb-2">1. Information We Collect</h3>
+                        <p class="mb-2">We may collect the following types of information:</p>
+                        <ul class="list-disc pl-5 space-y-1 text-gray-400">
+                            <li><strong>Personal Information:</strong> When you contact us or use certain features, we may collect Name and Email address.</li>
+                            <li><strong>Non-Personal Information:</strong> Usage data and analytics.</li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h3 class="text-xl font-bold text-white mb-2">2. How We Use Your Information</h3>
+                        <p class="mb-2">We use the collected information to:</p>
+                        <ul class="list-disc pl-5 space-y-1 text-gray-400">
+                            <li>Provide and maintain our services</li>
+                            <li>Improve our applications and user experience</li>
+                            <li>Respond to user inquiries and support requests</li>
+                            <li>Send important updates</li>
+                            <li>Ensure security and prevent misuse</li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h3 class="text-xl font-bold text-white mb-2">3. Sharing of Information</h3>
+                        <p>
+                            We do not sell, trade, or rent your personal information to others. We may share information only in the following cases:
+                        </p>
+                        <ul class="list-disc pl-5 space-y-1 text-gray-400 mt-2">
+                            <li>With trusted service providers who assist in operating our services</li>
+                            <li>When required by law or legal process</li>
+                            <li>To protect the rights, property, or safety of APNA ADDA and its users</li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h3 class="text-xl font-bold text-white mb-2">4. Data Security</h3>
+                        <p>
+                            We implement reasonable security measures to protect your personal information from unauthorized access, alteration, disclosure, or destruction. However, no digital system is completely secure, and we cannot guarantee absolute security.
+                        </p>
+                    </div>
+
+                    <div>
+                        <h3 class="text-xl font-bold text-white mb-2">5. Your Privacy Rights</h3>
+                        <p>You have the right to:</p>
+                        <ul class="list-disc pl-5 space-y-1 text-gray-400 mt-2">
+                            <li>Access your personal data</li>
+                            <li>Request correction or deletion of your data</li>
+                            <li>Withdraw consent at any time</li>
+                        </ul>
+                        <p class="mt-4">
+                            To exercise these rights, you may contact us via email at <a href="mailto:thepremanshu@gmail.com" class="text-red-500 hover:underline">thepremanshu@gmail.com</a>.
+                        </p>
+                    </div>
+
+                    <div>
+                        <h3 class="text-xl font-bold text-white mb-2">6. Changes to This Privacy Policy</h3>
+                        <p>
+                            We reserve the right to update this Privacy Policy at any time. All updates will be posted on this page with a revised effective date. Continued use of our services means acceptance of the updated policy.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. DISCLAIMER SECTION (NEW) -->
+        <div id="section-disclaimer" class="hidden-section animate-fade-in">
+            <div class="max-w-4xl mx-auto bg-gray-900 border border-gray-800 rounded-lg p-8 md:p-12 shadow-2xl">
+                <h2 class="text-3xl font-bold mb-6 text-red-600 border-b border-gray-700 pb-4">Disclaimer</h2>
+                
+                <div class="text-gray-300 leading-relaxed space-y-6 text-justify">
+                    <p>
+                        The information provided on the APNA ADDA website is for general informational purposes only. While we strive to keep the information accurate, up to date, and reliable, APNA ADDA makes no representations or warranties of any kind, express or implied, about the completeness, accuracy, reliability, suitability, or availability of any information, products, services, or related graphics contained on the website for any purpose. Any reliance you place on such information is strictly at your own risk.
+                    </p>
+                    <p>
+                        APNA ADDA shall not be held liable for any loss or damage, including without limitation indirect or consequential loss or damage, arising out of or in connection with the use of this website or its applications.
+                    </p>
+                    <p>
+                        Through this website, you may be able to link to other websites which are not under the control of APNA ADDA. We have no control over the nature, content, and availability of those sites. The inclusion of any links does not necessarily imply a recommendation or endorse the views expressed within them.
+                    </p>
+                    <p>
+                        APNA ADDA does not guarantee that the website and its services will be available at all times or that they will be free from errors, viruses, or other harmful components. We reserve the right to modify, suspend, or discontinue any part of the website or its services at any time without prior notice.
+                    </p>
+                    <p>
+                        All content, logos, application names, and intellectual property displayed on this website are the property of APNA ADDA unless otherwise stated. Unauthorized use, copying, or distribution of any material from this website is strictly prohibited.
+                    </p>
+                    <p class="font-bold text-white">
+                        By using this website, you hereby consent to this disclaimer and agree to its terms.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 7. LOGIN / SIGNUP SECTION -->
         <div id="section-login" class="hidden-section flex justify-center items-center h-full py-10">
             <div class="bg-gray-900 p-8 rounded-lg border border-red-900/30 shadow-2xl w-full max-w-md animate-fade-in">
                 <h2 class="text-3xl font-bold text-center mb-2 text-white">Welcome</h2>
@@ -273,7 +416,7 @@
             </div>
         </div>
 
-        <!-- 6. ADMIN DASHBOARD (Protected) -->
+        <!-- 8. ADMIN DASHBOARD (Protected) -->
         <div id="section-admin" class="hidden-section">
             <div class="flex justify-between items-center mb-8 border-b border-gray-800 pb-4">
                 <h2 class="text-2xl font-bold text-white">Admin Dashboard</h2>
@@ -281,8 +424,8 @@
             </div>
 
             <!-- Dashboard Content Grid -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <!-- Add Form -->
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+                <!-- 1. Add/Edit App Form -->
                 <div class="lg:col-span-1 bg-gray-900 p-6 rounded-lg border border-gray-800 h-fit">
                     <h3 id="formTitle" class="text-lg font-bold text-white mb-4">Add / Edit App</h3>
                     <form id="appForm" onsubmit="handleAppSubmit(event)">
@@ -310,7 +453,22 @@
                     </form>
                 </div>
 
-                <!-- List -->
+                <!-- 2. Manage Slideshow Form -->
+                <div class="lg:col-span-1 bg-gray-900 p-6 rounded-lg border border-gray-800 h-fit">
+                    <h3 class="text-lg font-bold text-white mb-4">Manage Slideshow</h3>
+                    <div class="mb-4">
+                        <label class="text-xs text-gray-400 block mb-1">Upload Hero Image</label>
+                        <input type="file" id="slideUploadInput" class="w-full text-xs text-gray-400 mb-2" accept="image/*">
+                        <button onclick="uploadSlide()" class="w-full bg-red-600 text-white font-bold py-2 rounded hover:bg-red-700 text-sm">Upload Slide</button>
+                    </div>
+                    <hr class="border-gray-700 my-4">
+                    <h4 class="text-sm font-bold text-gray-400 mb-2">Current Slides</h4>
+                    <div id="adminSlidesList" class="space-y-2 max-h-60 overflow-y-auto">
+                        <!-- List loaded via JS -->
+                    </div>
+                </div>
+
+                <!-- 3. App List -->
                 <div class="lg:col-span-2 bg-gray-900 rounded-lg border border-gray-800 overflow-hidden">
                     <div class="p-4 bg-black border-b border-gray-800"><h3 class="font-bold">App Database</h3></div>
                     <div class="overflow-x-auto">
@@ -326,9 +484,18 @@
     </main>
 
     <!-- FOOTER -->
-    <footer class="bg-black border-t border-gray-900 py-6 text-center mt-auto">
-        <p class="text-gray-500 text-sm">&copy; 2025 APNA ADDA. All Rights Reserved.</p>
-        <p class="text-red-700 text-xs font-bold mt-1">Designed by Premanshu Kumar</p>
+    <footer class="bg-black border-t border-gray-900 py-8 text-center mt-auto">
+        <p class="text-gray-500 text-sm mb-1">&copy; 2025 APNA ADDA. All Rights Reserved.</p>
+        <p class="text-red-700 text-xs font-bold mb-4">Designed by Premanshu Kumar</p>
+        
+        <div class="flex flex-wrap justify-center gap-6 text-xs font-bold">
+            <span onclick="navigateTo('privacy')" class="cursor-pointer text-gray-400 hover:text-red-500 bg-gray-900 px-4 py-2 rounded border border-gray-800 hover:border-red-600 transition">
+                <i class="fas fa-shield-alt mr-1"></i> Privacy Policy
+            </span>
+            <span onclick="navigateTo('disclaimer')" class="cursor-pointer text-gray-400 hover:text-red-500 bg-gray-900 px-4 py-2 rounded border border-gray-800 hover:border-red-600 transition">
+                <i class="fas fa-exclamation-circle mr-1"></i> Disclaimer
+            </span>
+        </div>
     </footer>
 
     <!-- JAVASCRIPT -->
@@ -353,36 +520,32 @@
         // 2. STATE
         const ADMIN_EMAIL = "thepremanshu@gmail.com";
         let allApps = [];
+        let allSlides = []; // Store slideshow images
         let isSignupMode = false;
-        const sections = ['home', 'apps', 'about', 'contact', 'login', 'admin'];
+        let slideInterval = null;
+        
+        // Added 'privacy' and 'disclaimer' to the sections array
+        const sections = ['home', 'apps', 'about', 'contact', 'login', 'admin', 'privacy', 'disclaimer'];
 
-        // 3. TELEGRAM POPUP & INIT
+        // 3. INIT
         window.onload = function() {
-            // Restore last visited section from LocalStorage
+            // Restore last visited section
             const savedSection = localStorage.getItem('apnaAddaCurrentSection') || 'home';
-            
-            // If the saved section is NOT admin, we can go there immediately.
-            // If it IS admin, we wait for the auth observer to handle it to avoid flickering/kicking out.
             if(savedSection !== 'admin') {
                 navigateTo(savedSection, true); 
-            } else {
-                // Show loading or just stay blank until auth decides
-                // For smoother UX, we can default to home temporarily if needed, 
-                // but let's let onAuthStateChanged handle the final routing.
-            }
+            } 
 
+            // Telegram Popup
             setTimeout(() => {
-                // Only show popup if not on admin page
                 const current = localStorage.getItem('apnaAddaCurrentSection');
                 if(current === 'admin') return;
-
                 Swal.fire({
                     title: '<strong style="color:#fff">Join Telegram Channel</strong>',
                     html: '<span style="color:#bbb">Stay updated with latest apps & features!</span>',
                     icon: 'info',
                     background: '#141414',
                     showCancelButton: true,
-                    confirmButtonColor: '#0088cc', // Telegram Blue
+                    confirmButtonColor: '#0088cc',
                     cancelButtonColor: '#333',
                     confirmButtonText: '<i class="fab fa-telegram-plane"></i> Join Now',
                     cancelButtonText: 'Maybe Later'
@@ -395,16 +558,13 @@
             
             // Initial Fetch
             fetchApps();
+            fetchSlides();
         };
 
         // 4. NAVIGATION LOGIC
         function navigateTo(sectionId, isInitialLoad = false) {
-            // If not initial load, save the preference
-            if(!isInitialLoad) {
-                localStorage.setItem('apnaAddaCurrentSection', sectionId);
-            }
+            if(!isInitialLoad) localStorage.setItem('apnaAddaCurrentSection', sectionId);
 
-            // UI updates
             sections.forEach(s => document.getElementById(`section-${s}`).classList.add('hidden-section'));
             document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
 
@@ -412,7 +572,6 @@
             const navLink = document.getElementById(`link-${sectionId}`);
             if (navLink) navLink.classList.add('active');
 
-            // Scroll to top
             window.scrollTo(0, 0);
         }
 
@@ -420,51 +579,34 @@
             document.getElementById('homeAppsContainer').scrollIntoView({ behavior: 'smooth' });
         }
 
-        // 5. AUTH OBSERVER (The Fix)
+        // 5. AUTH OBSERVER
         auth.onAuthStateChanged((user) => {
             const loginBtn = document.getElementById('navLoginBtn');
             const logoutBtn = document.getElementById('navLogoutBtn');
             const dashBtn = document.getElementById('navDashboardBtn');
             
-            // 1. Update Buttons
             if (user) {
                 loginBtn.classList.add('hidden');
                 logoutBtn.classList.remove('hidden');
-                if (user.email === ADMIN_EMAIL) {
-                    dashBtn.classList.remove('hidden');
-                } else {
-                    dashBtn.classList.add('hidden');
-                }
+                if (user.email === ADMIN_EMAIL) dashBtn.classList.remove('hidden');
+                else dashBtn.classList.add('hidden');
             } else {
                 loginBtn.classList.remove('hidden');
                 logoutBtn.classList.add('hidden');
                 dashBtn.classList.add('hidden');
             }
 
-            // 2. Handle Smart Redirection (Persistence Logic)
             const savedSection = localStorage.getItem('apnaAddaCurrentSection');
-            
             if (user) {
-                // User IS logged in
                 if (savedSection === 'login') {
-                    // If they were on login page, move them to Dashboard or Home
                     if(user.email === ADMIN_EMAIL) navigateTo('admin');
                     else navigateTo('home');
                 } else if (savedSection === 'admin') {
-                    // If they were on Admin, verify email
-                    if(user.email === ADMIN_EMAIL) {
-                        navigateTo('admin'); // Allow access
-                    } else {
-                        navigateTo('home'); // Kick out
-                    }
+                    if(user.email === ADMIN_EMAIL) navigateTo('admin');
+                    else navigateTo('home');
                 } 
-                // If savedSection is home/apps/etc, they stay there automatically via window.onload logic
             } else {
-                // User is NOT logged in
-                if (savedSection === 'admin') {
-                    // If they tried to access admin but aren't logged in, kick to login
-                    navigateTo('login');
-                }
+                if (savedSection === 'admin') navigateTo('login');
             }
         });
 
@@ -520,13 +662,13 @@
                 background: '#111', color: '#fff'
             }).then((res) => {
                 if(res.isConfirmed) {
-                    localStorage.setItem('apnaAddaCurrentSection', 'home'); // Reset Nav
+                    localStorage.setItem('apnaAddaCurrentSection', 'home');
                     auth.signOut().then(() => navigateTo('home'));
                 }
             });
         }
 
-        // 7. DATA LOGIC
+        // 7. APP DATA LOGIC
         function fetchApps() {
             db.ref('apps').on('value', (snap) => {
                 const data = snap.val();
@@ -591,24 +733,71 @@
             });
         }
 
-        function renderAdminTable() {
-            const tb = document.getElementById('adminAppsTable');
-            tb.innerHTML = '';
-            allApps.forEach(app => {
-                tb.innerHTML += `
-                    <tr class="border-b border-gray-800">
-                        <td class="p-3">${app.image ? '<span class="text-green-500">Img</span>' : '<span class="text-red-500">No</span>'}</td>
-                        <td class="p-3 text-white">${app.name}</td>
-                        <td class="p-3 text-xs text-gray-400">${app.status}</td>
-                        <td class="p-3 text-right">
-                            <button onclick="editApp('${app.id}')" class="text-blue-400 mr-2"><i class="fas fa-edit"></i></button>
-                            <button onclick="deleteApp('${app.id}')" class="text-red-500"><i class="fas fa-trash"></i></button>
-                        </td>
-                    </tr>`;
+        // 8. SLIDESHOW LOGIC
+        function fetchSlides() {
+            db.ref('slides').on('value', (snap) => {
+                const data = snap.val();
+                allSlides = [];
+                if(data) Object.keys(data).forEach(k => allSlides.push({id: k, image: data[k].image}));
+                renderHeroSlides();
+                renderAdminSlidesList();
             });
         }
 
-        // 8. ADMIN ACTIONS
+        function renderHeroSlides() {
+            const container = document.getElementById('heroSlideshow');
+            container.innerHTML = '';
+            
+            if(allSlides.length === 0) {
+                // Default dark bg if no slides
+                container.style.backgroundColor = '#111';
+                return;
+            }
+
+            allSlides.forEach((slide, index) => {
+                const img = document.createElement('img');
+                img.src = slide.image;
+                img.classList.add('slide-image');
+                if(index === 0) img.classList.add('active');
+                container.appendChild(img);
+            });
+
+            startSlideshow();
+        }
+
+        function startSlideshow() {
+            if(slideInterval) clearInterval(slideInterval);
+            if(allSlides.length < 2) return; // No need to loop if 0 or 1 slide
+
+            let currentIndex = 0;
+            const images = document.querySelectorAll('.slide-image');
+            
+            slideInterval = setInterval(() => {
+                if(images.length === 0) return;
+                images[currentIndex].classList.remove('active');
+                currentIndex = (currentIndex + 1) % images.length;
+                images[currentIndex].classList.add('active');
+            }, 5000); // 5 Seconds
+        }
+
+        function renderAdminSlidesList() {
+            const list = document.getElementById('adminSlidesList');
+            list.innerHTML = '';
+            if(allSlides.length === 0) {
+                list.innerHTML = '<div class="text-xs text-gray-500">No slides uploaded.</div>';
+                return;
+            }
+            allSlides.forEach(slide => {
+                list.innerHTML += `
+                    <div class="flex items-center justify-between bg-black p-2 rounded border border-gray-700">
+                        <img src="${slide.image}" class="h-8 w-12 object-cover rounded">
+                        <button onclick="deleteSlide('${slide.id}')" class="text-red-500 hover:text-red-400 text-xs font-bold">DELETE</button>
+                    </div>
+                `;
+            });
+        }
+
+        // 9. ADMIN ACTIONS
         function toggleStatusFields() {
             const s = document.getElementById('launchStatus').value;
             document.getElementById('dateField').classList.add('hidden');
@@ -646,6 +835,30 @@
             Swal.fire({icon:'success', title:'Saved', background:'#111', color:'#fff', timer:1500, showConfirmButton:false});
         }
 
+        async function uploadSlide() {
+            const file = document.getElementById('slideUploadInput').files[0];
+            if(!file) {
+                Swal.fire({icon:'error', title:'Select an image', background:'#111', color:'#fff'});
+                return;
+            }
+
+            const img64 = await new Promise(r => {
+                const rd = new FileReader(); 
+                rd.onload = () => r(rd.result); 
+                rd.readAsDataURL(file);
+            });
+
+            db.ref('slides').push({ image: img64 });
+            document.getElementById('slideUploadInput').value = '';
+            Swal.fire({icon:'success', title:'Slide Uploaded', background:'#111', color:'#fff', timer:1000, showConfirmButton:false});
+        }
+
+        function deleteSlide(id) {
+            Swal.fire({title:'Delete Slide?', icon:'warning', showCancelButton:true, background:'#111', color:'#fff'}).then(r => {
+                if(r.isConfirmed) db.ref('slides/'+id).remove();
+            });
+        }
+
         function editApp(id) {
             const app = allApps.find(a=>a.id===id);
             if(!app) return;
@@ -659,8 +872,25 @@
         }
 
         function deleteApp(id) {
-            Swal.fire({title:'Delete?', icon:'warning', showCancelButton:true, background:'#111', color:'#fff'}).then(r => {
+            Swal.fire({title:'Delete App?', icon:'warning', showCancelButton:true, background:'#111', color:'#fff'}).then(r => {
                 if(r.isConfirmed) db.ref('apps/'+id).remove();
+            });
+        }
+
+        function renderAdminTable() {
+            const tb = document.getElementById('adminAppsTable');
+            tb.innerHTML = '';
+            allApps.forEach(app => {
+                tb.innerHTML += `
+                    <tr class="border-b border-gray-800">
+                        <td class="p-3">${app.image ? '<span class="text-green-500">Img</span>' : '<span class="text-red-500">No</span>'}</td>
+                        <td class="p-3 text-white">${app.name}</td>
+                        <td class="p-3 text-xs text-gray-400">${app.status}</td>
+                        <td class="p-3 text-right">
+                            <button onclick="editApp('${app.id}')" class="text-blue-400 mr-2"><i class="fas fa-edit"></i></button>
+                            <button onclick="deleteApp('${app.id}')" class="text-red-500"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>`;
             });
         }
 
