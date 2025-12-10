@@ -50,12 +50,17 @@
         /* Navigation Links */
         .nav-link {
             cursor: pointer;
-            padding: 0.5rem 1rem;
+            padding: 0.75rem 1rem;
             transition: color 0.3s ease;
             color: #aaa;
             font-weight: 500;
             font-size: 0.9rem;
+            display: block; /* Block for mobile stacking */
         }
+        @media(min-width: 768px) {
+            .nav-link { display: inline-block; padding: 0.5rem 1rem; }
+        }
+
         .nav-link:hover, .nav-link.active {
             color: var(--primary-red);
             font-weight: 700;
@@ -123,48 +128,58 @@
 </head>
 <body class="flex flex-col min-h-screen">
 
-    <!-- NAVIGATION -->
-    <nav class="w-full bg-black/90 backdrop-blur-sm border-b border-gray-900 sticky top-0 z-50">
-        <div class="container mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center">
-            <!-- LOGO TEXT -->
-            <div class="text-2xl font-black tracking-widest text-red-600 cursor-pointer mb-4 md:mb-0" onclick="navigateTo('home')">
-                APNA ADDA
+    <!-- NAVIGATION (RESPONSIVE) -->
+    <nav class="w-full bg-black/95 backdrop-blur-sm border-b border-gray-900 sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4 flex flex-wrap justify-between items-center">
+            
+            <!-- LOGO -->
+            <div class="flex items-center justify-between w-full md:w-auto">
+                <div class="text-2xl font-black tracking-widest text-red-600 cursor-pointer" onclick="navigateTo('home')">
+                    APNA ADDA
+                </div>
+                
+                <!-- MOBILE MENU BUTTON -->
+                <button id="mobileMenuBtn" class="md:hidden text-white focus:outline-none" onclick="toggleMobileMenu()">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
             </div>
 
-            <!-- Links -->
-            <div class="flex flex-wrap justify-center gap-2 items-center">
-                <span class="nav-link active" id="link-home" onclick="navigateTo('home')">Home</span>
-                <span class="nav-link" id="link-apps" onclick="navigateTo('apps')">Our Apps</span>
-                <span class="nav-link" id="link-about" onclick="navigateTo('about')">About Us</span>
-                <span class="nav-link" id="link-contact" onclick="navigateTo('contact')">Contact Us</span>
+            <!-- LINKS CONTAINER -->
+            <div id="navMenu" class="hidden w-full md:flex md:w-auto md:items-center mt-4 md:mt-0 flex-col md:flex-row gap-2 transition-all duration-300">
+                <span class="nav-link active text-center md:text-left" id="link-home" onclick="navigateTo('home'); toggleMobileMenu(true)">Home</span>
+                <span class="nav-link text-center md:text-left" id="link-apps" onclick="navigateTo('apps'); toggleMobileMenu(true)">Our Apps</span>
+                <span class="nav-link text-center md:text-left" id="link-about" onclick="navigateTo('about'); toggleMobileMenu(true)">About Us</span>
+                <span class="nav-link text-center md:text-left" id="link-contact" onclick="navigateTo('contact'); toggleMobileMenu(true)">Contact Us</span>
                 
-                <!-- Separator -->
-                <div class="h-4 w-px bg-gray-700 mx-2"></div>
+                <!-- Separator (Hidden on mobile) -->
+                <div class="hidden md:block h-4 w-px bg-gray-700 mx-2"></div>
 
-                <!-- Login / Dashboard / Logout -->
-                <button id="navLoginBtn" onclick="navigateTo('login')" class="text-white bg-red-600 hover:bg-red-700 px-4 py-1.5 rounded text-sm font-bold transition">
-                    Login
-                </button>
-                
-                <button id="navDashboardBtn" onclick="navigateTo('admin')" class="hidden text-white bg-gray-800 hover:bg-gray-700 px-4 py-1.5 rounded text-sm transition">
-                    Dashboard
-                </button>
-                
-                <button id="navLogoutBtn" onclick="handleLogout()" class="hidden text-red-500 hover:text-white px-3 py-1.5 text-sm transition font-bold">
-                    Logout
-                </button>
+                <!-- Auth Buttons -->
+                <div class="flex flex-col md:flex-row gap-3 mt-3 md:mt-0 items-center justify-center">
+                    <button id="navLoginBtn" onclick="navigateTo('login'); toggleMobileMenu(true)" class="w-full md:w-auto text-white bg-red-600 hover:bg-red-700 px-6 py-2 md:px-4 md:py-1.5 rounded text-sm font-bold transition">
+                        Login
+                    </button>
+                    
+                    <button id="navDashboardBtn" onclick="navigateTo('admin'); toggleMobileMenu(true)" class="hidden w-full md:w-auto text-white bg-gray-800 hover:bg-gray-700 px-6 py-2 md:px-4 md:py-1.5 rounded text-sm transition">
+                        Dashboard
+                    </button>
+                    
+                    <button id="navLogoutBtn" onclick="handleLogout(); toggleMobileMenu(true)" class="hidden w-full md:w-auto text-red-500 hover:text-white px-3 py-1.5 text-sm transition font-bold border border-red-900 md:border-none rounded">
+                        Logout
+                    </button>
+                </div>
             </div>
         </div>
     </nav>
 
     <!-- MAIN CONTENT AREA -->
-    <main class="flex-grow container mx-auto px-4 py-8">
+    <main class="flex-grow container mx-auto px-4 py-6 md:py-8">
 
         <!-- 1. HOME SECTION -->
         <div id="section-home" class="animate-fade-in">
             
             <!-- HERO WITH SLIDESHOW -->
-            <div class="relative w-full rounded-2xl overflow-hidden mb-8 border border-gray-800">
+            <div class="relative w-full rounded-2xl overflow-hidden mb-8 border border-gray-800 h-[50vh] md:h-auto">
                 <!-- Background Slideshow -->
                 <div id="heroSlideshow" class="absolute inset-0 w-full h-full bg-gray-900">
                     <!-- Slides injected via JS -->
@@ -173,23 +188,24 @@
                 <div class="hero-overlay"></div>
 
                 <!-- Hero Content -->
-                <div class="relative z-10 flex flex-col items-center justify-center py-32 text-center px-4">
-                    <h1 class="text-6xl md:text-8xl font-black mb-6 text-white tracking-tighter drop-shadow-2xl">
+                <div class="relative z-10 flex flex-col items-center justify-center h-full py-20 md:py-32 text-center px-4">
+                    <!-- Responsive Text Sizes -->
+                    <h1 class="text-4xl md:text-6xl lg:text-8xl font-black mb-4 md:mb-6 text-white tracking-tighter drop-shadow-2xl">
                         APNA <span class="text-red-600">ADDA</span>
                     </h1>
-                    <p class="text-xl md:text-2xl text-gray-200 font-light tracking-wide max-w-2xl mx-auto mb-10 drop-shadow-md">
+                    <p class="text-lg md:text-xl lg:text-2xl text-gray-200 font-light tracking-wide max-w-2xl mx-auto mb-8 md:mb-10 drop-shadow-md">
                         Technology for Everyday Growth.
                     </p>
-                    <button onclick="scrollToHomeApps()" class="px-8 py-4 bg-red-600/20 backdrop-blur-md border-2 border-red-600 text-white font-bold rounded-full hover:bg-red-600 transition transform hover:scale-105 shadow-lg">
+                    <button onclick="scrollToHomeApps()" class="px-6 py-3 md:px-8 md:py-4 bg-red-600/20 backdrop-blur-md border-2 border-red-600 text-white font-bold rounded-full hover:bg-red-600 transition transform hover:scale-105 shadow-lg text-sm md:text-base">
                         EXPLORE APPS
                     </button>
                 </div>
             </div>
 
             <!-- Home Page Apps Grid -->
-            <div id="homeAppsContainer" class="py-10 border-t border-gray-900">
-                <div class="text-center mb-10">
-                    <h2 class="text-3xl font-bold border-b-4 border-red-600 inline-block pb-2">Latest Applications</h2>
+            <div id="homeAppsContainer" class="py-8 md:py-10 border-t border-gray-900">
+                <div class="text-center mb-8 md:mb-10">
+                    <h2 class="text-2xl md:text-3xl font-bold border-b-4 border-red-600 inline-block pb-2">Latest Applications</h2>
                 </div>
                 
                 <div id="homeLoader" class="text-center py-10">
@@ -197,7 +213,8 @@
                     <p class="mt-2 text-gray-500">Loading...</p>
                 </div>
 
-                <div id="homeAppsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Grid responds: 1 column mobile, 2 tablet, 3 desktop -->
+                <div id="homeAppsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
                     <!-- Apps loaded via JS here too -->
                 </div>
             </div>
@@ -205,21 +222,21 @@
 
         <!-- 2. APPS SECTION (Dedicated Page) -->
         <div id="section-apps" class="hidden-section animate-fade-in">
-            <div class="text-center mb-10">
-                <h2 class="text-3xl font-bold border-b-4 border-red-600 inline-block pb-2">All Applications</h2>
+            <div class="text-center mb-8 md:mb-10">
+                <h2 class="text-2xl md:text-3xl font-bold border-b-4 border-red-600 inline-block pb-2">All Applications</h2>
             </div>
             
-            <div id="appsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div id="appsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
                 <!-- Apps loaded via JS -->
             </div>
         </div>
 
         <!-- 3. ABOUT US SECTION -->
         <div id="section-about" class="hidden-section animate-fade-in">
-            <div class="max-w-4xl mx-auto bg-gray-900 border border-gray-800 rounded-lg p-8 md:p-12 shadow-2xl">
-                <h2 class="text-3xl font-bold mb-6 text-red-600">About APNA ADDA</h2>
+            <div class="max-w-4xl mx-auto bg-gray-900 border border-gray-800 rounded-lg p-6 md:p-12 shadow-2xl">
+                <h2 class="text-2xl md:text-3xl font-bold mb-6 text-red-600">About APNA ADDA</h2>
                 
-                <div class="space-y-4 text-gray-300 leading-relaxed text-justify">
+                <div class="space-y-4 text-gray-300 leading-relaxed text-justify text-sm md:text-base">
                     <p>
                         APNA ADDA is a technology-driven company committed to building smart, simple, and useful digital solutions for everyday life. We primarily focus on creating applications that support students, while also offering tools that benefit people from all walks of life.
                     </p>
@@ -232,25 +249,24 @@
                     <p>
                         We continuously work to improve our applications and introduce new ideas that can make a positive impact on education and daily living.
                     </p>
-                    <p class="text-xl font-bold text-white mt-6 text-center">
+                    <p class="text-lg md:text-xl font-bold text-white mt-6 text-center">
                         APNA ADDA – Technology for Everyday Growth.
                     </p>
                 </div>
 
                 <!-- Social Links in About -->
-                <div class="mt-10 pt-6 border-t border-gray-700 flex flex-wrap justify-center gap-6">
-                    <a href="mailto:thepremanshu@gmail.com" class="flex items-center gap-2 text-gray-400 hover:text-white transition">
+                <div class="mt-10 pt-6 border-t border-gray-700 flex flex-col md:flex-row flex-wrap justify-center gap-4 md:gap-6">
+                    <a href="mailto:thepremanshu@gmail.com" class="flex items-center justify-center gap-2 text-gray-400 hover:text-white transition bg-black md:bg-transparent p-3 md:p-0 rounded">
                         <i class="fas fa-envelope text-red-500 text-xl"></i>
                         <span>Email Us</span>
                     </a>
-                    <a href="https://t.me/apnaadda_official" target="_blank" class="flex items-center gap-2 text-gray-400 hover:text-blue-400 transition">
+                    <a href="https://t.me/apnaadda_official" target="_blank" class="flex items-center justify-center gap-2 text-gray-400 hover:text-blue-400 transition bg-black md:bg-transparent p-3 md:p-0 rounded">
                         <i class="fab fa-telegram text-blue-500 text-xl"></i>
-                        <span>Telegram Channel</span>
+                        <span>Telegram</span>
                     </a>
-                    <!-- WhatsApp Link Added in About -->
-                    <a href="https://whatsapp.com/channel/0029Vb7K9Ms3gvWeXnfpLy3x" target="_blank" class="flex items-center gap-2 text-gray-400 hover:text-green-400 transition">
+                    <a href="https://whatsapp.com/channel/0029Vb7K9Ms3gvWeXnfpLy3x" target="_blank" class="flex items-center justify-center gap-2 text-gray-400 hover:text-green-400 transition bg-black md:bg-transparent p-3 md:p-0 rounded">
                         <i class="fab fa-whatsapp text-green-500 text-xl"></i>
-                        <span>WhatsApp Channel</span>
+                        <span>WhatsApp</span>
                     </a>
                 </div>
             </div>
@@ -259,27 +275,24 @@
         <!-- 4. CONTACT US SECTION -->
         <div id="section-contact" class="hidden-section animate-fade-in">
             <div class="flex flex-col items-center justify-center min-h-[50vh]">
-                <h2 class="text-4xl font-bold mb-8">Get In Touch</h2>
+                <h2 class="text-3xl md:text-4xl font-bold mb-8">Get In Touch</h2>
                 
-                <div class="bg-gray-900 p-8 rounded-xl border border-gray-800 shadow-lg w-full max-w-lg text-center">
-                    <p class="text-gray-400 mb-8">
+                <div class="bg-gray-900 p-6 md:p-8 rounded-xl border border-gray-800 shadow-lg w-full max-w-lg text-center">
+                    <p class="text-gray-400 mb-8 text-sm md:text-base">
                         Have questions, suggestions, or just want to say hello? Reach out to us directly or join our communities.
                     </p>
 
                     <div class="space-y-4">
-                        <!-- Google Email Button -->
                         <a href="mailto:thepremanshu@gmail.com" class="block w-full bg-white hover:bg-gray-200 text-gray-800 font-bold py-3 px-6 rounded shadow transition flex items-center justify-center gap-3">
                             <i class="fab fa-google text-red-600"></i>
                             Send Email
                         </a>
 
-                        <!-- Telegram Button -->
                         <a href="https://t.me/apnaadda_official" target="_blank" class="block w-full bg-[#0088cc] hover:bg-[#0077b5] text-white font-bold py-3 px-6 rounded shadow transition flex items-center justify-center gap-3">
                             <i class="fab fa-telegram-plane"></i>
                             Join Telegram
                         </a>
 
-                        <!-- WhatsApp Button Added in Contact -->
                         <a href="https://whatsapp.com/channel/0029Vb7K9Ms3gvWeXnfpLy3x" target="_blank" class="block w-full bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold py-3 px-6 rounded shadow transition flex items-center justify-center gap-3">
                             <i class="fab fa-whatsapp text-xl"></i>
                             Join WhatsApp
@@ -295,19 +308,14 @@
 
         <!-- 5. PRIVACY POLICY SECTION -->
         <div id="section-privacy" class="hidden-section animate-fade-in">
-            <div class="max-w-4xl mx-auto bg-gray-900 border border-gray-800 rounded-lg p-8 md:p-12 shadow-2xl">
-                <h2 class="text-3xl font-bold mb-6 text-red-600 border-b border-gray-700 pb-4">Privacy Policy</h2>
+            <div class="max-w-4xl mx-auto bg-gray-900 border border-gray-800 rounded-lg p-6 md:p-12 shadow-2xl">
+                <h2 class="text-2xl md:text-3xl font-bold mb-6 text-red-600 border-b border-gray-700 pb-4">Privacy Policy</h2>
                 
-                 <div class="text-gray-300 leading-relaxed space-y-6">
+                 <div class="text-gray-300 leading-relaxed space-y-6 text-sm md:text-base">
                     <p class="text-sm text-gray-500 font-bold">Effective Date: 07 DECEMBER 2025</p>
-
                     <p>
                         APNA ADDA (“we,” “our,” or “us”) respects your privacy and is committed to protecting the personal information of users who visit our website and use our applications and services. This Privacy Policy explains how we collect, use, disclose, and safeguard your information.
                     </p>
-                    <p>
-                        By using our website or services, you agree to the terms of this Privacy Policy.
-                    </p>
-
                     <div>
                         <h3 class="text-xl font-bold text-white mb-2">1. Information We Collect</h3>
                         <p class="mb-2">We may collect the following types of information:</p>
@@ -322,10 +330,10 @@
 
         <!-- 6. DISCLAIMER SECTION -->
         <div id="section-disclaimer" class="hidden-section animate-fade-in">
-            <div class="max-w-4xl mx-auto bg-gray-900 border border-gray-800 rounded-lg p-8 md:p-12 shadow-2xl">
-                <h2 class="text-3xl font-bold mb-6 text-red-600 border-b border-gray-700 pb-4">Disclaimer</h2>
+            <div class="max-w-4xl mx-auto bg-gray-900 border border-gray-800 rounded-lg p-6 md:p-12 shadow-2xl">
+                <h2 class="text-2xl md:text-3xl font-bold mb-6 text-red-600 border-b border-gray-700 pb-4">Disclaimer</h2>
                 
-                <div class="text-gray-300 leading-relaxed space-y-6 text-justify">
+                <div class="text-gray-300 leading-relaxed space-y-6 text-justify text-sm md:text-base">
                     <p>
                         The information provided on the APNA ADDA website is for general informational purposes only. While we strive to keep the information accurate, up to date, and reliable, APNA ADDA makes no representations or warranties of any kind, express or implied, about the completeness, accuracy, reliability, suitability, or availability of any information, products, services, or related graphics contained on the website for any purpose. Any reliance you place on such information is strictly at your own risk.
                     </p>
@@ -338,8 +346,8 @@
 
         <!-- 7. LOGIN / SIGNUP SECTION -->
         <div id="section-login" class="hidden-section flex justify-center items-center h-full py-10">
-            <div class="bg-gray-900 p-8 rounded-lg border border-red-900/30 shadow-2xl w-full max-w-md animate-fade-in">
-                <h2 class="text-3xl font-bold text-center mb-2 text-white">Welcome</h2>
+            <div class="bg-gray-900 p-8 rounded-lg border border-red-900/30 shadow-2xl w-full max-w-md animate-fade-in mx-2">
+                <h2 class="text-2xl md:text-3xl font-bold text-center mb-2 text-white">Welcome</h2>
                 <p class="text-center text-gray-500 mb-6 text-sm">Sign in to manage your world</p>
 
                 <!-- Toggles -->
@@ -366,12 +374,12 @@
 
         <!-- 8. ADMIN DASHBOARD (Protected) -->
         <div id="section-admin" class="hidden-section">
-            <div class="flex justify-between items-center mb-8 border-b border-gray-800 pb-4">
-                <h2 class="text-2xl font-bold text-white">Admin Dashboard</h2>
+            <div class="flex flex-col md:flex-row justify-between items-center mb-8 border-b border-gray-800 pb-4 gap-4">
+                <h2 class="text-xl md:text-2xl font-bold text-white">Admin Dashboard</h2>
                 <span class="bg-red-900/40 text-red-500 px-3 py-1 rounded text-xs border border-red-900">MASTER ACCESS</span>
             </div>
 
-            <!-- Dashboard Content Grid -->
+            <!-- Dashboard Content Grid - Stack on mobile, grid on lg -->
             <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
                 <!-- 1. Add/Edit App Form -->
                 <div class="lg:col-span-1 bg-gray-900 p-6 rounded-lg border border-gray-800 h-fit">
@@ -420,7 +428,7 @@
                 <div class="lg:col-span-2 bg-gray-900 rounded-lg border border-gray-800 overflow-hidden">
                     <div class="p-4 bg-black border-b border-gray-800"><h3 class="font-bold">App Database</h3></div>
                     <div class="overflow-x-auto">
-                        <table class="w-full text-left text-sm text-gray-400">
+                        <table class="w-full text-left text-sm text-gray-400 whitespace-nowrap">
                             <thead class="bg-gray-800 text-xs uppercase"><tr><th class="p-3">Img</th><th class="p-3">Name</th><th class="p-3">Status</th><th class="p-3 text-right">Action</th></tr></thead>
                             <tbody id="adminAppsTable"></tbody>
                         </table>
@@ -436,7 +444,7 @@
         <p class="text-gray-500 text-sm mb-1">&copy; 2025 APNA ADDA. All Rights Reserved.</p>
         <p class="text-red-700 text-xs font-bold mb-4">Designed by Premanshu Kumar</p>
         
-        <div class="flex flex-wrap justify-center gap-6 text-xs font-bold">
+        <div class="flex flex-wrap justify-center gap-4 text-xs font-bold px-4">
             <span onclick="navigateTo('privacy')" class="cursor-pointer text-gray-400 hover:text-red-500 bg-gray-900 px-4 py-2 rounded border border-gray-800 hover:border-red-600 transition">
                 <i class="fas fa-shield-alt mr-1"></i> Privacy Policy
             </span>
@@ -448,6 +456,29 @@
 
     <!-- JAVASCRIPT -->
     <script>
+        // --- MOBILE MENU LOGIC ---
+        function toggleMobileMenu(forceClose = false) {
+            const menu = document.getElementById('navMenu');
+            const icon = document.querySelector('#mobileMenuBtn i');
+            
+            if (forceClose) {
+                menu.classList.add('hidden');
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+                return;
+            }
+
+            if (menu.classList.contains('hidden')) {
+                menu.classList.remove('hidden');
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                menu.classList.add('hidden');
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        }
+
         // 1. FIREBASE CONFIG
         const firebaseConfig = {
             apiKey: "AIzaSyAUHUwmJVnW40FefXCpuxfREsnXNCHHxQU",
@@ -467,8 +498,6 @@
 
         // 2. STATE
         const ADMIN_EMAIL = "thepremanshu@gmail.com";
-        
-        // --- LINKS UPDATED ---
         const WHATSAPP_LINK = "https://whatsapp.com/channel/0029Vb7K9Ms3gvWeXnfpLy3x"; 
         const TELEGRAM_LINK = "https://t.me/apnaadda_official";
 
@@ -488,21 +517,17 @@
             } 
 
             // --- FIRST VISIT POPUP LOGIC ---
-            // Check if user has already seen the popup (stored in LocalStorage)
             const hasSeenPopup = localStorage.getItem('hasSeenSocialPopup');
             
-            // If they haven't seen it yet, show it after a short delay
             if (!hasSeenPopup) {
                 setTimeout(() => {
-                    // Do not show on admin page
                     const current = localStorage.getItem('apnaAddaCurrentSection');
                     if(current === 'admin') return;
 
                     Swal.fire({
-                        // Title updated as requested
-                        title: '<strong style="color:#fff; font-size:1.5rem;">STAY CONNECTED WITH APNA ADDA</strong>',
+                        title: '<strong style="color:#fff; font-size:1.5rem;">STAY CONNECTED</strong>',
                         html: `
-                            <div class="text-gray-400 mb-4 text-sm">Join our channels to get the latest apps, news & features!</div>
+                            <div class="text-gray-400 mb-4 text-sm">Join our channels for latest updates!</div>
                             <div class="flex flex-col gap-3">
                                 <a href="${WHATSAPP_LINK}" target="_blank" class="flex items-center justify-center gap-2 w-full py-3 rounded bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold transition no-underline shadow-lg">
                                     <i class="fab fa-whatsapp text-2xl"></i> Join WhatsApp Channel
@@ -522,25 +547,11 @@
                             popup: 'border border-gray-700 rounded-xl'
                         }
                     }).then((result) => {
-                        // Mark as seen so it doesn't pop up again on refresh
                         localStorage.setItem('hasSeenSocialPopup', 'true');
-
-                        // Check if they clicked "Maybe Later" (DismissReason.cancel)
-                        if (result.dismiss === Swal.DismissReason.cancel) {
-                            Swal.fire({
-                                icon: 'info',
-                                title: 'No Problem!',
-                                text: 'You can find these links in the "About Us" and "Contact Us" pages anytime.',
-                                background: '#111',
-                                color: '#fff',
-                                confirmButtonColor: '#E50914'
-                            });
-                        }
                     });
-                }, 1500); // 1.5 seconds delay
+                }, 1500); 
             }
             
-            // Initial Fetch
             fetchApps();
             fetchSlides();
         };
@@ -694,12 +705,11 @@
                     btnClass = 'bg-red-600 hover:bg-red-700 text-white';
                     link = app.link || '#';
                 } else if(app.status.includes('date')) {
-                    // --- CHANGED: FORMAT DATE (YYYY-MM-DD to DD-MM-YYYY) ---
                     let displayDate = app.statusDetail;
                     if(displayDate && displayDate.includes('-')) {
-                        const parts = displayDate.split('-'); // splits 2025-12-25 into [2025, 12, 25]
+                        const parts = displayDate.split('-');
                         if(parts.length === 3) {
-                            displayDate = `${parts[2]}-${parts[1]}-${parts[0]}`; // Reorder to 25-12-2025
+                            displayDate = `${parts[2]}-${parts[1]}-${parts[0]}`; 
                         }
                     }
                     badge = `Coming: ${displayDate}`;
@@ -741,7 +751,6 @@
             container.innerHTML = '';
             
             if(allSlides.length === 0) {
-                // Default dark bg if no slides
                 container.style.backgroundColor = '#111';
                 return;
             }
@@ -759,7 +768,7 @@
 
         function startSlideshow() {
             if(slideInterval) clearInterval(slideInterval);
-            if(allSlides.length < 2) return; // No need to loop if 0 or 1 slide
+            if(allSlides.length < 2) return; 
 
             let currentIndex = 0;
             const images = document.querySelectorAll('.slide-image');
@@ -769,7 +778,7 @@
                 images[currentIndex].classList.remove('active');
                 currentIndex = (currentIndex + 1) % images.length;
                 images[currentIndex].classList.add('active');
-            }, 5000); // 5 Seconds
+            }, 5000); 
         }
 
         function renderAdminSlidesList() {
@@ -893,4 +902,4 @@
         }
     </script>
 </body>
-                                    </html>
+</html>
