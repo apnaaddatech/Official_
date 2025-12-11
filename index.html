@@ -35,6 +35,10 @@
             color: var(--light-text);
             font-family: 'Montserrat', sans-serif;
             overflow-x: hidden;
+            padding-bottom: 70px; /* Space for bottom nav on mobile */
+        }
+        @media(min-width: 768px) {
+            body { padding-bottom: 0; }
         }
 
         /* Animations */
@@ -47,23 +51,53 @@
             animation: fadeIn 0.6s ease-out forwards;
         }
 
-        /* Navigation Links */
+        @keyframes glow {
+            0% { box-shadow: 0 0 5px #E50914; }
+            50% { box-shadow: 0 0 20px #E50914, 0 0 10px #ff4d4d; }
+            100% { box-shadow: 0 0 5px #E50914; }
+        }
+
+        .glow-btn {
+            animation: glow 2s infinite;
+            background: linear-gradient(45deg, #E50914, #ff4b1f);
+        }
+
+        /* Navigation Links (Desktop) */
         .nav-link {
             cursor: pointer;
-            padding: 0.75rem 1rem;
+            padding: 0.5rem 1rem;
             transition: color 0.3s ease;
             color: #aaa;
             font-weight: 500;
             font-size: 0.9rem;
-            display: block; /* Block for mobile stacking */
-        }
-        @media(min-width: 768px) {
-            .nav-link { display: inline-block; padding: 0.5rem 1rem; }
+            display: inline-block;
         }
 
         .nav-link:hover, .nav-link.active {
             color: var(--primary-red);
             font-weight: 700;
+        }
+
+        /* Bottom Navigation (Mobile) */
+        .bottom-nav-item {
+            color: #666;
+            transition: all 0.3s ease;
+        }
+        .bottom-nav-item.active {
+            color: var(--primary-red);
+        }
+        .bottom-nav-item.active i {
+            transform: translateY(-2px);
+        }
+
+        /* Accordion in Profile */
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .accordion-btn.active .fa-chevron-down {
+            transform: rotate(180deg);
         }
 
         /* App Card Hover */
@@ -109,7 +143,6 @@
             display: none !important;
         }
         
-        /* Inputs */
         input, select, textarea {
             background-color: #222;
             border: 1px solid #444;
@@ -120,54 +153,176 @@
             border-color: var(--primary-red);
         }
 
-        /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #111; }
         ::-webkit-scrollbar-thumb { background: #E50914; border-radius: 4px; }
+
+        /* --- CHAT WIDGET STYLES --- */
+        .chat-widget-btn {
+            position: fixed;
+            bottom: 90px; /* Raised for mobile bottom nav */
+            right: 20px;
+            background-color: var(--primary-red);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(229, 9, 20, 0.5);
+            z-index: 1000;
+            transition: transform 0.3s ease;
+        }
+        .chat-widget-btn:hover { transform: scale(1.1); }
+        
+        .chat-window {
+            position: fixed;
+            bottom: 160px; /* Raised for mobile */
+            right: 20px;
+            width: 350px;
+            height: 500px;
+            background-color: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.8);
+            z-index: 1000;
+            opacity: 0;
+            transform: translateY(20px);
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+        .chat-window.open {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: all;
+        }
+        .chat-header {
+            background: var(--primary-red);
+            padding: 15px;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .chat-body {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            background-color: #0f0f0f;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .chat-message {
+            max-width: 80%;
+            padding: 8px 12px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            line-height: 1.4;
+            word-wrap: break-word;
+        }
+        .msg-admin {
+            align-self: flex-start;
+            background-color: #333;
+            color: #ddd;
+            border-bottom-left-radius: 0;
+        }
+        .msg-user {
+            align-self: flex-end;
+            background-color: #E50914;
+            color: white;
+            border-bottom-right-radius: 0;
+        }
+        .chat-footer {
+            padding: 10px;
+            background-color: #1a1a1a;
+            border-top: 1px solid #333;
+            display: flex;
+            gap: 10px;
+        }
+        .chat-input {
+            flex: 1;
+            background: #000;
+            border: 1px solid #333;
+            padding: 8px 12px;
+            border-radius: 20px;
+            color: white;
+            font-size: 0.9rem;
+        }
+        .chat-send-btn {
+            background: transparent;
+            color: var(--primary-red);
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+        .notification-dot {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 15px;
+            height: 15px;
+            background-color: #fff;
+            border: 2px solid var(--primary-red);
+            border-radius: 50%;
+        }
+
+        /* Desktop Adjustments */
+        @media (min-width: 768px) {
+            .chat-widget-btn { bottom: 20px; }
+            .chat-window { bottom: 90px; }
+        }
+
+        /* Mobile Responsive Chat */
+        @media (max-width: 480px) {
+            .chat-window {
+                width: 90%;
+                right: 5%;
+                bottom: 160px;
+                height: 50vh;
+            }
+        }
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
 
-    <!-- NAVIGATION (RESPONSIVE) -->
+    <!-- TOP NAVIGATION -->
     <nav class="w-full bg-black/95 backdrop-blur-sm border-b border-gray-900 sticky top-0 z-50">
-        <div class="container mx-auto px-4 py-4 flex flex-wrap justify-between items-center">
+        <div class="container mx-auto px-4 py-3 md:py-4 flex justify-between items-center">
             
             <!-- LOGO -->
-            <div class="flex items-center justify-between w-full md:w-auto">
-                <div class="text-2xl font-black tracking-widest text-red-600 cursor-pointer" onclick="navigateTo('home')">
-                    APNA ADDA
-                </div>
-                
-                <!-- MOBILE MENU BUTTON -->
-                <button id="mobileMenuBtn" class="md:hidden text-white focus:outline-none" onclick="toggleMobileMenu()">
-                    <i class="fas fa-bars text-2xl"></i>
-                </button>
+            <div class="text-2xl font-black tracking-widest text-red-600 cursor-pointer" onclick="navigateTo('home')">
+                APNA ADDA
             </div>
 
-            <!-- LINKS CONTAINER -->
-            <div id="navMenu" class="hidden w-full md:flex md:w-auto md:items-center mt-4 md:mt-0 flex-col md:flex-row gap-2 transition-all duration-300">
-                <span class="nav-link active text-center md:text-left" id="link-home" onclick="navigateTo('home'); toggleMobileMenu(true)">Home</span>
-                <span class="nav-link text-center md:text-left" id="link-apps" onclick="navigateTo('apps'); toggleMobileMenu(true)">Our Apps</span>
-                <span class="nav-link text-center md:text-left" id="link-about" onclick="navigateTo('about'); toggleMobileMenu(true)">About Us</span>
-                <span class="nav-link text-center md:text-left" id="link-contact" onclick="navigateTo('contact'); toggleMobileMenu(true)">Contact Us</span>
+            <!-- DESKTOP MENU -->
+            <div id="desktopMenu" class="hidden md:flex items-center gap-6">
+                <span class="nav-link active" id="link-home" onclick="navigateTo('home')">Home</span>
+                <span class="nav-link" id="link-apps" onclick="navigateTo('apps')">Our Apps</span>
+                <span class="nav-link" id="link-about" onclick="navigateTo('about')">About Us</span>
+                <span class="nav-link" id="link-contact" onclick="navigateTo('contact')">Contact Us</span>
                 
-                <!-- Separator (Hidden on mobile) -->
-                <div class="hidden md:block h-4 w-px bg-gray-700 mx-2"></div>
+                <div class="h-4 w-px bg-gray-700 mx-2"></div>
 
-                <!-- Auth Buttons -->
-                <div class="flex flex-col md:flex-row gap-3 mt-3 md:mt-0 items-center justify-center">
-                    <button id="navLoginBtn" onclick="navigateTo('login'); toggleMobileMenu(true)" class="w-full md:w-auto text-white bg-red-600 hover:bg-red-700 px-6 py-2 md:px-4 md:py-1.5 rounded text-sm font-bold transition">
-                        Login
-                    </button>
-                    
-                    <button id="navDashboardBtn" onclick="navigateTo('admin'); toggleMobileMenu(true)" class="hidden w-full md:w-auto text-white bg-gray-800 hover:bg-gray-700 px-6 py-2 md:px-4 md:py-1.5 rounded text-sm transition">
-                        Dashboard
-                    </button>
-                    
-                    <button id="navLogoutBtn" onclick="handleLogout(); toggleMobileMenu(true)" class="hidden w-full md:w-auto text-red-500 hover:text-white px-3 py-1.5 text-sm transition font-bold border border-red-900 md:border-none rounded">
-                        Logout
-                    </button>
-                </div>
+                <!-- Desktop Auth Buttons -->
+                <button id="navLoginBtn" onclick="navigateTo('login')" class="text-white bg-red-600 hover:bg-red-700 px-4 py-1.5 rounded text-sm font-bold transition">Login</button>
+                <button id="navDashboardBtn" onclick="navigateTo('admin')" class="hidden text-white bg-gray-800 hover:bg-gray-700 px-4 py-1.5 rounded text-sm transition">Dashboard</button>
+                <button id="navLogoutBtn" onclick="handleLogout()" class="hidden text-red-500 hover:text-white px-3 py-1.5 text-sm transition font-bold">Logout</button>
+            </div>
+
+            <!-- MOBILE HEADER BUTTON (LOGIN ONLY) -->
+            <div class="md:hidden">
+                <button id="mobileHeaderLoginBtn" onclick="navigateTo('login')" class="glow-btn text-white px-4 py-1.5 rounded-full text-xs font-bold tracking-wide shadow-lg hidden">
+                    LOGIN <i class="fas fa-sign-in-alt ml-1"></i>
+                </button>
             </div>
         </div>
     </nav>
@@ -177,19 +332,11 @@
 
         <!-- 1. HOME SECTION -->
         <div id="section-home" class="animate-fade-in">
-            
             <!-- HERO WITH SLIDESHOW -->
             <div class="relative w-full rounded-2xl overflow-hidden mb-8 border border-gray-800 h-[50vh] md:h-auto">
-                <!-- Background Slideshow -->
-                <div id="heroSlideshow" class="absolute inset-0 w-full h-full bg-gray-900">
-                    <!-- Slides injected via JS -->
-                </div>
-                <!-- Dark Overlay -->
+                <div id="heroSlideshow" class="absolute inset-0 w-full h-full bg-gray-900"></div>
                 <div class="hero-overlay"></div>
-
-                <!-- Hero Content -->
                 <div class="relative z-10 flex flex-col items-center justify-center h-full py-20 md:py-32 text-center px-4">
-                    <!-- Responsive Text Sizes -->
                     <h1 class="text-4xl md:text-6xl lg:text-8xl font-black mb-4 md:mb-6 text-white tracking-tighter drop-shadow-2xl">
                         APNA <span class="text-red-600">ADDA</span>
                     </h1>
@@ -207,139 +354,130 @@
                 <div class="text-center mb-8 md:mb-10">
                     <h2 class="text-2xl md:text-3xl font-bold border-b-4 border-red-600 inline-block pb-2">Latest Applications</h2>
                 </div>
-                
                 <div id="homeLoader" class="text-center py-10">
                     <i class="fas fa-circle-notch fa-spin text-red-600 text-4xl"></i>
                     <p class="mt-2 text-gray-500">Loading...</p>
                 </div>
-
-                <!-- Grid responds: 1 column mobile, 2 tablet, 3 desktop -->
-                <div id="homeAppsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-                    <!-- Apps loaded via JS here too -->
-                </div>
+                <div id="homeAppsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"></div>
             </div>
         </div>
 
-        <!-- 2. APPS SECTION (Dedicated Page) -->
+        <!-- 2. APPS SECTION -->
         <div id="section-apps" class="hidden-section animate-fade-in">
             <div class="text-center mb-8 md:mb-10">
                 <h2 class="text-2xl md:text-3xl font-bold border-b-4 border-red-600 inline-block pb-2">All Applications</h2>
             </div>
-            
-            <div id="appsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-                <!-- Apps loaded via JS -->
+            <div id="appsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"></div>
+        </div>
+
+        <!-- 3. PROFILE SECTION (Combined for Mobile) -->
+        <div id="section-profile" class="hidden-section animate-fade-in">
+            <div class="max-w-lg mx-auto">
+                <!-- Profile Header / Auth State -->
+                <div class="bg-gray-900 border border-gray-800 rounded-lg p-6 mb-6 text-center">
+                    <div id="profileLoggedOut" class="hidden">
+                        <div class="w-20 h-20 bg-gray-800 rounded-full mx-auto flex items-center justify-center mb-4 text-3xl text-gray-600">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <h2 class="text-xl font-bold text-white mb-2">Welcome Guest</h2>
+                        <p class="text-gray-400 text-sm mb-4">Login to access all features.</p>
+                        <button onclick="navigateTo('login')" class="glow-btn w-full text-white font-bold py-3 rounded-lg shadow-lg">LOGIN NOW</button>
+                    </div>
+
+                    <div id="profileLoggedIn" class="hidden">
+                        <div class="w-20 h-20 bg-red-900/30 border-2 border-red-600 rounded-full mx-auto flex items-center justify-center mb-4 text-3xl text-red-500">
+                            <i class="fas fa-user-check"></i>
+                        </div>
+                        <h2 class="text-xl font-bold text-white mb-1" id="profileEmailDisplay">User</h2>
+                        <span class="inline-block bg-gray-800 text-xs px-2 py-1 rounded text-gray-400 mb-4">Member</span>
+                        
+                        <div class="grid grid-cols-2 gap-3">
+                            <button id="profileAdminBtn" onclick="navigateTo('admin')" class="hidden w-full bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 rounded text-sm border border-gray-700">
+                                DASHBOARD
+                            </button>
+                            <button onclick="handleLogout()" class="w-full bg-red-900/20 hover:bg-red-900/40 text-red-500 font-bold py-2 rounded text-sm border border-red-900/50">
+                                LOGOUT
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dropdown Menus (Accordions) -->
+                <div class="space-y-3">
+                    <!-- About Us -->
+                    <div class="bg-gray-900 border border-gray-800 rounded-lg overflow-hidden">
+                        <button class="accordion-btn w-full flex justify-between items-center p-4 text-left font-bold text-gray-300 hover:bg-gray-800 transition" onclick="toggleAccordion('acc-about', this)">
+                            <span><i class="fas fa-info-circle w-6 text-center text-red-600 mr-2"></i> About Us</span>
+                            <i class="fas fa-chevron-down transition-transform duration-300"></i>
+                        </button>
+                        <div id="acc-about" class="accordion-content bg-black">
+                            <div class="p-4 text-sm text-gray-400 leading-relaxed text-justify">
+                                APNA ADDA is a technology-driven company committed to building smart, simple, and useful digital solutions for everyday life. Founded by Premanshu Kumar.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contact Us -->
+                    <div class="bg-gray-900 border border-gray-800 rounded-lg overflow-hidden">
+                        <button class="accordion-btn w-full flex justify-between items-center p-4 text-left font-bold text-gray-300 hover:bg-gray-800 transition" onclick="toggleAccordion('acc-contact', this)">
+                            <span><i class="fas fa-envelope w-6 text-center text-blue-500 mr-2"></i> Contact Us</span>
+                            <i class="fas fa-chevron-down transition-transform duration-300"></i>
+                        </button>
+                        <div id="acc-contact" class="accordion-content bg-black">
+                            <div class="p-4 flex flex-col gap-3">
+                                <a href="mailto:thepremanshu@gmail.com" class="flex items-center gap-3 text-gray-400 hover:text-white"><i class="fas fa-at"></i> Email Support</a>
+                                <a href="https://t.me/apnaadda_official" target="_blank" class="flex items-center gap-3 text-gray-400 hover:text-blue-400"><i class="fab fa-telegram"></i> Telegram</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Privacy Policy -->
+                    <div class="bg-gray-900 border border-gray-800 rounded-lg overflow-hidden">
+                        <button class="accordion-btn w-full flex justify-between items-center p-4 text-left font-bold text-gray-300 hover:bg-gray-800 transition" onclick="toggleAccordion('acc-privacy', this)">
+                            <span><i class="fas fa-shield-alt w-6 text-center text-green-500 mr-2"></i> Privacy Policy</span>
+                            <i class="fas fa-chevron-down transition-transform duration-300"></i>
+                        </button>
+                        <div id="acc-privacy" class="accordion-content bg-black">
+                            <div class="p-4 text-sm text-gray-400">
+                                Your privacy is important to APNA ADDA. We respect your personal information and use it only to improve our services.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Disclaimer -->
+                    <div class="bg-gray-900 border border-gray-800 rounded-lg overflow-hidden">
+                        <button class="accordion-btn w-full flex justify-between items-center p-4 text-left font-bold text-gray-300 hover:bg-gray-800 transition" onclick="toggleAccordion('acc-disclaimer', this)">
+                            <span><i class="fas fa-exclamation-triangle w-6 text-center text-yellow-500 mr-2"></i> Disclaimer</span>
+                            <i class="fas fa-chevron-down transition-transform duration-300"></i>
+                        </button>
+                        <div id="acc-disclaimer" class="accordion-content bg-black">
+                            <div class="p-4 text-sm text-gray-400">
+                                Information provided on APNA ADDA is for general informational purposes only. Use at your own risk.
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- 3. ABOUT US SECTION -->
-        <div id="section-about" class="hidden-section animate-fade-in">
-            <div class="max-w-4xl mx-auto bg-gray-900 border border-gray-800 rounded-lg p-6 md:p-12 shadow-2xl">
-                <h2 class="text-2xl md:text-3xl font-bold mb-6 text-red-600">About APNA ADDA</h2>
-                
-                <div class="space-y-4 text-gray-300 leading-relaxed text-justify text-sm md:text-base">
-                    <p>
-                        APNA ADDA is a technology-driven company committed to building smart, simple, and useful digital solutions for everyday life. We primarily focus on creating applications that support students, while also offering tools that benefit people from all walks of life.
-                    </p>
-                    <p>
-                        Our apps are designed to make daily tasks easier, improve productivity, and provide practical solutions through modern technology. At APNA ADDA, we believe that technology should be accessible, reliable, and purpose-driven.
-                    </p>
-                    <p>
-                        The company was founded and is owned by <strong>Premanshu Kumar</strong>, a passionate developer focused on creating meaningful digital products that solve real-world problems. This official website of APNA ADDA represents our mission, our products, and our commitment to quality and innovation.
-                    </p>
-                    <p>
-                        We continuously work to improve our applications and introduce new ideas that can make a positive impact on education and daily living.
-                    </p>
-                    <p class="text-lg md:text-xl font-bold text-white mt-6 text-center">
-                        APNA ADDA – Technology for Everyday Growth.
-                    </p>
-                </div>
-
-                <!-- Social Links in About -->
-                <div class="mt-10 pt-6 border-t border-gray-700 flex flex-col md:flex-row flex-wrap justify-center gap-4 md:gap-6">
-                    <a href="mailto:thepremanshu@gmail.com" class="flex items-center justify-center gap-2 text-gray-400 hover:text-white transition bg-black md:bg-transparent p-3 md:p-0 rounded">
-                        <i class="fas fa-envelope text-red-500 text-xl"></i>
-                        <span>Email Us</span>
-                    </a>
-                    <a href="https://t.me/apnaadda_official" target="_blank" class="flex items-center justify-center gap-2 text-gray-400 hover:text-blue-400 transition bg-black md:bg-transparent p-3 md:p-0 rounded">
-                        <i class="fab fa-telegram text-blue-500 text-xl"></i>
-                        <span>Telegram</span>
-                    </a>
-                    <a href="https://whatsapp.com/channel/0029Vb7K9Ms3gvWeXnfpLy3x" target="_blank" class="flex items-center justify-center gap-2 text-gray-400 hover:text-green-400 transition bg-black md:bg-transparent p-3 md:p-0 rounded">
-                        <i class="fab fa-whatsapp text-green-500 text-xl"></i>
-                        <span>WhatsApp</span>
-                    </a>
+        <!-- 4. ABOUT/CONTACT/ETC (Desktop view only - repurposed for Profile on mobile) -->
+        <div id="section-about" class="hidden-section hidden md:block">
+            <!-- Desktop specific About content -->
+             <div class="max-w-4xl mx-auto bg-gray-900 border border-gray-800 rounded-lg p-12 shadow-2xl">
+                <h2 class="text-3xl font-bold mb-6 text-red-600">About APNA ADDA</h2>
+                <div class="space-y-4 text-gray-300 leading-relaxed text-justify">
+                    <p>APNA ADDA is a technology-driven company committed to building smart, simple, and useful digital solutions.</p>
                 </div>
             </div>
         </div>
 
-        <!-- 4. CONTACT US SECTION -->
-        <div id="section-contact" class="hidden-section animate-fade-in">
-            <div class="flex flex-col items-center justify-center min-h-[50vh]">
-                <h2 class="text-3xl md:text-4xl font-bold mb-8">Get In Touch</h2>
-                
-                <div class="bg-gray-900 p-6 md:p-8 rounded-xl border border-gray-800 shadow-lg w-full max-w-lg text-center">
-                    <p class="text-gray-400 mb-8 text-sm md:text-base">
-                        Have questions, suggestions, or just want to say hello? Reach out to us directly or join our communities.
-                    </p>
-
+        <div id="section-contact" class="hidden-section hidden md:block">
+             <div class="flex flex-col items-center justify-center min-h-[50vh]">
+                <h2 class="text-4xl font-bold mb-8">Get In Touch</h2>
+                <div class="bg-gray-900 p-8 rounded-xl border border-gray-800 shadow-lg w-full max-w-lg text-center">
                     <div class="space-y-4">
-                        <a href="mailto:thepremanshu@gmail.com" class="block w-full bg-white hover:bg-gray-200 text-gray-800 font-bold py-3 px-6 rounded shadow transition flex items-center justify-center gap-3">
-                            <i class="fab fa-google text-red-600"></i>
-                            Send Email
-                        </a>
-
-                        <a href="https://t.me/apnaadda_official" target="_blank" class="block w-full bg-[#0088cc] hover:bg-[#0077b5] text-white font-bold py-3 px-6 rounded shadow transition flex items-center justify-center gap-3">
-                            <i class="fab fa-telegram-plane"></i>
-                            Join Telegram
-                        </a>
-
-                        <a href="https://whatsapp.com/channel/0029Vb7K9Ms3gvWeXnfpLy3x" target="_blank" class="block w-full bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold py-3 px-6 rounded shadow transition flex items-center justify-center gap-3">
-                            <i class="fab fa-whatsapp text-xl"></i>
-                            Join WhatsApp
-                        </a>
+                        <a href="mailto:thepremanshu@gmail.com" class="block w-full bg-white hover:bg-gray-200 text-gray-800 font-bold py-3 px-6 rounded shadow">Email Us</a>
                     </div>
-
-                    <div class="mt-8 text-sm text-gray-600">
-                        Response time: Within 24 hours
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 5. PRIVACY POLICY SECTION -->
-        <div id="section-privacy" class="hidden-section animate-fade-in">
-            <div class="max-w-4xl mx-auto bg-gray-900 border border-gray-800 rounded-lg p-6 md:p-12 shadow-2xl">
-                <h2 class="text-2xl md:text-3xl font-bold mb-6 text-red-600 border-b border-gray-700 pb-4">Privacy Policy</h2>
-                
-                 <div class="text-gray-300 leading-relaxed space-y-6 text-sm md:text-base">
-                    <p class="text-sm text-gray-500 font-bold">Effective Date: 07 DECEMBER 2025</p>
-                    <p>
-                        APNA ADDA (“we,” “our,” or “us”) respects your privacy and is committed to protecting the personal information of users who visit our website and use our applications and services. This Privacy Policy explains how we collect, use, disclose, and safeguard your information.
-                    </p>
-                    <div>
-                        <h3 class="text-xl font-bold text-white mb-2">1. Information We Collect</h3>
-                        <p class="mb-2">We may collect the following types of information:</p>
-                        <ul class="list-disc pl-5 space-y-1 text-gray-400">
-                            <li><strong>Personal Information:</strong> When you contact us or use certain features, we may collect Name and Email address.</li>
-                            <li><strong>Non-Personal Information:</strong> Usage data and analytics.</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 6. DISCLAIMER SECTION -->
-        <div id="section-disclaimer" class="hidden-section animate-fade-in">
-            <div class="max-w-4xl mx-auto bg-gray-900 border border-gray-800 rounded-lg p-6 md:p-12 shadow-2xl">
-                <h2 class="text-2xl md:text-3xl font-bold mb-6 text-red-600 border-b border-gray-700 pb-4">Disclaimer</h2>
-                
-                <div class="text-gray-300 leading-relaxed space-y-6 text-justify text-sm md:text-base">
-                    <p>
-                        The information provided on the APNA ADDA website is for general informational purposes only. While we strive to keep the information accurate, up to date, and reliable, APNA ADDA makes no representations or warranties of any kind, express or implied, about the completeness, accuracy, reliability, suitability, or availability of any information, products, services, or related graphics contained on the website for any purpose. Any reliance you place on such information is strictly at your own risk.
-                    </p>
-                    <p class="font-bold text-white">
-                        By using this website, you hereby consent to this disclaimer and agree to its terms.
-                    </p>
                 </div>
             </div>
         </div>
@@ -348,45 +486,30 @@
         <div id="section-login" class="hidden-section flex justify-center items-center h-full py-10">
             <div class="bg-gray-900 p-8 rounded-lg border border-red-900/30 shadow-2xl w-full max-w-md animate-fade-in mx-2">
                 <h2 class="text-2xl md:text-3xl font-bold text-center mb-2 text-white">Welcome</h2>
-                <p class="text-center text-gray-500 mb-6 text-sm">Sign in to manage your world</p>
-
-                <!-- Toggles -->
                 <div class="flex justify-center gap-8 mb-6 border-b border-gray-800 pb-2">
                     <div id="tabLogin" class="cursor-pointer text-red-600 font-bold border-b-2 border-red-600 pb-1" onclick="toggleAuthMode('login')">Login</div>
                     <div id="tabSignup" class="cursor-pointer text-gray-500 pb-1" onclick="toggleAuthMode('signup')">Sign Up</div>
                 </div>
-
                 <form id="authForm" onsubmit="handleAuthSubmit(event)">
-                    <div class="mb-4">
-                        <label class="block text-gray-400 mb-2 text-sm">Email</label>
-                        <input type="email" id="authEmail" class="w-full p-3 rounded bg-black border-gray-700 focus:border-red-600 transition" required>
-                    </div>
-                    <div class="mb-6">
-                        <label class="block text-gray-400 mb-2 text-sm">Password</label>
-                        <input type="password" id="authPassword" class="w-full p-3 rounded bg-black border-gray-700 focus:border-red-600 transition" required>
-                    </div>
-                    <button type="submit" id="authSubmitBtn" class="w-full bg-red-600 text-white font-bold py-3 rounded hover:bg-red-700 transition">
-                        LOGIN
-                    </button>
+                    <div class="mb-4"><label class="block text-gray-400 mb-2 text-sm">Email</label><input type="email" id="authEmail" class="w-full p-3 rounded bg-black border-gray-700 focus:border-red-600 transition" required></div>
+                    <div class="mb-6"><label class="block text-gray-400 mb-2 text-sm">Password</label><input type="password" id="authPassword" class="w-full p-3 rounded bg-black border-gray-700 focus:border-red-600 transition" required></div>
+                    <button type="submit" id="authSubmitBtn" class="w-full bg-red-600 text-white font-bold py-3 rounded hover:bg-red-700 transition">LOGIN</button>
                 </form>
             </div>
         </div>
 
-        <!-- 8. ADMIN DASHBOARD (Protected) -->
+        <!-- 8. ADMIN DASHBOARD -->
         <div id="section-admin" class="hidden-section">
-            <div class="flex flex-col md:flex-row justify-between items-center mb-8 border-b border-gray-800 pb-4 gap-4">
+            <div class="flex justify-between items-center mb-8 border-b border-gray-800 pb-4">
                 <h2 class="text-xl md:text-2xl font-bold text-white">Admin Dashboard</h2>
-                <span class="bg-red-900/40 text-red-500 px-3 py-1 rounded text-xs border border-red-900">MASTER ACCESS</span>
             </div>
-
-            <!-- Dashboard Content Grid - Stack on mobile, grid on lg -->
-            <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
-                <!-- 1. Add/Edit App Form -->
-                <div class="lg:col-span-1 bg-gray-900 p-6 rounded-lg border border-gray-800 h-fit">
-                    <h3 id="formTitle" class="text-lg font-bold text-white mb-4">Add / Edit App</h3>
+            <!-- Admin Content (Same as before) -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                 <!-- 1. Add/Edit App Form (Col 1-3) -->
+                 <div class="lg:col-span-3 bg-gray-900 p-6 rounded-lg border border-gray-800 h-fit">
+                    <h3 class="text-lg font-bold text-white mb-4">Add / Edit App</h3>
                     <form id="appForm" onsubmit="handleAppSubmit(event)">
                         <input type="hidden" id="editAppId">
-                        
                         <div class="mb-3"><label class="text-xs text-gray-400 block mb-1">Name</label><input type="text" id="appName" class="w-full p-2 rounded" required></div>
                         <div class="mb-3">
                             <label class="text-xs text-gray-400 block mb-1">Status</label>
@@ -401,7 +524,6 @@
                         <div id="weeksField" class="mb-3 hidden"><label class="text-xs text-gray-400 block mb-1">Weeks</label><input type="number" id="statusWeeks" class="w-full p-2 rounded"></div>
                         <div class="mb-3"><label class="text-xs text-gray-400 block mb-1">Link</label><input type="url" id="appLink" class="w-full p-2 rounded"></div>
                         <div class="mb-4"><label class="text-xs text-gray-400 block mb-1">Image</label><input type="file" id="appImage" class="w-full text-xs text-gray-400" accept="image/*"></div>
-
                         <div class="flex gap-2">
                             <button type="submit" id="submitBtn" class="flex-1 bg-white text-black font-bold py-2 rounded hover:bg-gray-200">Save</button>
                             <button type="button" onclick="resetForm()" class="px-3 border border-gray-600 rounded text-white">Reset</button>
@@ -409,29 +531,48 @@
                     </form>
                 </div>
 
-                <!-- 2. Manage Slideshow Form -->
-                <div class="lg:col-span-1 bg-gray-900 p-6 rounded-lg border border-gray-800 h-fit">
-                    <h3 class="text-lg font-bold text-white mb-4">Manage Slideshow</h3>
+                <!-- 2. Slideshow (Col 4-6) -->
+                <div class="lg:col-span-3 bg-gray-900 p-6 rounded-lg border border-gray-800 h-fit">
+                    <h3 class="text-lg font-bold text-white mb-4">Slideshow</h3>
                     <div class="mb-4">
-                        <label class="text-xs text-gray-400 block mb-1">Upload Hero Image</label>
                         <input type="file" id="slideUploadInput" class="w-full text-xs text-gray-400 mb-2" accept="image/*">
-                        <button onclick="uploadSlide()" class="w-full bg-red-600 text-white font-bold py-2 rounded hover:bg-red-700 text-sm">Upload Slide</button>
+                        <button onclick="uploadSlide()" class="w-full bg-red-600 text-white font-bold py-2 rounded hover:bg-red-700 text-sm">Upload</button>
                     </div>
-                    <hr class="border-gray-700 my-4">
-                    <h4 class="text-sm font-bold text-gray-400 mb-2">Current Slides</h4>
-                    <div id="adminSlidesList" class="space-y-2 max-h-60 overflow-y-auto">
-                        <!-- List loaded via JS -->
+                    <div id="adminSlidesList" class="space-y-2 max-h-60 overflow-y-auto"></div>
+                </div>
+
+                <!-- 3. App List (Col 7-12) -->
+                <div class="lg:col-span-6 bg-gray-900 rounded-lg border border-gray-800 overflow-hidden h-fit mb-6">
+                    <div class="p-4 bg-black border-b border-gray-800"><h3 class="font-bold">App Database</h3></div>
+                    <div class="overflow-x-auto max-h-80 overflow-y-auto">
+                        <table class="w-full text-left text-sm text-gray-400 whitespace-nowrap">
+                            <thead class="bg-gray-800 text-xs uppercase"><tr><th class="p-3">Name</th><th class="p-3">Status</th><th class="p-3 text-right">Action</th></tr></thead>
+                            <tbody id="adminAppsTable"></tbody>
+                        </table>
                     </div>
                 </div>
 
-                <!-- 3. App List -->
-                <div class="lg:col-span-2 bg-gray-900 rounded-lg border border-gray-800 overflow-hidden">
-                    <div class="p-4 bg-black border-b border-gray-800"><h3 class="font-bold">App Database</h3></div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left text-sm text-gray-400 whitespace-nowrap">
-                            <thead class="bg-gray-800 text-xs uppercase"><tr><th class="p-3">Img</th><th class="p-3">Name</th><th class="p-3">Status</th><th class="p-3 text-right">Action</th></tr></thead>
-                            <tbody id="adminAppsTable"></tbody>
-                        </table>
+                <!-- 4. Support (Full) -->
+                <div class="lg:col-span-12 bg-gray-900 rounded-lg border border-gray-800 overflow-hidden mt-2">
+                    <div class="p-4 bg-black border-b border-gray-800 flex justify-between">
+                        <h3 class="font-bold text-white">Support Messages</h3>
+                        <button onclick="fetchSupportChats()" class="text-xs text-gray-400 hover:text-white"><i class="fas fa-sync"></i> Refresh</button>
+                    </div>
+                    <div class="flex flex-col md:flex-row h-[400px]">
+                        <div class="w-full md:w-1/3 border-r border-gray-800 overflow-y-auto bg-[#111]" id="adminSupportUserList"></div>
+                        <div class="w-full md:w-2/3 flex flex-col bg-[#0a0a0a] relative">
+                            <div id="adminChatHeader" class="p-3 border-b border-gray-800 bg-[#141414] font-bold text-gray-300 flex justify-between items-center">
+                                <span>Select user</span>
+                                <button id="deleteChatBtn" class="hidden text-red-600 text-xs border border-red-900 px-2 py-1 rounded" onclick="deleteUserChat()">DELETE</button>
+                            </div>
+                            <div id="adminChatBody" class="flex-1 overflow-y-auto p-4 flex flex-col gap-3"></div>
+                            <div id="adminChatFooter" class="p-3 border-t border-gray-800 bg-[#141414] hidden">
+                                <form onsubmit="sendAdminReply(event)" class="flex gap-2">
+                                    <input type="text" id="adminChatInput" class="flex-1 bg-black border border-gray-700 rounded-full px-4 py-2 text-sm" placeholder="Reply...">
+                                    <button type="submit" class="text-red-600 px-3"><i class="fas fa-paper-plane"></i></button>
+                                </form>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -439,46 +580,48 @@
 
     </main>
 
-    <!-- FOOTER -->
-    <footer class="bg-black border-t border-gray-900 py-8 text-center mt-auto">
-        <p class="text-gray-500 text-sm mb-1">&copy; 2025 APNA ADDA. All Rights Reserved.</p>
-        <p class="text-red-700 text-xs font-bold mb-4">Designed by Premanshu Kumar</p>
-        
-        <div class="flex flex-wrap justify-center gap-4 text-xs font-bold px-4">
-            <span onclick="navigateTo('privacy')" class="cursor-pointer text-gray-400 hover:text-red-500 bg-gray-900 px-4 py-2 rounded border border-gray-800 hover:border-red-600 transition">
-                <i class="fas fa-shield-alt mr-1"></i> Privacy Policy
-            </span>
-            <span onclick="navigateTo('disclaimer')" class="cursor-pointer text-gray-400 hover:text-red-500 bg-gray-900 px-4 py-2 rounded border border-gray-800 hover:border-red-600 transition">
-                <i class="fas fa-exclamation-circle mr-1"></i> Disclaimer
-            </span>
+    <!-- MOBILE BOTTOM NAVIGATION -->
+    <div class="md:hidden fixed bottom-0 left-0 w-full bg-black/95 backdrop-blur-md border-t border-gray-900 flex justify-around items-center py-3 z-40 pb-safe">
+        <div class="bottom-nav-item active flex flex-col items-center gap-1 cursor-pointer w-1/3" id="bn-home" onclick="navigateTo('home')">
+            <i class="fas fa-home text-xl"></i>
+            <span class="text-[10px] font-bold">Home</span>
         </div>
-    </footer>
+        <div class="bottom-nav-item flex flex-col items-center gap-1 cursor-pointer w-1/3" id="bn-apps" onclick="navigateTo('apps')">
+            <i class="fas fa-th-large text-xl"></i>
+            <span class="text-[10px] font-bold">Apps</span>
+        </div>
+        <div class="bottom-nav-item flex flex-col items-center gap-1 cursor-pointer w-1/3" id="bn-profile" onclick="navigateTo('profile')">
+            <i class="fas fa-user-circle text-xl"></i>
+            <span class="text-[10px] font-bold">Profile</span>
+        </div>
+    </div>
+
+    <!-- SUPPORT CHAT WIDGET -->
+    <div id="supportWidget" class="z-50">
+        <div class="chat-widget-btn" onclick="toggleChatWindow()">
+            <i class="fas fa-comments"></i>
+            <div id="userChatBadge" class="notification-dot hidden"></div>
+        </div>
+        <div class="chat-window" id="chatWindow">
+            <div class="chat-header">
+                <div class="flex items-center gap-2"><i class="fas fa-robot"></i> SUPPORT</div>
+                <i class="fas fa-times cursor-pointer" onclick="toggleChatWindow()"></i>
+            </div>
+            <div class="bg-gray-800 p-3 text-xs text-center text-gray-400 border-b border-gray-700">
+                WELCOME TO APNA ADDA! HOW CAN WE ASSIST YOU TODAY?
+            </div>
+            <div class="chat-body" id="userChatBody"></div>
+            <div class="chat-footer">
+                <form class="flex w-full gap-2" onsubmit="sendUserMessage(event)">
+                    <input type="text" id="userChatInput" class="chat-input" placeholder="Type message..." required autocomplete="off">
+                    <button type="submit" class="chat-send-btn"><i class="fas fa-paper-plane"></i></button>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <!-- JAVASCRIPT -->
     <script>
-        // --- MOBILE MENU LOGIC ---
-        function toggleMobileMenu(forceClose = false) {
-            const menu = document.getElementById('navMenu');
-            const icon = document.querySelector('#mobileMenuBtn i');
-            
-            if (forceClose) {
-                menu.classList.add('hidden');
-                icon.classList.remove('fa-times');
-                icon.classList.add('fa-bars');
-                return;
-            }
-
-            if (menu.classList.contains('hidden')) {
-                menu.classList.remove('hidden');
-                icon.classList.remove('fa-bars');
-                icon.classList.add('fa-times');
-            } else {
-                menu.classList.add('hidden');
-                icon.classList.remove('fa-times');
-                icon.classList.add('fa-bars');
-            }
-        }
-
         // 1. FIREBASE CONFIG
         const firebaseConfig = {
             apiKey: "AIzaSyAUHUwmJVnW40FefXCpuxfREsnXNCHHxQU",
@@ -492,81 +635,56 @@
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.database();
-
-        // Ensure persistence is set to LOCAL
         auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
 
         // 2. STATE
         const ADMIN_EMAIL = "thepremanshu@gmail.com";
-        const WHATSAPP_LINK = "https://whatsapp.com/channel/0029Vb7K9Ms3gvWeXnfpLy3x"; 
-        const TELEGRAM_LINK = "https://t.me/apnaadda_official";
-
         let allApps = [];
-        let allSlides = []; // Store slideshow images
+        let allSlides = [];
         let isSignupMode = false;
         let slideInterval = null;
-        
-        const sections = ['home', 'apps', 'about', 'contact', 'login', 'admin', 'privacy', 'disclaimer'];
+        let currentUserEmail = null;
+        let currentAdminChatUser = null;
+        const sections = ['home', 'apps', 'about', 'contact', 'login', 'admin', 'profile'];
 
         // 3. INIT
         window.onload = function() {
-            // Restore last visited section
             const savedSection = localStorage.getItem('apnaAddaCurrentSection') || 'home';
-            if(savedSection !== 'admin') {
-                navigateTo(savedSection, true); 
-            } 
-
-            // --- FIRST VISIT POPUP LOGIC ---
-            const hasSeenPopup = localStorage.getItem('hasSeenSocialPopup');
-            
-            if (!hasSeenPopup) {
-                setTimeout(() => {
-                    const current = localStorage.getItem('apnaAddaCurrentSection');
-                    if(current === 'admin') return;
-
-                    Swal.fire({
-                        title: '<strong style="color:#fff; font-size:1.5rem;">STAY CONNECTED</strong>',
-                        html: `
-                            <div class="text-gray-400 mb-4 text-sm">Join our channels for latest updates!</div>
-                            <div class="flex flex-col gap-3">
-                                <a href="${WHATSAPP_LINK}" target="_blank" class="flex items-center justify-center gap-2 w-full py-3 rounded bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold transition no-underline shadow-lg">
-                                    <i class="fab fa-whatsapp text-2xl"></i> Join WhatsApp Channel
-                                </a>
-                                <a href="${TELEGRAM_LINK}" target="_blank" class="flex items-center justify-center gap-2 w-full py-3 rounded bg-[#0088cc] hover:bg-[#0077b5] text-white font-bold transition no-underline shadow-lg">
-                                    <i class="fab fa-telegram-plane text-2xl"></i> Join Telegram Channel
-                                </a>
-                            </div>
-                        `,
-                        background: '#141414',
-                        showCancelButton: true,
-                        showConfirmButton: false, 
-                        cancelButtonColor: '#333',
-                        cancelButtonText: 'Maybe Later',
-                        allowOutsideClick: false,
-                        customClass: {
-                            popup: 'border border-gray-700 rounded-xl'
-                        }
-                    }).then((result) => {
-                        localStorage.setItem('hasSeenSocialPopup', 'true');
-                    });
-                }, 1500); 
-            }
-            
+            if(savedSection !== 'admin') navigateTo(savedSection, true); 
             fetchApps();
             fetchSlides();
         };
 
-        // 4. NAVIGATION LOGIC
         function navigateTo(sectionId, isInitialLoad = false) {
             if(!isInitialLoad) localStorage.setItem('apnaAddaCurrentSection', sectionId);
+            
+            // Handle Sections
+            sections.forEach(s => {
+                const el = document.getElementById(`section-${s}`);
+                if(el) el.classList.add('hidden-section');
+            });
 
-            sections.forEach(s => document.getElementById(`section-${s}`).classList.add('hidden-section'));
+            // Desktop Nav
             document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-
-            document.getElementById(`section-${sectionId}`).classList.remove('hidden-section');
             const navLink = document.getElementById(`link-${sectionId}`);
             if (navLink) navLink.classList.add('active');
 
+            // Mobile Bottom Nav Highlights
+            document.querySelectorAll('.bottom-nav-item').forEach(i => i.classList.remove('active'));
+            if(sectionId === 'home') document.getElementById('bn-home').classList.add('active');
+            else if(sectionId === 'apps') document.getElementById('bn-apps').classList.add('active');
+            else if(sectionId === 'profile' || sectionId === 'login' || sectionId === 'admin') document.getElementById('bn-profile').classList.add('active');
+
+            // Show selected section
+            const target = document.getElementById(`section-${sectionId}`);
+            if(target) target.classList.remove('hidden-section');
+
+            // Special mobile "profile" handling: if clicking About/Contact on desktop, it shows section. 
+            // On mobile, profile contains these, so we need to ensure profile is used or sections are allowed.
+            // Current setup: Desktop uses distinct sections. Mobile has Profile.
+            // If on mobile and navigateTo('about'), we might want to switch to Profile and open accordion? 
+            // For simplicity, we keep sections distinct but hidden on mobile except Profile.
+            
             window.scrollTo(0, 0);
         }
 
@@ -574,55 +692,89 @@
             document.getElementById('homeAppsContainer').scrollIntoView({ behavior: 'smooth' });
         }
 
-        // 5. AUTH OBSERVER
-        auth.onAuthStateChanged((user) => {
-            const loginBtn = document.getElementById('navLoginBtn');
-            const logoutBtn = document.getElementById('navLogoutBtn');
-            const dashBtn = document.getElementById('navDashboardBtn');
+        function toggleAccordion(id, btn) {
+            const content = document.getElementById(id);
+            const isActive = btn.classList.contains('active');
             
+            // Close all others
+            document.querySelectorAll('.accordion-content').forEach(c => { c.style.maxHeight = '0'; });
+            document.querySelectorAll('.accordion-btn').forEach(b => { b.classList.remove('active'); });
+
+            if (!isActive) {
+                btn.classList.add('active');
+                content.style.maxHeight = content.scrollHeight + "px";
+            }
+        }
+
+        // 4. AUTH & CHAT INIT
+        auth.onAuthStateChanged((user) => {
+            const navLoginBtn = document.getElementById('navLoginBtn');
+            const navLogoutBtn = document.getElementById('navLogoutBtn');
+            const navDashBtn = document.getElementById('navDashboardBtn');
+            
+            // Mobile Specifics
+            const mobileHeaderLoginBtn = document.getElementById('mobileHeaderLoginBtn');
+            const profileLoggedOut = document.getElementById('profileLoggedOut');
+            const profileLoggedIn = document.getElementById('profileLoggedIn');
+            const profileEmail = document.getElementById('profileEmailDisplay');
+            const profileAdminBtn = document.getElementById('profileAdminBtn');
+
             if (user) {
-                loginBtn.classList.add('hidden');
-                logoutBtn.classList.remove('hidden');
-                if (user.email === ADMIN_EMAIL) dashBtn.classList.remove('hidden');
-                else dashBtn.classList.add('hidden');
+                currentUserEmail = user.email;
+                // Desktop
+                navLoginBtn.classList.add('hidden');
+                navLogoutBtn.classList.remove('hidden');
+                
+                // Mobile Header (Hide Login Btn)
+                mobileHeaderLoginBtn.classList.add('hidden');
+
+                // Profile Section
+                profileLoggedOut.classList.add('hidden');
+                profileLoggedIn.classList.remove('hidden');
+                profileEmail.innerText = user.email.split('@')[0];
+
+                initUserChat(user.email);
+
+                if (user.email === ADMIN_EMAIL) {
+                    navDashBtn.classList.remove('hidden');
+                    profileAdminBtn.classList.remove('hidden'); // Mobile Profile
+                    fetchSupportChats(); 
+                } else {
+                    navDashBtn.classList.add('hidden');
+                    profileAdminBtn.classList.add('hidden');
+                }
             } else {
-                loginBtn.classList.remove('hidden');
-                logoutBtn.classList.add('hidden');
-                dashBtn.classList.add('hidden');
+                currentUserEmail = null;
+                // Desktop
+                navLoginBtn.classList.remove('hidden');
+                navLogoutBtn.classList.add('hidden');
+                navDashBtn.classList.add('hidden');
+
+                // Mobile Header (Show Login Btn)
+                mobileHeaderLoginBtn.classList.remove('hidden');
+
+                // Profile Section
+                profileLoggedOut.classList.remove('hidden');
+                profileLoggedIn.classList.add('hidden');
             }
 
             const savedSection = localStorage.getItem('apnaAddaCurrentSection');
-            if (user) {
-                if (savedSection === 'login') {
-                    if(user.email === ADMIN_EMAIL) navigateTo('admin');
-                    else navigateTo('home');
-                } else if (savedSection === 'admin') {
-                    if(user.email === ADMIN_EMAIL) navigateTo('admin');
-                    else navigateTo('home');
-                } 
-            } else {
-                if (savedSection === 'admin') navigateTo('login');
-            }
+            if (user && savedSection === 'login') navigateTo(user.email === ADMIN_EMAIL ? 'admin' : 'home');
+            if (!user && savedSection === 'admin') navigateTo('login');
         });
 
-        // 6. LOGIN/SIGNUP LOGIC
         function toggleAuthMode(mode) {
             isSignupMode = (mode === 'signup');
             const loginTab = document.getElementById('tabLogin');
             const signupTab = document.getElementById('tabSignup');
             const btn = document.getElementById('authSubmitBtn');
-
             if (isSignupMode) {
-                loginTab.classList.replace('text-red-600', 'text-gray-500');
-                loginTab.classList.remove('font-bold', 'border-b-2');
-                signupTab.classList.replace('text-gray-500', 'text-red-600');
-                signupTab.classList.add('font-bold', 'border-b-2', 'border-red-600');
+                loginTab.classList.replace('text-red-600', 'text-gray-500'); loginTab.classList.remove('font-bold', 'border-b-2');
+                signupTab.classList.replace('text-gray-500', 'text-red-600'); signupTab.classList.add('font-bold', 'border-b-2', 'border-red-600');
                 btn.innerText = "SIGN UP";
             } else {
-                signupTab.classList.replace('text-red-600', 'text-gray-500');
-                signupTab.classList.remove('font-bold', 'border-b-2');
-                loginTab.classList.replace('text-gray-500', 'text-red-600');
-                loginTab.classList.add('font-bold', 'border-b-2', 'border-red-600');
+                signupTab.classList.replace('text-red-600', 'text-gray-500'); signupTab.classList.remove('font-bold', 'border-b-2');
+                loginTab.classList.replace('text-gray-500', 'text-red-600'); loginTab.classList.add('font-bold', 'border-b-2', 'border-red-600');
                 btn.innerText = "LOGIN";
             }
         }
@@ -631,275 +783,92 @@
             e.preventDefault();
             const email = document.getElementById('authEmail').value;
             const pass = document.getElementById('authPassword').value;
-
             if (isSignupMode) {
-                auth.createUserWithEmailAndPassword(email, pass)
-                    .then(() => {
-                        Swal.fire({icon:'success', title:'Signed Up!', background:'#111', color:'#fff', confirmButtonColor:'#E50914'});
-                        navigateTo('home');
-                    })
-                    .catch(err => Swal.fire({icon:'error', title:'Error', text:err.message, background:'#111', color:'#fff'}));
+                auth.createUserWithEmailAndPassword(email, pass).then(() => { navigateTo('home'); })
+                .catch(err => Swal.fire({icon:'error', title:'Error', text:err.message, background:'#111', color:'#fff'}));
             } else {
-                auth.signInWithEmailAndPassword(email, pass)
-                    .then((cred) => {
-                        Swal.fire({icon:'success', title:'Welcome', timer:1500, showConfirmButton:false, background:'#111', color:'#fff'});
-                        if(cred.user.email === ADMIN_EMAIL) navigateTo('admin');
-                        else navigateTo('home');
-                    })
-                    .catch(err => Swal.fire({icon:'error', title:'Error', text:err.message, background:'#111', color:'#fff'}));
+                auth.signInWithEmailAndPassword(email, pass).then((cred) => {
+                    if(cred.user.email === ADMIN_EMAIL) navigateTo('admin');
+                    else navigateTo('home');
+                }).catch(err => Swal.fire({icon:'error', title:'Error', text:err.message, background:'#111', color:'#fff'}));
             }
         }
 
         function handleLogout() {
-            Swal.fire({
-                title: 'Logout?', icon: 'warning', showCancelButton: true,
-                confirmButtonColor: '#E50914', cancelButtonColor: '#333',
-                background: '#111', color: '#fff'
-            }).then((res) => {
-                if(res.isConfirmed) {
-                    localStorage.setItem('apnaAddaCurrentSection', 'home');
-                    auth.signOut().then(() => navigateTo('home'));
+            Swal.fire({title: 'Logout?', icon: 'warning', showCancelButton: true, confirmButtonColor: '#E50914', background: '#111', color: '#fff'})
+            .then((res) => { if(res.isConfirmed) { localStorage.setItem('apnaAddaCurrentSection', 'home'); auth.signOut().then(() => navigateTo('home')); } });
+        }
+
+        // ============================================
+        // CHAT, APPS, SLIDES (Same Logic as before)
+        // ============================================
+        function sanitizeEmail(email) { return email.replace(/\./g, ','); }
+        function toggleChatWindow() {
+            if (!auth.currentUser) {
+                Swal.fire({title:'Authentication Required', text:'Please login to use support chat.', icon:'warning', showCancelButton:true, confirmButtonText:'LOGIN', confirmButtonColor:'#E50914', background:'#111', color:'#fff'}).then((r)=>{if(r.isConfirmed)navigateTo('login');});
+                return;
+            }
+            const win = document.getElementById('chatWindow'); win.classList.toggle('open');
+            if(win.classList.contains('open')) {
+                document.getElementById('userChatBadge').classList.add('hidden');
+                if(currentUserEmail) db.ref(`support_chats/${sanitizeEmail(currentUserEmail)}`).update({ hasUnreadAdmin: false });
+            }
+        }
+        function initUserChat(email) {
+            const chatBody = document.getElementById('userChatBody');
+            db.ref(`support_chats/${sanitizeEmail(email)}`).on('value', snapshot => {
+                const data = snapshot.val(); chatBody.innerHTML = ''; 
+                if (data && data.messages) {
+                    if (data.hasUnreadAdmin) { if (!document.getElementById('chatWindow').classList.contains('open')) document.getElementById('userChatBadge').classList.remove('hidden'); }
+                    Object.values(data.messages).forEach(msg => {
+                        const div = document.createElement('div'); div.className = `chat-message ${msg.sender === 'admin' ? 'msg-admin' : 'msg-user'}`; div.innerText = msg.text; chatBody.appendChild(div);
+                    });
+                    chatBody.scrollTop = chatBody.scrollHeight;
                 }
             });
         }
-
-        // 7. APP DATA LOGIC
-        function fetchApps() {
-            db.ref('apps').on('value', (snap) => {
-                const data = snap.val();
-                allApps = [];
-                if(data) Object.keys(data).forEach(k => allApps.push({id: k, ...data[k]}));
-                renderPublicGrid();
-                renderAdminTable();
+        function sendUserMessage(e) {
+            e.preventDefault(); const input = document.getElementById('userChatInput'); const text = input.value.trim();
+            if (!text || !currentUserEmail) return;
+            const chatRef = db.ref(`support_chats/${sanitizeEmail(currentUserEmail)}`);
+            chatRef.get().then(snap => {
+                const isFirst = !snap.child('messages').exists();
+                chatRef.child('messages').push({sender:'user', text:text, timestamp:firebase.database.ServerValue.TIMESTAMP});
+                chatRef.update({userEmail:currentUserEmail, lastMessageTime:firebase.database.ServerValue.TIMESTAMP, hasUnreadUser:true});
+                input.value = '';
+                if(isFirst) setTimeout(() => { chatRef.child('messages').push({sender:'admin', text:"ONE TEAM MEMBER WILL SHORTLY ASSISTS YOU!", timestamp:firebase.database.ServerValue.TIMESTAMP}); chatRef.update({hasUnreadAdmin:true}); }, 500);
             });
         }
-
-        function renderPublicGrid() {
-            const gridHome = document.getElementById('homeAppsGrid');
-            const gridPage = document.getElementById('appsGrid');
-            const loader = document.getElementById('homeLoader');
-            
-            if(loader) loader.style.display = 'none';
-            gridHome.innerHTML = '';
-            gridPage.innerHTML = '';
-
-            if(allApps.length === 0) {
-                const empty = '<div class="col-span-3 text-center text-gray-500">No apps available yet.</div>';
-                gridHome.innerHTML = empty;
-                gridPage.innerHTML = empty;
-                return;
-            }
-
-            allApps.forEach(app => {
-                let img = app.image ? `<img src="${app.image}" class="w-full aspect-video object-cover">` : `<div class="w-full aspect-video bg-gray-800 flex items-center justify-center text-red-600 font-bold">APNA ADDA</div>`;
-                
-                let badge = app.status;
-                let color = 'bg-gray-600';
-                let btnTxt = 'Wait for Launch';
-                let btnClass = 'bg-gray-800 text-gray-500 cursor-not-allowed';
-                let link = '#';
-
-                if(app.status === 'Launched') {
-                    color = 'bg-green-600';
-                    btnTxt = 'CLICK HERE';
-                    btnClass = 'bg-red-600 hover:bg-red-700 text-white';
-                    link = app.link || '#';
-                } else if(app.status.includes('date')) {
-                    let displayDate = app.statusDetail;
-                    if(displayDate && displayDate.includes('-')) {
-                        const parts = displayDate.split('-');
-                        if(parts.length === 3) {
-                            displayDate = `${parts[2]}-${parts[1]}-${parts[0]}`; 
-                        }
-                    }
-                    badge = `Coming: ${displayDate}`;
-                    color = 'bg-blue-600';
-                } else if(app.status.includes('weeks')) {
-                    badge = `In ${app.statusDetail} Weeks`;
-                    color = 'bg-purple-600';
-                }
-
-                const cardHtml = `
-                    <div class="app-card rounded-lg overflow-hidden flex flex-col h-full relative">
-                        <div class="relative">${img}<span class="absolute top-2 right-2 ${color} text-white text-[10px] font-bold px-2 py-1 rounded shadow">${badge}</span></div>
-                        <div class="p-5 flex flex-col flex-grow bg-gray-900">
-                            <h3 class="text-xl font-bold mb-4 text-white">${app.name}</h3>
-                            <div class="mt-auto">
-                                <a href="${link}" ${app.status==='Launched'?'target="_blank"':''} class="block w-full text-center ${btnClass} font-bold py-2 rounded transition text-sm">${btnTxt}</a>
-                            </div>
-                        </div>
-                    </div>`;
-                
-                gridHome.innerHTML += cardHtml;
-                gridPage.innerHTML += cardHtml;
+        // Admin Chat functions same as previous (omitted for brevity, they work as defined in previous block)
+        function fetchSupportChats() {
+            const list = document.getElementById('adminSupportUserList');
+            db.ref('support_chats').orderByChild('lastMessageTime').on('value', s => {
+                list.innerHTML = ''; const d = s.val(); if(!d) { list.innerHTML='<div class="p-4 text-center text-gray-500">No chats</div>'; return; }
+                Object.entries(d).sort((a,b)=>b[1].lastMessageTime-a[1].lastMessageTime).forEach(([k,v])=>{
+                    const div = document.createElement('div'); div.className=`p-4 border-b border-gray-800 cursor-pointer hover:bg-gray-800 ${currentAdminChatUser===k?'bg-gray-800 border-l-4 border-l-red-600':''}`;
+                    div.onclick=()=>openAdminChat(k,v.userEmail);
+                    div.innerHTML=`<div class="flex justify-between mb-1"><span class="font-bold text-gray-200 text-sm truncate w-24">${v.userEmail.split('@')[0]}</span><span class="text-xs text-gray-500">${new Date(v.lastMessageTime).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</span></div><div class="text-xs text-gray-400 truncate flex items-center"><i class="fas fa-user-circle mr-1"></i> ${v.userEmail} ${v.hasUnreadUser?'<span class="bg-red-600 w-2 h-2 rounded-full ml-2"></span>':''}</div>`;
+                    list.appendChild(div);
+                });
             });
         }
-
-        // 8. SLIDESHOW LOGIC
-        function fetchSlides() {
-            db.ref('slides').on('value', (snap) => {
-                const data = snap.val();
-                allSlides = [];
-                if(data) Object.keys(data).forEach(k => allSlides.push({id: k, image: data[k].image}));
-                renderHeroSlides();
-                renderAdminSlidesList();
-            });
+        function openAdminChat(k,e){ currentAdminChatUser=k; document.getElementById('adminChatHeader').innerHTML=`<span class="text-sm font-bold text-white"><i class="fas fa-user text-red-500 mr-2"></i>${e}</span><button onclick="deleteUserChat()" class="text-red-500 text-xs border border-red-900 px-2 py-1 rounded">DEL</button>`; document.getElementById('adminChatFooter').classList.remove('hidden'); db.ref(`support_chats/${k}`).update({hasUnreadUser:false}); 
+            const cb=document.getElementById('adminChatBody'); db.ref(`support_chats/${k}/messages`).on('value',s=>{ cb.innerHTML=''; const m=s.val(); if(m)Object.values(m).forEach(x=>{ const d=document.createElement('div'); d.className=`max-w-[80%] p-2 rounded text-xs mb-2 ${x.sender==='admin'?'bg-red-900 text-white self-end':'bg-gray-800 text-gray-300 self-start'}`; d.innerText=x.text; cb.appendChild(d); }); cb.scrollTop=cb.scrollHeight; });
         }
-
-        function renderHeroSlides() {
-            const container = document.getElementById('heroSlideshow');
-            container.innerHTML = '';
-            
-            if(allSlides.length === 0) {
-                container.style.backgroundColor = '#111';
-                return;
-            }
-
-            allSlides.forEach((slide, index) => {
-                const img = document.createElement('img');
-                img.src = slide.image;
-                img.classList.add('slide-image');
-                if(index === 0) img.classList.add('active');
-                container.appendChild(img);
-            });
-
-            startSlideshow();
-        }
-
-        function startSlideshow() {
-            if(slideInterval) clearInterval(slideInterval);
-            if(allSlides.length < 2) return; 
-
-            let currentIndex = 0;
-            const images = document.querySelectorAll('.slide-image');
-            
-            slideInterval = setInterval(() => {
-                if(images.length === 0) return;
-                images[currentIndex].classList.remove('active');
-                currentIndex = (currentIndex + 1) % images.length;
-                images[currentIndex].classList.add('active');
-            }, 5000); 
-        }
-
-        function renderAdminSlidesList() {
-            const list = document.getElementById('adminSlidesList');
-            list.innerHTML = '';
-            if(allSlides.length === 0) {
-                list.innerHTML = '<div class="text-xs text-gray-500">No slides uploaded.</div>';
-                return;
-            }
-            allSlides.forEach(slide => {
-                list.innerHTML += `
-                    <div class="flex items-center justify-between bg-black p-2 rounded border border-gray-700">
-                        <img src="${slide.image}" class="h-8 w-12 object-cover rounded">
-                        <button onclick="deleteSlide('${slide.id}')" class="text-red-500 hover:text-red-400 text-xs font-bold">DELETE</button>
-                    </div>
-                `;
-            });
-        }
-
-        // 9. ADMIN ACTIONS
-        function toggleStatusFields() {
-            const s = document.getElementById('launchStatus').value;
-            document.getElementById('dateField').classList.add('hidden');
-            document.getElementById('weeksField').classList.add('hidden');
-            if(s.includes('date')) document.getElementById('dateField').classList.remove('hidden');
-            if(s.includes('weeks')) document.getElementById('weeksField').classList.remove('hidden');
-        }
-
-        async function handleAppSubmit(e) {
-            e.preventDefault();
-            const id = document.getElementById('editAppId').value;
-            const name = document.getElementById('appName').value;
-            const status = document.getElementById('launchStatus').value;
-            const link = document.getElementById('appLink').value;
-            let detail = '';
-            if(status.includes('date')) detail = document.getElementById('statusDate').value;
-            if(status.includes('weeks')) detail = document.getElementById('statusWeeks').value;
-
-            if(!(await Swal.fire({title:'Save Changes?', icon:'question', showCancelButton:true, background:'#111', color:'#fff'})).isConfirmed) return;
-
-            const file = document.getElementById('appImage').files[0];
-            let img64 = null;
-            if(file) {
-                img64 = await new Promise(r => {const rd=new FileReader(); rd.onload=()=>r(rd.result); rd.readAsDataURL(file);});
-            } else if(id) {
-                const old = allApps.find(a=>a.id===id);
-                if(old) img64 = old.image;
-            }
-
-            const payload = {name, status, statusDetail:detail, link, image:img64||''};
-            if(id) db.ref('apps/'+id).update(payload);
-            else db.ref('apps').push(payload);
-            
-            resetForm();
-            Swal.fire({icon:'success', title:'Saved', background:'#111', color:'#fff', timer:1500, showConfirmButton:false});
-        }
-
-        async function uploadSlide() {
-            const file = document.getElementById('slideUploadInput').files[0];
-            if(!file) {
-                Swal.fire({icon:'error', title:'Select an image', background:'#111', color:'#fff'});
-                return;
-            }
-
-            const img64 = await new Promise(r => {
-                const rd = new FileReader(); 
-                rd.onload = () => r(rd.result); 
-                rd.readAsDataURL(file);
-            });
-
-            db.ref('slides').push({ image: img64 });
-            document.getElementById('slideUploadInput').value = '';
-            Swal.fire({icon:'success', title:'Slide Uploaded', background:'#111', color:'#fff', timer:1000, showConfirmButton:false});
-        }
-
-        function deleteSlide(id) {
-            Swal.fire({title:'Delete Slide?', icon:'warning', showCancelButton:true, background:'#111', color:'#fff'}).then(r => {
-                if(r.isConfirmed) db.ref('slides/'+id).remove();
-            });
-        }
-
-        function editApp(id) {
-            const app = allApps.find(a=>a.id===id);
-            if(!app) return;
-            document.getElementById('editAppId').value = app.id;
-            document.getElementById('appName').value = app.name;
-            document.getElementById('launchStatus').value = app.status;
-            document.getElementById('appLink').value = app.link || '';
-            toggleStatusFields();
-            if(app.status.includes('date')) document.getElementById('statusDate').value = app.statusDetail;
-            if(app.status.includes('weeks')) document.getElementById('statusWeeks').value = app.statusDetail;
-        }
-
-        function deleteApp(id) {
-            Swal.fire({title:'Delete App?', icon:'warning', showCancelButton:true, background:'#111', color:'#fff'}).then(r => {
-                if(r.isConfirmed) db.ref('apps/'+id).remove();
-            });
-        }
-
-        function renderAdminTable() {
-            const tb = document.getElementById('adminAppsTable');
-            tb.innerHTML = '';
-            allApps.forEach(app => {
-                tb.innerHTML += `
-                    <tr class="border-b border-gray-800">
-                        <td class="p-3">${app.image ? '<span class="text-green-500">Img</span>' : '<span class="text-red-500">No</span>'}</td>
-                        <td class="p-3 text-white">${app.name}</td>
-                        <td class="p-3 text-xs text-gray-400">${app.status}</td>
-                        <td class="p-3 text-right">
-                            <button onclick="editApp('${app.id}')" class="text-blue-400 mr-2"><i class="fas fa-edit"></i></button>
-                            <button onclick="deleteApp('${app.id}')" class="text-red-500"><i class="fas fa-trash"></i></button>
-                        </td>
-                    </tr>`;
-            });
-        }
-
-        function resetForm() {
-            document.getElementById('appForm').reset();
-            document.getElementById('editAppId').value = '';
-            toggleStatusFields();
-        }
+        function sendAdminReply(e){ e.preventDefault(); if(!currentAdminChatUser)return; const i=document.getElementById('adminChatInput'); const t=i.value.trim(); if(!t)return; 
+            const r=db.ref(`support_chats/${currentAdminChatUser}`); r.child('messages').push({sender:'admin',text:t,timestamp:firebase.database.ServerValue.TIMESTAMP}); r.update({lastMessageTime:firebase.database.ServerValue.TIMESTAMP,hasUnreadAdmin:true}); i.value=''; }
+        function deleteUserChat(){ if(!currentAdminChatUser)return; Swal.fire({title:'Delete?',icon:'warning',showCancelButton:true,background:'#111',color:'#fff'}).then(r=>{if(r.isConfirmed)db.ref(`support_chats/${currentAdminChatUser}`).remove().then(()=>{document.getElementById('adminChatBody').innerHTML='';currentAdminChatUser=null;document.getElementById('adminChatFooter').classList.add('hidden');});}); }
+        
+        // App & Slide Logic
+        function fetchApps() { db.ref('apps').on('value', s => { allApps=[]; const d=s.val(); if(d)Object.keys(d).forEach(k=>allApps.push({id:k,...d[k]})); renderPublicGrid(); renderAdminTable(); }); }
+        function renderPublicGrid() { const g1=document.getElementById('homeAppsGrid'); const g2=document.getElementById('appsGrid'); document.getElementById('homeLoader').style.display='none'; g1.innerHTML=''; g2.innerHTML=''; allApps.forEach(a=>{ let c='bg-gray-600',b=a.status,l='#'; if(a.status==='Launched'){c='bg-green-600';l=a.link;} else if(a.status.includes('date')){c='bg-blue-600';b='Coming: '+a.statusDetail;} const h=`<div class="app-card rounded-lg overflow-hidden flex flex-col h-full relative"><div class="relative">${a.image?`<img src="${a.image}" class="w-full aspect-video object-cover">`:`<div class="w-full aspect-video bg-gray-800 flex items-center justify-center text-red-600 font-bold">ADDA</div>`}<span class="absolute top-2 right-2 ${c} text-white text-[10px] px-2 py-1 rounded">${b}</span></div><div class="p-4 bg-gray-900 flex flex-col flex-grow"><h3 class="font-bold text-white mb-4">${a.name}</h3><a href="${l}" class="mt-auto block text-center ${a.status==='Launched'?'bg-red-600 text-white':'bg-gray-800 text-gray-500'} font-bold py-2 rounded text-sm">${a.status==='Launched'?'OPEN':'WAIT'}</a></div></div>`; g1.innerHTML+=h; g2.innerHTML+=h; }); }
+        function fetchSlides() { db.ref('slides').on('value', s => { allSlides=[]; const d=s.val(); if(d)Object.keys(d).forEach(k=>allSlides.push({id:k,image:d[k].image})); const c=document.getElementById('heroSlideshow'); c.innerHTML=''; const l=document.getElementById('adminSlidesList'); l.innerHTML=''; allSlides.forEach((x,i)=>{ const m=document.createElement('img'); m.src=x.image; m.className='slide-image'+(i===0?' active':''); c.appendChild(m); l.innerHTML+=`<div class="flex justify-between bg-black p-2 border border-gray-700 mb-1"><img src="${x.image}" class="h-6 w-10 rounded"><button onclick="db.ref('slides/${x.id}').remove()" class="text-red-500 text-xs">DEL</button></div>`; }); if(slideInterval)clearInterval(slideInterval); let idx=0; const im=document.querySelectorAll('.slide-image'); slideInterval=setInterval(()=>{if(im.length){im[idx].classList.remove('active');idx=(idx+1)%im.length;im[idx].classList.add('active');}},5000); }); }
+        function toggleStatusFields() { const v=document.getElementById('launchStatus').value; document.getElementById('dateField').classList.toggle('hidden',!v.includes('date')); document.getElementById('weeksField').classList.toggle('hidden',!v.includes('weeks')); }
+        async function handleAppSubmit(e){ e.preventDefault(); const id=document.getElementById('editAppId').value; const f=document.getElementById('appImage').files[0]; let i=null; if(f)i=await new Promise(r=>{const d=new FileReader();d.onload=()=>r(d.result);d.readAsDataURL(f);}); else if(id){const o=allApps.find(x=>x.id===id);if(o)i=o.image;} const p={name:document.getElementById('appName').value,status:document.getElementById('launchStatus').value,statusDetail:document.getElementById('statusDate').value||document.getElementById('statusWeeks').value,link:document.getElementById('appLink').value,image:i||''}; if(id)db.ref('apps/'+id).update(p);else db.ref('apps').push(p); resetForm(); Swal.fire({icon:'success',title:'Saved',background:'#111',color:'#fff',timer:1000,showConfirmButton:false}); }
+        function resetForm(){document.getElementById('appForm').reset();document.getElementById('editAppId').value='';toggleStatusFields();}
+        async function uploadSlide(){const f=document.getElementById('slideUploadInput').files[0]; if(f){const i=await new Promise(r=>{const d=new FileReader();d.onload=()=>r(d.result);d.readAsDataURL(f);}); db.ref('slides').push({image:i});}}
+        function renderAdminTable(){const t=document.getElementById('adminAppsTable');t.innerHTML='';allApps.forEach(a=>{t.innerHTML+=`<tr class="border-b border-gray-800"><td class="p-3 text-white">${a.name}</td><td class="p-3 text-xs text-gray-400">${a.status}</td><td class="p-3 text-right"><button onclick="editApp('${a.id}')" class="text-blue-400 mr-2"><i class="fas fa-edit"></i></button><button onclick="db.ref('apps/${a.id}').remove()" class="text-red-500"><i class="fas fa-trash"></i></button></td></tr>`;});}
+        function editApp(id){const a=allApps.find(x=>x.id===id);if(!a)return;document.getElementById('editAppId').value=a.id;document.getElementById('appName').value=a.name;document.getElementById('launchStatus').value=a.status;document.getElementById('appLink').value=a.link||'';toggleStatusFields();if(a.status.includes('date'))document.getElementById('statusDate').value=a.statusDetail;if(a.status.includes('weeks'))document.getElementById('statusWeeks').value=a.statusDetail;}
     </script>
 </body>
 </html>
