@@ -28,6 +28,7 @@
             --dark-black: #000000;
             --dark-gray: #141414;
             --light-text: #ffffff;
+            --bottom-nav-height: 65px;
         }
 
         body {
@@ -35,6 +36,11 @@
             color: var(--light-text);
             font-family: 'Montserrat', sans-serif;
             overflow-x: hidden;
+            padding-bottom: var(--bottom-nav-height); 
+        }
+
+        @media(min-width: 768px) {
+            body { padding-bottom: 0; }
         }
 
         /* Animations */
@@ -42,28 +48,33 @@
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
+        .animate-fade-in { animation: fadeIn 0.6s ease-out forwards; }
 
-        .animate-fade-in {
-            animation: fadeIn 0.6s ease-out forwards;
-        }
-
-        /* Navigation Links */
+        /* Navigation Links (Desktop) */
         .nav-link {
             cursor: pointer;
-            padding: 0.75rem 1rem;
+            padding: 0.5rem 1rem;
             transition: color 0.3s ease;
             color: #aaa;
             font-weight: 500;
             font-size: 0.9rem;
-            display: block; /* Block for mobile stacking */
+            display: inline-block;
         }
-        @media(min-width: 768px) {
-            .nav-link { display: inline-block; padding: 0.5rem 1rem; }
-        }
-
         .nav-link:hover, .nav-link.active {
             color: var(--primary-red);
             font-weight: 700;
+        }
+
+        /* Mobile Bottom Nav Items */
+        .mobile-nav-item {
+            color: #666;
+            transition: all 0.3s ease;
+        }
+        .mobile-nav-item.active {
+            color: var(--primary-red);
+        }
+        .mobile-nav-item.active i {
+            transform: translateY(-2px);
         }
 
         /* App Card Hover */
@@ -80,116 +91,139 @@
 
         /* Slideshow Styles */
         .slide-image {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0;
-            transition: opacity 1s ease-in-out;
-            z-index: 0;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: cover; opacity: 0; transition: opacity 1s ease-in-out; z-index: 0;
         }
-        .slide-image.active {
-            opacity: 1;
-        }
+        .slide-image.active { opacity: 1; }
         .hero-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.7);
-            background: linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.8) 100%);
-            z-index: 1;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.8) 100%); z-index: 1;
         }
 
         /* Utility */
-        .hidden-section {
-            display: none !important;
-        }
+        .hidden-section { display: none !important; }
+        .hidden { display: none !important; }
         
         /* Inputs */
         input, select, textarea {
-            background-color: #222;
-            border: 1px solid #444;
-            color: white;
+            background-color: #222; border: 1px solid #444; color: white;
         }
-        input:focus, select:focus {
-            outline: none;
-            border-color: var(--primary-red);
+        input:focus, select:focus, textarea:focus {
+            outline: none; border-color: var(--primary-red);
         }
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #111; }
-        ::-webkit-scrollbar-thumb { background: #E50914; border-radius: 4px; }
+        /* --- CHAT WIDGET STYLES --- */
+        .support-btn {
+            position: fixed;
+            right: 20px;
+            bottom: 30px; 
+            background-color: var(--primary-red);
+            color: white;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(229, 9, 20, 0.5);
+            cursor: pointer;
+            z-index: 9999;
+            transition: transform 0.2s, bottom 0.3s;
+        }
+        .support-btn:hover { transform: scale(1.1); }
+        .support-btn i { font-size: 1.5rem; }
+
+        @media(max-width: 768px) {
+            .support-btn {
+                bottom: 85px; 
+            }
+        }
+
+        .chat-box {
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            width: 350px;
+            height: 450px;
+            background-color: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 12px;
+            box-shadow: 0 5px 30px rgba(0,0,0,0.8);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transform-origin: bottom right;
+            transition: all 0.3s ease;
+        }
+        @media(max-width: 400px) {
+            .chat-box { width: 90%; right: 5%; bottom: 150px; }
+        }
+
+        .chat-header {
+            background-color: var(--primary-red); padding: 15px; font-weight: bold;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .chat-body {
+            flex-grow: 1; padding: 15px; overflow-y: auto; background-color: #0f0f0f;
+            display: flex; flex-direction: column; gap: 10px;
+        }
+        .chat-input-area {
+            padding: 10px; background-color: #1a1a1a; border-top: 1px solid #333; display: flex; gap: 10px;
+        }
+        
+        .msg-bubble { max-width: 80%; padding: 8px 12px; border-radius: 12px; font-size: 0.85rem; line-height: 1.4; word-wrap: break-word; }
+        .msg-user { align-self: flex-end; background-color: var(--primary-red); color: white; border-bottom-right-radius: 2px; }
+        .msg-system, .msg-admin { align-self: flex-start; background-color: #333; color: #ddd; border-bottom-left-radius: 2px; }
+        .msg-system { border: 1px solid #444; font-style: italic; }
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
 
-    <!-- NAVIGATION (RESPONSIVE) -->
-    <nav class="w-full bg-black/95 backdrop-blur-sm border-b border-gray-900 sticky top-0 z-50">
-        <div class="container mx-auto px-4 py-4 flex flex-wrap justify-between items-center">
+    <!-- TOP NAVIGATION (DESKTOP ONLY) -->
+    <nav class="w-full bg-black/95 backdrop-blur-sm border-b border-gray-900 sticky top-0 z-50 hidden md:block">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
             
             <!-- LOGO -->
-            <div class="flex items-center justify-between w-full md:w-auto">
-                <div class="text-2xl font-black tracking-widest text-red-600 cursor-pointer" onclick="navigateTo('home')">
-                    APNA ADDA
-                </div>
-                
-                <!-- MOBILE MENU BUTTON -->
-                <button id="mobileMenuBtn" class="md:hidden text-white focus:outline-none" onclick="toggleMobileMenu()">
-                    <i class="fas fa-bars text-2xl"></i>
-                </button>
+            <div class="text-2xl font-black tracking-widest text-red-600 cursor-pointer" onclick="navigateTo('home')">
+                APNA ADDA
             </div>
 
-            <!-- LINKS CONTAINER -->
-            <div id="navMenu" class="hidden w-full md:flex md:w-auto md:items-center mt-4 md:mt-0 flex-col md:flex-row gap-2 transition-all duration-300">
-                <span class="nav-link active text-center md:text-left" id="link-home" onclick="navigateTo('home'); toggleMobileMenu(true)">Home</span>
-                <span class="nav-link text-center md:text-left" id="link-apps" onclick="navigateTo('apps'); toggleMobileMenu(true)">Our Apps</span>
-                <span class="nav-link text-center md:text-left" id="link-about" onclick="navigateTo('about'); toggleMobileMenu(true)">About Us</span>
-                <span class="nav-link text-center md:text-left" id="link-contact" onclick="navigateTo('contact'); toggleMobileMenu(true)">Contact Us</span>
+            <!-- DESKTOP LINKS -->
+            <div class="flex items-center gap-1">
+                <span class="nav-link active" id="link-home" onclick="navigateTo('home')">Home</span>
+                <span class="nav-link" id="link-apps" onclick="navigateTo('apps')">Our Apps</span>
+                <span class="nav-link" id="link-about" onclick="navigateTo('about')">About Us</span>
+                <span class="nav-link" id="link-contact" onclick="navigateTo('contact')">Contact Us</span>
                 
-                <!-- Separator (Hidden on mobile) -->
-                <div class="hidden md:block h-4 w-px bg-gray-700 mx-2"></div>
+                <div class="h-4 w-px bg-gray-700 mx-2"></div>
 
                 <!-- Auth Buttons -->
-                <div class="flex flex-col md:flex-row gap-3 mt-3 md:mt-0 items-center justify-center">
-                    <button id="navLoginBtn" onclick="navigateTo('login'); toggleMobileMenu(true)" class="w-full md:w-auto text-white bg-red-600 hover:bg-red-700 px-6 py-2 md:px-4 md:py-1.5 rounded text-sm font-bold transition">
-                        Login
-                    </button>
-                    
-                    <button id="navDashboardBtn" onclick="navigateTo('admin'); toggleMobileMenu(true)" class="hidden w-full md:w-auto text-white bg-gray-800 hover:bg-gray-700 px-6 py-2 md:px-4 md:py-1.5 rounded text-sm transition">
-                        Dashboard
-                    </button>
-                    
-                    <button id="navLogoutBtn" onclick="handleLogout(); toggleMobileMenu(true)" class="hidden w-full md:w-auto text-red-500 hover:text-white px-3 py-1.5 text-sm transition font-bold border border-red-900 md:border-none rounded">
-                        Logout
-                    </button>
-                </div>
+                <button id="navLoginBtn" onclick="navigateTo('login')" class="text-white bg-red-600 hover:bg-red-700 px-4 py-1.5 rounded text-sm font-bold transition ml-2">Login</button>
+                <button id="navDashboardBtn" onclick="navigateTo('admin')" class="hidden text-white bg-gray-800 hover:bg-gray-700 px-4 py-1.5 rounded text-sm transition ml-2">Dashboard</button>
+                <button id="navLogoutBtn" onclick="handleLogout()" class="hidden text-red-500 hover:text-white px-3 py-1.5 text-sm transition font-bold ml-2">Logout</button>
             </div>
         </div>
     </nav>
+
+    <!-- MOBILE TOP BAR (LOGO ONLY) -->
+    <div class="md:hidden w-full bg-black border-b border-gray-900 sticky top-0 z-50 p-4 flex justify-between items-center">
+        <div class="text-xl font-black tracking-widest text-red-600" onclick="navigateTo('home')">APNA ADDA</div>
+        <!-- Auth State Indicator (Small Icon) -->
+        <div id="mobileAuthIcon" onclick="navigateTo('login')" class="text-gray-400">
+            <i class="fas fa-user-circle text-2xl"></i>
+        </div>
+    </div>
 
     <!-- MAIN CONTENT AREA -->
     <main class="flex-grow container mx-auto px-4 py-6 md:py-8">
 
         <!-- 1. HOME SECTION -->
         <div id="section-home" class="animate-fade-in">
-            
-            <!-- HERO WITH SLIDESHOW -->
             <div class="relative w-full rounded-2xl overflow-hidden mb-8 border border-gray-800 h-[50vh] md:h-auto">
-                <!-- Background Slideshow -->
-                <div id="heroSlideshow" class="absolute inset-0 w-full h-full bg-gray-900">
-                    <!-- Slides injected via JS -->
-                </div>
-                <!-- Dark Overlay -->
+                <div id="heroSlideshow" class="absolute inset-0 w-full h-full bg-gray-900"></div>
                 <div class="hero-overlay"></div>
-
-                <!-- Hero Content -->
                 <div class="relative z-10 flex flex-col items-center justify-center h-full py-20 md:py-32 text-center px-4">
-                    <!-- Responsive Text Sizes -->
                     <h1 class="text-4xl md:text-6xl lg:text-8xl font-black mb-4 md:mb-6 text-white tracking-tighter drop-shadow-2xl">
                         APNA <span class="text-red-600">ADDA</span>
                     </h1>
@@ -202,72 +236,66 @@
                 </div>
             </div>
 
-            <!-- Home Page Apps Grid -->
             <div id="homeAppsContainer" class="py-8 md:py-10 border-t border-gray-900">
                 <div class="text-center mb-8 md:mb-10">
                     <h2 class="text-2xl md:text-3xl font-bold border-b-4 border-red-600 inline-block pb-2">Latest Applications</h2>
                 </div>
-                
                 <div id="homeLoader" class="text-center py-10">
                     <i class="fas fa-circle-notch fa-spin text-red-600 text-4xl"></i>
                     <p class="mt-2 text-gray-500">Loading...</p>
                 </div>
-
-                <!-- Grid responds: 1 column mobile, 2 tablet, 3 desktop -->
-                <div id="homeAppsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-                    <!-- Apps loaded via JS here too -->
-                </div>
+                <div id="homeAppsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"></div>
             </div>
         </div>
 
-        <!-- 2. APPS SECTION (Dedicated Page) -->
+        <!-- 2. APPS SECTION -->
         <div id="section-apps" class="hidden-section animate-fade-in">
             <div class="text-center mb-8 md:mb-10">
                 <h2 class="text-2xl md:text-3xl font-bold border-b-4 border-red-600 inline-block pb-2">All Applications</h2>
             </div>
-            
-            <div id="appsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-                <!-- Apps loaded via JS -->
-            </div>
+            <div id="appsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"></div>
         </div>
 
         <!-- 3. ABOUT US SECTION -->
         <div id="section-about" class="hidden-section animate-fade-in">
             <div class="max-w-4xl mx-auto bg-gray-900 border border-gray-800 rounded-lg p-6 md:p-12 shadow-2xl">
                 <h2 class="text-2xl md:text-3xl font-bold mb-6 text-red-600">About APNA ADDA</h2>
-                
                 <div class="space-y-4 text-gray-300 leading-relaxed text-justify text-sm md:text-base">
-                    <p>
-                        APNA ADDA is a technology-driven company committed to building smart, simple, and useful digital solutions for everyday life. We primarily focus on creating applications that support students, while also offering tools that benefit people from all walks of life.
-                    </p>
-                    <p>
-                        Our apps are designed to make daily tasks easier, improve productivity, and provide practical solutions through modern technology. At APNA ADDA, we believe that technology should be accessible, reliable, and purpose-driven.
-                    </p>
-                    <p>
-                        The company was founded and is owned by <strong>Premanshu Kumar</strong>, a passionate developer focused on creating meaningful digital products that solve real-world problems. This official website of APNA ADDA represents our mission, our products, and our commitment to quality and innovation.
-                    </p>
-                    <p>
-                        We continuously work to improve our applications and introduce new ideas that can make a positive impact on education and daily living.
-                    </p>
-                    <p class="text-lg md:text-xl font-bold text-white mt-6 text-center">
-                        APNA ADDA – Technology for Everyday Growth.
-                    </p>
+                    <p>APNA ADDA is a technology-driven company committed to building smart, simple, and useful digital solutions for everyday life. We primarily focus on creating applications that support students, while also offering tools that benefit people from all walks of life.</p>
+                    <p>Our apps are designed to make daily tasks easier, improve productivity, and provide practical solutions through modern technology. The company was founded and is owned by <strong>Premanshu Kumar</strong>.</p>
+                </div>
+                
+                <!-- SOCIAL & CONTACT BUTTONS IN ABOUT -->
+                <div class="mt-10 pt-6 border-t border-gray-700 flex flex-col gap-4">
+                    <h3 class="text-center text-white font-bold mb-2">Connect With Us</h3>
+                    <div class="flex flex-col md:flex-row flex-wrap justify-center gap-4">
+                        <a href="mailto:thepremanshu@gmail.com" class="flex items-center justify-center gap-2 text-white bg-gray-800 hover:bg-gray-700 transition py-3 px-6 rounded font-bold shadow-lg">
+                            <i class="fas fa-envelope text-red-500 text-xl"></i><span>Email Us</span>
+                        </a>
+                        <!-- Telegram Button -->
+                        <a href="https://t.me/apnaadda_official" target="_blank" class="flex items-center justify-center gap-2 text-white bg-[#0088cc] hover:bg-[#0077b5] transition py-3 px-6 rounded font-bold shadow-lg">
+                            <i class="fab fa-telegram-plane text-xl"></i><span>Telegram Channel</span>
+                        </a>
+                        <!-- WhatsApp Button -->
+                        <a href="https://whatsapp.com/channel/0029Vb7K9Ms3gvWeXnfpLy3x" target="_blank" class="flex items-center justify-center gap-2 text-white bg-[#25D366] hover:bg-[#20bd5a] transition py-3 px-6 rounded font-bold shadow-lg">
+                            <i class="fab fa-whatsapp text-xl"></i><span>WhatsApp Channel</span>
+                        </a>
+                    </div>
                 </div>
 
-                <!-- Social Links in About -->
-                <div class="mt-10 pt-6 border-t border-gray-700 flex flex-col md:flex-row flex-wrap justify-center gap-4 md:gap-6">
-                    <a href="mailto:thepremanshu@gmail.com" class="flex items-center justify-center gap-2 text-gray-400 hover:text-white transition bg-black md:bg-transparent p-3 md:p-0 rounded">
-                        <i class="fas fa-envelope text-red-500 text-xl"></i>
-                        <span>Email Us</span>
-                    </a>
-                    <a href="https://t.me/apnaadda_official" target="_blank" class="flex items-center justify-center gap-2 text-gray-400 hover:text-blue-400 transition bg-black md:bg-transparent p-3 md:p-0 rounded">
-                        <i class="fab fa-telegram text-blue-500 text-xl"></i>
-                        <span>Telegram</span>
-                    </a>
-                    <a href="https://whatsapp.com/channel/0029Vb7K9Ms3gvWeXnfpLy3x" target="_blank" class="flex items-center justify-center gap-2 text-gray-400 hover:text-green-400 transition bg-black md:bg-transparent p-3 md:p-0 rounded">
-                        <i class="fab fa-whatsapp text-green-500 text-xl"></i>
-                        <span>WhatsApp</span>
-                    </a>
+                <!-- MOBILE SPECIFIC LEGAL LINKS -->
+                <div class="md:hidden mt-8 pt-6 border-t border-gray-800">
+                    <h3 class="text-lg font-bold text-white mb-4 text-center">Legal Information</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div onclick="navigateTo('privacy')" class="bg-black p-3 rounded text-center border border-gray-800 cursor-pointer active:border-red-600">
+                            <i class="fas fa-shield-alt text-red-600 mb-2 block text-xl"></i>
+                            <span class="text-xs text-gray-400">Privacy Policy</span>
+                        </div>
+                        <div onclick="navigateTo('disclaimer')" class="bg-black p-3 rounded text-center border border-gray-800 cursor-pointer active:border-red-600">
+                            <i class="fas fa-exclamation-circle text-red-600 mb-2 block text-xl"></i>
+                            <span class="text-xs text-gray-400">Disclaimer</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -276,120 +304,77 @@
         <div id="section-contact" class="hidden-section animate-fade-in">
             <div class="flex flex-col items-center justify-center min-h-[50vh]">
                 <h2 class="text-3xl md:text-4xl font-bold mb-8">Get In Touch</h2>
-                
                 <div class="bg-gray-900 p-6 md:p-8 rounded-xl border border-gray-800 shadow-lg w-full max-w-lg text-center">
-                    <p class="text-gray-400 mb-8 text-sm md:text-base">
-                        Have questions, suggestions, or just want to say hello? Reach out to us directly or join our communities.
-                    </p>
-
+                    <p class="text-gray-400 mb-8 text-sm md:text-base">Have questions? Join our community or email us directly.</p>
+                    
                     <div class="space-y-4">
                         <a href="mailto:thepremanshu@gmail.com" class="block w-full bg-white hover:bg-gray-200 text-gray-800 font-bold py-3 px-6 rounded shadow transition flex items-center justify-center gap-3">
-                            <i class="fab fa-google text-red-600"></i>
-                            Send Email
+                            <i class="fab fa-google text-red-600 text-xl"></i> Send Email
                         </a>
 
                         <a href="https://t.me/apnaadda_official" target="_blank" class="block w-full bg-[#0088cc] hover:bg-[#0077b5] text-white font-bold py-3 px-6 rounded shadow transition flex items-center justify-center gap-3">
-                            <i class="fab fa-telegram-plane"></i>
-                            Join Telegram
+                            <i class="fab fa-telegram-plane text-xl"></i> Join Telegram
                         </a>
 
                         <a href="https://whatsapp.com/channel/0029Vb7K9Ms3gvWeXnfpLy3x" target="_blank" class="block w-full bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold py-3 px-6 rounded shadow transition flex items-center justify-center gap-3">
-                            <i class="fab fa-whatsapp text-xl"></i>
-                            Join WhatsApp
+                            <i class="fab fa-whatsapp text-xl"></i> Join WhatsApp
                         </a>
                     </div>
-
-                    <div class="mt-8 text-sm text-gray-600">
-                        Response time: Within 24 hours
-                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- 5. PRIVACY POLICY SECTION -->
+        <!-- 5. PRIVACY POLICY -->
         <div id="section-privacy" class="hidden-section animate-fade-in">
             <div class="max-w-4xl mx-auto bg-gray-900 border border-gray-800 rounded-lg p-6 md:p-12 shadow-2xl">
-                <h2 class="text-2xl md:text-3xl font-bold mb-6 text-red-600 border-b border-gray-700 pb-4">Privacy Policy</h2>
-                
-                 <div class="text-gray-300 leading-relaxed space-y-6 text-sm md:text-base">
-                    <p class="text-sm text-gray-500 font-bold">Effective Date: 07 DECEMBER 2025</p>
-                    <p>
-                        APNA ADDA (“we,” “our,” or “us”) respects your privacy and is committed to protecting the personal information of users who visit our website and use our applications and services. This Privacy Policy explains how we collect, use, disclose, and safeguard your information.
-                    </p>
-                    <div>
-                        <h3 class="text-xl font-bold text-white mb-2">1. Information We Collect</h3>
-                        <p class="mb-2">We may collect the following types of information:</p>
-                        <ul class="list-disc pl-5 space-y-1 text-gray-400">
-                            <li><strong>Personal Information:</strong> When you contact us or use certain features, we may collect Name and Email address.</li>
-                            <li><strong>Non-Personal Information:</strong> Usage data and analytics.</li>
-                        </ul>
-                    </div>
+                <h2 class="text-2xl font-bold mb-4 text-red-600">Privacy Policy</h2>
+                <p class="text-gray-400 text-sm">Effective Date: 07 DECEMBER 2025</p>
+                <div class="mt-4 text-gray-300 text-sm space-y-4">
+                    <p>APNA ADDA respects your privacy. We collect minimal personal information (Name, Email) only for user authentication and support services.</p>
+                    <p>We do not sell your data. Usage data is collected to improve app performance.</p>
                 </div>
             </div>
         </div>
 
-        <!-- 6. DISCLAIMER SECTION -->
+        <!-- 6. DISCLAIMER -->
         <div id="section-disclaimer" class="hidden-section animate-fade-in">
             <div class="max-w-4xl mx-auto bg-gray-900 border border-gray-800 rounded-lg p-6 md:p-12 shadow-2xl">
-                <h2 class="text-2xl md:text-3xl font-bold mb-6 text-red-600 border-b border-gray-700 pb-4">Disclaimer</h2>
-                
-                <div class="text-gray-300 leading-relaxed space-y-6 text-justify text-sm md:text-base">
-                    <p>
-                        The information provided on the APNA ADDA website is for general informational purposes only. While we strive to keep the information accurate, up to date, and reliable, APNA ADDA makes no representations or warranties of any kind, express or implied, about the completeness, accuracy, reliability, suitability, or availability of any information, products, services, or related graphics contained on the website for any purpose. Any reliance you place on such information is strictly at your own risk.
-                    </p>
-                    <p class="font-bold text-white">
-                        By using this website, you hereby consent to this disclaimer and agree to its terms.
-                    </p>
-                </div>
+                <h2 class="text-2xl font-bold mb-4 text-red-600">Disclaimer</h2>
+                <p class="text-gray-300 text-sm">The information provided on APNA ADDA is for general informational purposes only. We strive for accuracy but make no warranties about the completeness or reliability of the information.</p>
             </div>
         </div>
 
-        <!-- 7. LOGIN / SIGNUP SECTION -->
+        <!-- 7. LOGIN / SIGNUP -->
         <div id="section-login" class="hidden-section flex justify-center items-center h-full py-10">
             <div class="bg-gray-900 p-8 rounded-lg border border-red-900/30 shadow-2xl w-full max-w-md animate-fade-in mx-2">
                 <h2 class="text-2xl md:text-3xl font-bold text-center mb-2 text-white">Welcome</h2>
-                <p class="text-center text-gray-500 mb-6 text-sm">Sign in to manage your world</p>
-
-                <!-- Toggles -->
                 <div class="flex justify-center gap-8 mb-6 border-b border-gray-800 pb-2">
                     <div id="tabLogin" class="cursor-pointer text-red-600 font-bold border-b-2 border-red-600 pb-1" onclick="toggleAuthMode('login')">Login</div>
                     <div id="tabSignup" class="cursor-pointer text-gray-500 pb-1" onclick="toggleAuthMode('signup')">Sign Up</div>
                 </div>
-
                 <form id="authForm" onsubmit="handleAuthSubmit(event)">
-                    <div class="mb-4">
-                        <label class="block text-gray-400 mb-2 text-sm">Email</label>
-                        <input type="email" id="authEmail" class="w-full p-3 rounded bg-black border-gray-700 focus:border-red-600 transition" required>
-                    </div>
-                    <div class="mb-6">
-                        <label class="block text-gray-400 mb-2 text-sm">Password</label>
-                        <input type="password" id="authPassword" class="w-full p-3 rounded bg-black border-gray-700 focus:border-red-600 transition" required>
-                    </div>
-                    <button type="submit" id="authSubmitBtn" class="w-full bg-red-600 text-white font-bold py-3 rounded hover:bg-red-700 transition">
-                        LOGIN
-                    </button>
+                    <div class="mb-4"><label class="block text-gray-400 mb-2 text-sm">Email</label><input type="email" id="authEmail" class="w-full p-3 rounded bg-black border-gray-700" required></div>
+                    <div class="mb-6"><label class="block text-gray-400 mb-2 text-sm">Password</label><input type="password" id="authPassword" class="w-full p-3 rounded bg-black border-gray-700" required></div>
+                    <button type="submit" id="authSubmitBtn" class="w-full bg-red-600 text-white font-bold py-3 rounded hover:bg-red-700 transition">LOGIN</button>
                 </form>
             </div>
         </div>
 
-        <!-- 8. ADMIN DASHBOARD (Protected) -->
+        <!-- 8. ADMIN DASHBOARD -->
         <div id="section-admin" class="hidden-section">
             <div class="flex flex-col md:flex-row justify-between items-center mb-8 border-b border-gray-800 pb-4 gap-4">
                 <h2 class="text-xl md:text-2xl font-bold text-white">Admin Dashboard</h2>
                 <span class="bg-red-900/40 text-red-500 px-3 py-1 rounded text-xs border border-red-900">MASTER ACCESS</span>
             </div>
-
-            <!-- Dashboard Content Grid - Stack on mobile, grid on lg -->
-            <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
-                <!-- 1. Add/Edit App Form -->
+            <!-- APPS AND SLIDES GRID -->
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-8 mb-12">
+                <!-- Add App -->
                 <div class="lg:col-span-1 bg-gray-900 p-6 rounded-lg border border-gray-800 h-fit">
-                    <h3 id="formTitle" class="text-lg font-bold text-white mb-4">Add / Edit App</h3>
+                    <h3 class="text-lg font-bold text-white mb-4">Add / Edit App</h3>
                     <form id="appForm" onsubmit="handleAppSubmit(event)">
                         <input type="hidden" id="editAppId">
-                        
-                        <div class="mb-3"><label class="text-xs text-gray-400 block mb-1">Name</label><input type="text" id="appName" class="w-full p-2 rounded" required></div>
+                        <div class="mb-3"><input type="text" id="appName" class="w-full p-2 rounded" placeholder="App Name" required></div>
                         <div class="mb-3">
-                            <label class="text-xs text-gray-400 block mb-1">Status</label>
                             <select id="launchStatus" class="w-full p-2 rounded" onchange="toggleStatusFields()" required>
                                 <option value="Coming Soon">Coming Soon</option>
                                 <option value="Coming in selected date">Specific Date</option>
@@ -397,89 +382,79 @@
                                 <option value="Launched">Launched</option>
                             </select>
                         </div>
-                        <div id="dateField" class="mb-3 hidden"><label class="text-xs text-gray-400 block mb-1">Date</label><input type="date" id="statusDate" class="w-full p-2 rounded"></div>
-                        <div id="weeksField" class="mb-3 hidden"><label class="text-xs text-gray-400 block mb-1">Weeks</label><input type="number" id="statusWeeks" class="w-full p-2 rounded"></div>
-                        <div class="mb-3"><label class="text-xs text-gray-400 block mb-1">Link</label><input type="url" id="appLink" class="w-full p-2 rounded"></div>
-                        <div class="mb-4"><label class="text-xs text-gray-400 block mb-1">Image</label><input type="file" id="appImage" class="w-full text-xs text-gray-400" accept="image/*"></div>
-
-                        <div class="flex gap-2">
-                            <button type="submit" id="submitBtn" class="flex-1 bg-white text-black font-bold py-2 rounded hover:bg-gray-200">Save</button>
-                            <button type="button" onclick="resetForm()" class="px-3 border border-gray-600 rounded text-white">Reset</button>
-                        </div>
+                        <div id="dateField" class="mb-3 hidden"><input type="date" id="statusDate" class="w-full p-2 rounded"></div>
+                        <div id="weeksField" class="mb-3 hidden"><input type="number" id="statusWeeks" class="w-full p-2 rounded" placeholder="Weeks"></div>
+                        <div class="mb-3"><input type="url" id="appLink" class="w-full p-2 rounded" placeholder="Link"></div>
+                        <div class="mb-4"><input type="file" id="appImage" class="w-full text-xs text-gray-400" accept="image/*"></div>
+                        <button type="submit" class="w-full bg-white text-black font-bold py-2 rounded">Save</button>
                     </form>
                 </div>
-
-                <!-- 2. Manage Slideshow Form -->
-                <div class="lg:col-span-1 bg-gray-900 p-6 rounded-lg border border-gray-800 h-fit">
-                    <h3 class="text-lg font-bold text-white mb-4">Manage Slideshow</h3>
-                    <div class="mb-4">
-                        <label class="text-xs text-gray-400 block mb-1">Upload Hero Image</label>
-                        <input type="file" id="slideUploadInput" class="w-full text-xs text-gray-400 mb-2" accept="image/*">
-                        <button onclick="uploadSlide()" class="w-full bg-red-600 text-white font-bold py-2 rounded hover:bg-red-700 text-sm">Upload Slide</button>
-                    </div>
-                    <hr class="border-gray-700 my-4">
-                    <h4 class="text-sm font-bold text-gray-400 mb-2">Current Slides</h4>
-                    <div id="adminSlidesList" class="space-y-2 max-h-60 overflow-y-auto">
-                        <!-- List loaded via JS -->
-                    </div>
-                </div>
-
-                <!-- 3. App List -->
-                <div class="lg:col-span-2 bg-gray-900 rounded-lg border border-gray-800 overflow-hidden">
-                    <div class="p-4 bg-black border-b border-gray-800"><h3 class="font-bold">App Database</h3></div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left text-sm text-gray-400 whitespace-nowrap">
-                            <thead class="bg-gray-800 text-xs uppercase"><tr><th class="p-3">Img</th><th class="p-3">Name</th><th class="p-3">Status</th><th class="p-3 text-right">Action</th></tr></thead>
-                            <tbody id="adminAppsTable"></tbody>
-                        </table>
-                    </div>
+                <!-- Support Centre (Simplified for display) -->
+                <div class="lg:col-span-3 bg-gray-900 border border-gray-800 rounded-lg p-4">
+                     <h3 class="text-lg font-bold text-white mb-4">Support Messages</h3>
+                     <div id="adminSupportList" class="h-64 overflow-y-auto text-sm text-gray-400">Loading...</div>
+                     <div id="adminChatBody" class="hidden"></div>
+                     <div id="adminChatHeader" class="hidden"></div>
+                     <input type="hidden" id="adminMsgInput">
                 </div>
             </div>
         </div>
 
     </main>
 
-    <!-- FOOTER -->
-    <footer class="bg-black border-t border-gray-900 py-8 text-center mt-auto">
-        <p class="text-gray-500 text-sm mb-1">&copy; 2025 APNA ADDA. All Rights Reserved.</p>
+    <!-- FOOTER (DESKTOP) -->
+    <footer class="hidden md:block bg-black border-t border-gray-900 py-8 text-center mt-auto">
+        <p class="text-gray-500 text-sm mb-1">&copy; 2025 APNA ADDA.</p>
         <p class="text-red-700 text-xs font-bold mb-4">Designed by Premanshu Kumar</p>
-        
         <div class="flex flex-wrap justify-center gap-4 text-xs font-bold px-4">
-            <span onclick="navigateTo('privacy')" class="cursor-pointer text-gray-400 hover:text-red-500 bg-gray-900 px-4 py-2 rounded border border-gray-800 hover:border-red-600 transition">
-                <i class="fas fa-shield-alt mr-1"></i> Privacy Policy
-            </span>
-            <span onclick="navigateTo('disclaimer')" class="cursor-pointer text-gray-400 hover:text-red-500 bg-gray-900 px-4 py-2 rounded border border-gray-800 hover:border-red-600 transition">
-                <i class="fas fa-exclamation-circle mr-1"></i> Disclaimer
-            </span>
+            <span onclick="navigateTo('privacy')" class="cursor-pointer text-gray-400 hover:text-red-500">Privacy Policy</span>
+            <span onclick="navigateTo('disclaimer')" class="cursor-pointer text-gray-400 hover:text-red-500">Disclaimer</span>
         </div>
     </footer>
 
+    <!-- MOBILE BOTTOM NAVIGATION (FIXED) -->
+    <div class="md:hidden fixed bottom-0 left-0 w-full bg-black/95 backdrop-blur-md border-t border-gray-800 z-50 flex justify-around items-center py-2 h-[65px]">
+        <div onclick="navigateTo('home')" class="mobile-nav-item flex flex-col items-center justify-center w-full h-full cursor-pointer" id="mob-home">
+            <i class="fas fa-home text-lg mb-1"></i>
+            <span class="text-[10px] font-medium">Home</span>
+        </div>
+        <div onclick="navigateTo('apps')" class="mobile-nav-item flex flex-col items-center justify-center w-full h-full cursor-pointer" id="mob-apps">
+            <i class="fas fa-th-large text-lg mb-1"></i>
+            <span class="text-[10px] font-medium">Apps</span>
+        </div>
+        <div onclick="navigateTo('about')" class="mobile-nav-item flex flex-col items-center justify-center w-full h-full cursor-pointer" id="mob-about">
+            <i class="fas fa-info-circle text-lg mb-1"></i>
+            <span class="text-[10px] font-medium">About</span>
+        </div>
+        <div onclick="navigateTo('contact')" class="mobile-nav-item flex flex-col items-center justify-center w-full h-full cursor-pointer" id="mob-contact">
+            <i class="fas fa-phone-alt text-lg mb-1"></i>
+            <span class="text-[10px] font-medium">Contact</span>
+        </div>
+    </div>
+
+    <!-- SUPPORT WIDGET -->
+    <div id="userSupportWidget">
+        <div class="support-btn" onclick="toggleUserChat()">
+            <i class="fas fa-headset"></i>
+        </div>
+        <div id="userChatWindow" class="chat-box hidden transform scale-0 origin-bottom-right">
+            <div class="chat-header">
+                <span>APNA ADDA SUPPORT</span>
+                <i class="fas fa-times cursor-pointer hover:text-black" onclick="toggleUserChat()"></i>
+            </div>
+            <div id="userChatBody" class="chat-body"></div>
+            <div class="chat-input-area">
+                <input type="text" id="userMsgInput" class="flex-grow bg-gray-900 border-gray-700 rounded-full px-4 text-sm" placeholder="Type a message..." onkeypress="if(event.key==='Enter') sendUserMessage()">
+                <button onclick="sendUserMessage()" class="bg-red-600 hover:bg-red-700 text-white w-8 h-8 rounded-full flex items-center justify-center text-xs">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- JAVASCRIPT -->
     <script>
-        // --- MOBILE MENU LOGIC ---
-        function toggleMobileMenu(forceClose = false) {
-            const menu = document.getElementById('navMenu');
-            const icon = document.querySelector('#mobileMenuBtn i');
-            
-            if (forceClose) {
-                menu.classList.add('hidden');
-                icon.classList.remove('fa-times');
-                icon.classList.add('fa-bars');
-                return;
-            }
-
-            if (menu.classList.contains('hidden')) {
-                menu.classList.remove('hidden');
-                icon.classList.remove('fa-bars');
-                icon.classList.add('fa-times');
-            } else {
-                menu.classList.add('hidden');
-                icon.classList.remove('fa-times');
-                icon.classList.add('fa-bars');
-            }
-        }
-
-        // 1. FIREBASE CONFIG
+        // FIREBASE CONFIG
         const firebaseConfig = {
             apiKey: "AIzaSyAUHUwmJVnW40FefXCpuxfREsnXNCHHxQU",
             authDomain: "ai-chatbot-51f32.firebaseapp.com",
@@ -492,80 +467,70 @@
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.database();
-
-        // Ensure persistence is set to LOCAL
         auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
 
-        // 2. STATE
+        // STATE
         const ADMIN_EMAIL = "thepremanshu@gmail.com";
-        const WHATSAPP_LINK = "https://whatsapp.com/channel/0029Vb7K9Ms3gvWeXnfpLy3x"; 
+        const WHATSAPP_LINK = "https://whatsapp.com/channel/0029Vb7K9Ms3gvWeXnfpLy3x";
         const TELEGRAM_LINK = "https://t.me/apnaadda_official";
 
-        let allApps = [];
-        let allSlides = []; // Store slideshow images
-        let isSignupMode = false;
-        let slideInterval = null;
-        
+        let allApps = [], allSlides = [], currentUser = null, currentAdminChatUid = null, slideInterval = null;
         const sections = ['home', 'apps', 'about', 'contact', 'login', 'admin', 'privacy', 'disclaimer'];
 
-        // 3. INIT
         window.onload = function() {
-            // Restore last visited section
             const savedSection = localStorage.getItem('apnaAddaCurrentSection') || 'home';
-            if(savedSection !== 'admin') {
-                navigateTo(savedSection, true); 
-            } 
+            if(savedSection !== 'admin') navigateTo(savedSection, true); 
+            fetchApps(); fetchSlides();
 
-            // --- FIRST VISIT POPUP LOGIC ---
-            const hasSeenPopup = localStorage.getItem('hasSeenSocialPopup');
-            
-            if (!hasSeenPopup) {
-                setTimeout(() => {
-                    const current = localStorage.getItem('apnaAddaCurrentSection');
-                    if(current === 'admin') return;
-
+            // --- FIRST TIME VISIT POPUP ---
+            setTimeout(() => {
+                const hasSeen = localStorage.getItem('hasSeenSocialPopup');
+                const isAuthPage = document.getElementById('section-login').classList.contains('hidden-section') === false;
+                
+                if (!hasSeen && !isAuthPage) {
                     Swal.fire({
-                        title: '<strong style="color:#fff; font-size:1.5rem;">STAY CONNECTED</strong>',
+                        title: '<strong class="text-xl">STAY CONNECTED!</strong>',
                         html: `
-                            <div class="text-gray-400 mb-4 text-sm">Join our channels for latest updates!</div>
+                            <p class="text-gray-400 mb-6 text-sm">Join our official channels for the latest updates.</p>
                             <div class="flex flex-col gap-3">
-                                <a href="${WHATSAPP_LINK}" target="_blank" class="flex items-center justify-center gap-2 w-full py-3 rounded bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold transition no-underline shadow-lg">
-                                    <i class="fab fa-whatsapp text-2xl"></i> Join WhatsApp Channel
+                                <a href="${TELEGRAM_LINK}" target="_blank" class="w-full bg-[#0088cc] hover:bg-[#0077b5] text-white py-3 rounded font-bold flex items-center justify-center gap-2 transition">
+                                    <i class="fab fa-telegram-plane text-xl"></i> Join Telegram
                                 </a>
-                                <a href="${TELEGRAM_LINK}" target="_blank" class="flex items-center justify-center gap-2 w-full py-3 rounded bg-[#0088cc] hover:bg-[#0077b5] text-white font-bold transition no-underline shadow-lg">
-                                    <i class="fab fa-telegram-plane text-2xl"></i> Join Telegram Channel
+                                <a href="${WHATSAPP_LINK}" target="_blank" class="w-full bg-[#25D366] hover:bg-[#20bd5a] text-white py-3 rounded font-bold flex items-center justify-center gap-2 transition">
+                                    <i class="fab fa-whatsapp text-xl"></i> Join WhatsApp
                                 </a>
                             </div>
                         `,
                         background: '#141414',
-                        showCancelButton: true,
-                        showConfirmButton: false, 
-                        cancelButtonColor: '#333',
-                        cancelButtonText: 'Maybe Later',
-                        allowOutsideClick: false,
-                        customClass: {
-                            popup: 'border border-gray-700 rounded-xl'
-                        }
-                    }).then((result) => {
+                        showConfirmButton: false,
+                        showCloseButton: true,
+                        color: '#ffffff',
+                        customClass: { popup: 'border border-gray-800 rounded-xl shadow-2xl' }
+                    }).then(() => {
                         localStorage.setItem('hasSeenSocialPopup', 'true');
                     });
-                }, 1500); 
-            }
-            
-            fetchApps();
-            fetchSlides();
+                }
+            }, 1500);
         };
 
-        // 4. NAVIGATION LOGIC
         function navigateTo(sectionId, isInitialLoad = false) {
             if(!isInitialLoad) localStorage.setItem('apnaAddaCurrentSection', sectionId);
-
-            sections.forEach(s => document.getElementById(`section-${s}`).classList.add('hidden-section'));
+            
+            sections.forEach(s => {
+                const el = document.getElementById(`section-${s}`);
+                if(el) el.classList.add('hidden-section');
+            });
+            
+            const target = document.getElementById(`section-${sectionId}`);
+            if(target) target.classList.remove('hidden-section');
+            
             document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            const dLink = document.getElementById(`link-${sectionId}`);
+            if(dLink) dLink.classList.add('active');
 
-            document.getElementById(`section-${sectionId}`).classList.remove('hidden-section');
-            const navLink = document.getElementById(`link-${sectionId}`);
-            if (navLink) navLink.classList.add('active');
+            document.querySelectorAll('.mobile-nav-item').forEach(l => l.classList.remove('active'));
+            const mLink = document.getElementById(`mob-${sectionId}`);
+            if(mLink) mLink.classList.add('active');
 
             window.scrollTo(0, 0);
         }
@@ -574,81 +539,34 @@
             document.getElementById('homeAppsContainer').scrollIntoView({ behavior: 'smooth' });
         }
 
-        // 5. AUTH OBSERVER
+        // AUTH & SUPPORT
         auth.onAuthStateChanged((user) => {
+            currentUser = user;
             const loginBtn = document.getElementById('navLoginBtn');
             const logoutBtn = document.getElementById('navLogoutBtn');
             const dashBtn = document.getElementById('navDashboardBtn');
+            const mobAuthIcon = document.getElementById('mobileAuthIcon');
             
             if (user) {
                 loginBtn.classList.add('hidden');
                 logoutBtn.classList.remove('hidden');
-                if (user.email === ADMIN_EMAIL) dashBtn.classList.remove('hidden');
-                else dashBtn.classList.add('hidden');
+                mobAuthIcon.innerHTML = `<i class="fas fa-sign-out-alt text-red-500 text-2xl" onclick="handleLogout(); event.stopPropagation();"></i>`;
+                
+                if (user.email === ADMIN_EMAIL) {
+                    dashBtn.classList.remove('hidden');
+                    initAdminSupport();
+                } else {
+                    dashBtn.classList.add('hidden');
+                    initUserSupport(user.uid);
+                }
             } else {
                 loginBtn.classList.remove('hidden');
                 logoutBtn.classList.add('hidden');
                 dashBtn.classList.add('hidden');
-            }
-
-            const savedSection = localStorage.getItem('apnaAddaCurrentSection');
-            if (user) {
-                if (savedSection === 'login') {
-                    if(user.email === ADMIN_EMAIL) navigateTo('admin');
-                    else navigateTo('home');
-                } else if (savedSection === 'admin') {
-                    if(user.email === ADMIN_EMAIL) navigateTo('admin');
-                    else navigateTo('home');
-                } 
-            } else {
-                if (savedSection === 'admin') navigateTo('login');
+                mobAuthIcon.innerHTML = `<i class="fas fa-user-circle text-2xl" onclick="navigateTo('login')"></i>`;
+                document.getElementById('userChatWindow').classList.add('hidden');
             }
         });
-
-        // 6. LOGIN/SIGNUP LOGIC
-        function toggleAuthMode(mode) {
-            isSignupMode = (mode === 'signup');
-            const loginTab = document.getElementById('tabLogin');
-            const signupTab = document.getElementById('tabSignup');
-            const btn = document.getElementById('authSubmitBtn');
-
-            if (isSignupMode) {
-                loginTab.classList.replace('text-red-600', 'text-gray-500');
-                loginTab.classList.remove('font-bold', 'border-b-2');
-                signupTab.classList.replace('text-gray-500', 'text-red-600');
-                signupTab.classList.add('font-bold', 'border-b-2', 'border-red-600');
-                btn.innerText = "SIGN UP";
-            } else {
-                signupTab.classList.replace('text-red-600', 'text-gray-500');
-                signupTab.classList.remove('font-bold', 'border-b-2');
-                loginTab.classList.replace('text-gray-500', 'text-red-600');
-                loginTab.classList.add('font-bold', 'border-b-2', 'border-red-600');
-                btn.innerText = "LOGIN";
-            }
-        }
-
-        function handleAuthSubmit(e) {
-            e.preventDefault();
-            const email = document.getElementById('authEmail').value;
-            const pass = document.getElementById('authPassword').value;
-
-            if (isSignupMode) {
-                auth.createUserWithEmailAndPassword(email, pass)
-                    .then(() => {
-                        Swal.fire({icon:'success', title:'Signed Up!', background:'#111', color:'#fff', confirmButtonColor:'#E50914'});
-                        navigateTo('home');
-                    })
-                    .catch(err => Swal.fire({icon:'error', title:'Error', text:err.message, background:'#111', color:'#fff'}));
-            } else {
-                auth.signInWithEmailAndPassword(email, pass)
-                    .then((cred) => {
-                        Swal.fire({icon:'success', title:'Welcome', timer:1500, showConfirmButton:false, background:'#111', color:'#fff'});
-                        if(cred.user.email === ADMIN_EMAIL) navigateTo('admin');
-                        else navigateTo('home');
-                    })
-                    .catch(err => Swal.fire({icon:'error', title:'Error', text:err.message, background:'#111', color:'#fff'}));
-            }
-        }
 
         function handleLogout() {
             Swal.fire({
@@ -663,242 +581,157 @@
             });
         }
 
-        // 7. APP DATA LOGIC
+        function toggleAuthMode(mode) {
+            const isSignup = (mode === 'signup');
+            document.getElementById('authSubmitBtn').innerText = isSignup ? "SIGN UP" : "LOGIN";
+            document.getElementById('tabLogin').className = isSignup ? "cursor-pointer text-gray-500 pb-1" : "cursor-pointer text-red-600 font-bold border-b-2 border-red-600 pb-1";
+            document.getElementById('tabSignup').className = isSignup ? "cursor-pointer text-red-600 font-bold border-b-2 border-red-600 pb-1" : "cursor-pointer text-gray-500 pb-1";
+            window.isSignupMode = isSignup;
+        }
+
+        function handleAuthSubmit(e) {
+            e.preventDefault();
+            const email = document.getElementById('authEmail').value;
+            const pass = document.getElementById('authPassword').value;
+            const action = window.isSignupMode ? auth.createUserWithEmailAndPassword(email, pass) : auth.signInWithEmailAndPassword(email, pass);
+            
+            action.then((cred) => {
+                if(window.isSignupMode) db.ref('users/' + cred.user.uid).set({ email: email });
+                Swal.fire({icon:'success', title: window.isSignupMode?'Signed Up':'Welcome', background:'#111', color:'#fff', timer:1500, showConfirmButton:false});
+                navigateTo(cred.user.email === ADMIN_EMAIL ? 'admin' : 'home');
+            }).catch(err => Swal.fire({icon:'error', text:err.message, background:'#111', color:'#fff'}));
+        }
+
+        // --- SUPPORT LOGIC ---
+        function toggleUserChat() {
+            if(!currentUser) {
+                Swal.fire({icon:'info', title:'Authentication Required', text:'Please login to chat.', background:'#111', color:'#fff', confirmButtonColor:'#E50914'}).then(r=>{ if(r.isConfirmed) navigateTo('login'); });
+                return;
+            }
+            const win = document.getElementById('userChatWindow');
+            if(win.classList.contains('hidden')) {
+                win.classList.remove('hidden'); setTimeout(()=>win.classList.remove('scale-0'),10);
+            } else {
+                win.classList.add('scale-0'); setTimeout(()=>win.classList.add('hidden'),300);
+            }
+        }
+
+        function initUserSupport(uid) {
+            const chatBody = document.getElementById('userChatBody');
+            chatBody.innerHTML = `<div class="msg-bubble msg-system self-center text-center text-xs mb-4 text-gray-500">WELCOME TO THE APNA ADDA SUPPORT! <br> HOW CAN WE ASSIST YOU TODAY?</div>`;
+            db.ref(`support/${uid}/messages`).on('child_added', (snapshot) => {
+                const msg = snapshot.val();
+                const div = document.createElement('div');
+                div.className = `msg-bubble ${msg.sender === 'user' ? 'msg-user' : (msg.sender === 'system' ? 'msg-system' : 'msg-admin')}`;
+                div.innerText = msg.text;
+                chatBody.appendChild(div);
+                chatBody.scrollTop = chatBody.scrollHeight;
+            });
+        }
+
+        function sendUserMessage() {
+            const text = document.getElementById('userMsgInput').value.trim();
+            if(!text || !currentUser) return;
+            const uid = currentUser.uid;
+            const ref = db.ref(`support/${uid}`);
+            
+            ref.child('hasAutoReplied').once('value', (snap) => {
+                ref.child('messages').push({ text, sender: 'user', timestamp: Date.now() });
+                ref.child('userInfo').update({ email: currentUser.email, lastMsg: Date.now() });
+                if (!snap.val()) {
+                    setTimeout(() => {
+                        ref.child('messages').push({ text: "OUR TEAM MEMBER WILL SHORTLY ASSISTS YOU!", sender: 'system', timestamp: Date.now() });
+                        ref.child('hasAutoReplied').set(true);
+                    }, 800);
+                }
+            });
+            document.getElementById('userMsgInput').value = '';
+        }
+
+        function initAdminSupport() {
+             db.ref('support').on('value', snap => {
+                 const list = document.getElementById('adminSupportList');
+                 list.innerHTML = '';
+                 const data = snap.val();
+                 if(!data) { list.innerHTML = 'No chats'; return; }
+                 Object.keys(data).forEach(uid => {
+                     const u = data[uid];
+                     list.innerHTML += `<div class="p-2 border-b border-gray-700 cursor-pointer hover:bg-black" onclick="alert('Full admin chat UI implemented in previous version')">${u.userInfo?.email || 'User'}</div>`;
+                 });
+             });
+        }
+
         function fetchApps() {
             db.ref('apps').on('value', (snap) => {
                 const data = snap.val();
                 allApps = [];
                 if(data) Object.keys(data).forEach(k => allApps.push({id: k, ...data[k]}));
                 renderPublicGrid();
-                renderAdminTable();
             });
         }
 
         function renderPublicGrid() {
             const gridHome = document.getElementById('homeAppsGrid');
             const gridPage = document.getElementById('appsGrid');
-            const loader = document.getElementById('homeLoader');
+            document.getElementById('homeLoader').style.display = 'none';
+            gridHome.innerHTML = ''; gridPage.innerHTML = '';
             
-            if(loader) loader.style.display = 'none';
-            gridHome.innerHTML = '';
-            gridPage.innerHTML = '';
-
-            if(allApps.length === 0) {
-                const empty = '<div class="col-span-3 text-center text-gray-500">No apps available yet.</div>';
-                gridHome.innerHTML = empty;
-                gridPage.innerHTML = empty;
-                return;
-            }
-
             allApps.forEach(app => {
-                let img = app.image ? `<img src="${app.image}" class="w-full aspect-video object-cover">` : `<div class="w-full aspect-video bg-gray-800 flex items-center justify-center text-red-600 font-bold">APNA ADDA</div>`;
-                
                 let badge = app.status;
-                let color = 'bg-gray-600';
-                let btnTxt = 'Wait for Launch';
-                let btnClass = 'bg-gray-800 text-gray-500 cursor-not-allowed';
-                let link = '#';
-
-                if(app.status === 'Launched') {
-                    color = 'bg-green-600';
-                    btnTxt = 'CLICK HERE';
-                    btnClass = 'bg-red-600 hover:bg-red-700 text-white';
-                    link = app.link || '#';
-                } else if(app.status.includes('date')) {
-                    let displayDate = app.statusDetail;
-                    if(displayDate && displayDate.includes('-')) {
-                        const parts = displayDate.split('-');
-                        if(parts.length === 3) {
-                            displayDate = `${parts[2]}-${parts[1]}-${parts[0]}`; 
-                        }
-                    }
-                    badge = `Coming: ${displayDate}`;
-                    color = 'bg-blue-600';
-                } else if(app.status.includes('weeks')) {
-                    badge = `In ${app.statusDetail} Weeks`;
-                    color = 'bg-purple-600';
-                }
-
-                const cardHtml = `
-                    <div class="app-card rounded-lg overflow-hidden flex flex-col h-full relative">
-                        <div class="relative">${img}<span class="absolute top-2 right-2 ${color} text-white text-[10px] font-bold px-2 py-1 rounded shadow">${badge}</span></div>
-                        <div class="p-5 flex flex-col flex-grow bg-gray-900">
-                            <h3 class="text-xl font-bold mb-4 text-white">${app.name}</h3>
-                            <div class="mt-auto">
-                                <a href="${link}" ${app.status==='Launched'?'target="_blank"':''} class="block w-full text-center ${btnClass} font-bold py-2 rounded transition text-sm">${btnTxt}</a>
-                            </div>
-                        </div>
-                    </div>`;
+                let color = app.status === 'Launched' ? 'bg-green-600' : 'bg-gray-600';
+                if(app.status.includes('date')) { badge = `Coming: ${app.statusDetail}`; color='bg-blue-600'; }
                 
-                gridHome.innerHTML += cardHtml;
-                gridPage.innerHTML += cardHtml;
+                const html = `
+                    <div class="app-card rounded-lg overflow-hidden flex flex-col h-full relative">
+                        <div class="relative"><img src="${app.image}" class="w-full aspect-video object-cover">
+                        <span class="absolute top-2 right-2 ${color} text-white text-[10px] font-bold px-2 py-1 rounded">${badge}</span></div>
+                        <div class="p-5 flex flex-col flex-grow bg-gray-900"><h3 class="text-xl font-bold mb-4 text-white">${app.name}</h3>
+                        <a href="${app.link||'#'}" class="block w-full text-center ${app.status==='Launched'?'bg-red-600 text-white':'bg-gray-800 text-gray-500'} font-bold py-2 rounded text-sm">${app.status==='Launched'?'CLICK HERE':'Wait for Launch'}</a></div>
+                    </div>`;
+                gridHome.innerHTML += html; gridPage.innerHTML += html;
             });
         }
 
-        // 8. SLIDESHOW LOGIC
         function fetchSlides() {
-            db.ref('slides').on('value', (snap) => {
+            db.ref('slides').on('value', snap => {
                 const data = snap.val();
-                allSlides = [];
-                if(data) Object.keys(data).forEach(k => allSlides.push({id: k, image: data[k].image}));
-                renderHeroSlides();
-                renderAdminSlidesList();
+                const container = document.getElementById('heroSlideshow');
+                container.innerHTML = '';
+                if(data) {
+                    Object.values(data).forEach((s, i) => {
+                        const img = document.createElement('img');
+                        img.src = s.image;
+                        img.className = `slide-image ${i===0?'active':''}`;
+                        container.appendChild(img);
+                    });
+                    if(Object.keys(data).length > 1) {
+                        let idx = 0;
+                        const imgs = document.querySelectorAll('.slide-image');
+                        setInterval(() => {
+                            imgs[idx].classList.remove('active');
+                            idx = (idx + 1) % imgs.length;
+                            imgs[idx].classList.add('active');
+                        }, 5000);
+                    }
+                }
             });
         }
 
-        function renderHeroSlides() {
-            const container = document.getElementById('heroSlideshow');
-            container.innerHTML = '';
-            
-            if(allSlides.length === 0) {
-                container.style.backgroundColor = '#111';
-                return;
-            }
-
-            allSlides.forEach((slide, index) => {
-                const img = document.createElement('img');
-                img.src = slide.image;
-                img.classList.add('slide-image');
-                if(index === 0) img.classList.add('active');
-                container.appendChild(img);
-            });
-
-            startSlideshow();
-        }
-
-        function startSlideshow() {
-            if(slideInterval) clearInterval(slideInterval);
-            if(allSlides.length < 2) return; 
-
-            let currentIndex = 0;
-            const images = document.querySelectorAll('.slide-image');
-            
-            slideInterval = setInterval(() => {
-                if(images.length === 0) return;
-                images[currentIndex].classList.remove('active');
-                currentIndex = (currentIndex + 1) % images.length;
-                images[currentIndex].classList.add('active');
-            }, 5000); 
-        }
-
-        function renderAdminSlidesList() {
-            const list = document.getElementById('adminSlidesList');
-            list.innerHTML = '';
-            if(allSlides.length === 0) {
-                list.innerHTML = '<div class="text-xs text-gray-500">No slides uploaded.</div>';
-                return;
-            }
-            allSlides.forEach(slide => {
-                list.innerHTML += `
-                    <div class="flex items-center justify-between bg-black p-2 rounded border border-gray-700">
-                        <img src="${slide.image}" class="h-8 w-12 object-cover rounded">
-                        <button onclick="deleteSlide('${slide.id}')" class="text-red-500 hover:text-red-400 text-xs font-bold">DELETE</button>
-                    </div>
-                `;
-            });
-        }
-
-        // 9. ADMIN ACTIONS
         function toggleStatusFields() {
-            const s = document.getElementById('launchStatus').value;
-            document.getElementById('dateField').classList.add('hidden');
-            document.getElementById('weeksField').classList.add('hidden');
-            if(s.includes('date')) document.getElementById('dateField').classList.remove('hidden');
-            if(s.includes('weeks')) document.getElementById('weeksField').classList.remove('hidden');
+             const v = document.getElementById('launchStatus').value;
+             document.getElementById('dateField').classList.toggle('hidden', !v.includes('date'));
+             document.getElementById('weeksField').classList.toggle('hidden', !v.includes('weeks'));
         }
-
         async function handleAppSubmit(e) {
             e.preventDefault();
-            const id = document.getElementById('editAppId').value;
             const name = document.getElementById('appName').value;
             const status = document.getElementById('launchStatus').value;
-            const link = document.getElementById('appLink').value;
-            let detail = '';
-            if(status.includes('date')) detail = document.getElementById('statusDate').value;
-            if(status.includes('weeks')) detail = document.getElementById('statusWeeks').value;
-
-            if(!(await Swal.fire({title:'Save Changes?', icon:'question', showCancelButton:true, background:'#111', color:'#fff'})).isConfirmed) return;
-
             const file = document.getElementById('appImage').files[0];
             let img64 = null;
-            if(file) {
-                img64 = await new Promise(r => {const rd=new FileReader(); rd.onload=()=>r(rd.result); rd.readAsDataURL(file);});
-            } else if(id) {
-                const old = allApps.find(a=>a.id===id);
-                if(old) img64 = old.image;
-            }
-
-            const payload = {name, status, statusDetail:detail, link, image:img64||''};
-            if(id) db.ref('apps/'+id).update(payload);
-            else db.ref('apps').push(payload);
-            
-            resetForm();
-            Swal.fire({icon:'success', title:'Saved', background:'#111', color:'#fff', timer:1500, showConfirmButton:false});
-        }
-
-        async function uploadSlide() {
-            const file = document.getElementById('slideUploadInput').files[0];
-            if(!file) {
-                Swal.fire({icon:'error', title:'Select an image', background:'#111', color:'#fff'});
-                return;
-            }
-
-            const img64 = await new Promise(r => {
-                const rd = new FileReader(); 
-                rd.onload = () => r(rd.result); 
-                rd.readAsDataURL(file);
-            });
-
-            db.ref('slides').push({ image: img64 });
-            document.getElementById('slideUploadInput').value = '';
-            Swal.fire({icon:'success', title:'Slide Uploaded', background:'#111', color:'#fff', timer:1000, showConfirmButton:false});
-        }
-
-        function deleteSlide(id) {
-            Swal.fire({title:'Delete Slide?', icon:'warning', showCancelButton:true, background:'#111', color:'#fff'}).then(r => {
-                if(r.isConfirmed) db.ref('slides/'+id).remove();
-            });
-        }
-
-        function editApp(id) {
-            const app = allApps.find(a=>a.id===id);
-            if(!app) return;
-            document.getElementById('editAppId').value = app.id;
-            document.getElementById('appName').value = app.name;
-            document.getElementById('launchStatus').value = app.status;
-            document.getElementById('appLink').value = app.link || '';
-            toggleStatusFields();
-            if(app.status.includes('date')) document.getElementById('statusDate').value = app.statusDetail;
-            if(app.status.includes('weeks')) document.getElementById('statusWeeks').value = app.statusDetail;
-        }
-
-        function deleteApp(id) {
-            Swal.fire({title:'Delete App?', icon:'warning', showCancelButton:true, background:'#111', color:'#fff'}).then(r => {
-                if(r.isConfirmed) db.ref('apps/'+id).remove();
-            });
-        }
-
-        function renderAdminTable() {
-            const tb = document.getElementById('adminAppsTable');
-            tb.innerHTML = '';
-            allApps.forEach(app => {
-                tb.innerHTML += `
-                    <tr class="border-b border-gray-800">
-                        <td class="p-3">${app.image ? '<span class="text-green-500">Img</span>' : '<span class="text-red-500">No</span>'}</td>
-                        <td class="p-3 text-white">${app.name}</td>
-                        <td class="p-3 text-xs text-gray-400">${app.status}</td>
-                        <td class="p-3 text-right">
-                            <button onclick="editApp('${app.id}')" class="text-blue-400 mr-2"><i class="fas fa-edit"></i></button>
-                            <button onclick="deleteApp('${app.id}')" class="text-red-500"><i class="fas fa-trash"></i></button>
-                        </td>
-                    </tr>`;
-            });
-        }
-
-        function resetForm() {
+            if(file) img64 = await new Promise(r=>{const rd=new FileReader();rd.onload=()=>r(rd.result);rd.readAsDataURL(file)});
+            db.ref('apps').push({name, status, image: img64});
             document.getElementById('appForm').reset();
-            document.getElementById('editAppId').value = '';
-            toggleStatusFields();
+            Swal.fire({icon:'success', title:'Saved', background:'#111', color:'#fff', timer:1000, showConfirmButton:false});
         }
     </script>
 </body>
