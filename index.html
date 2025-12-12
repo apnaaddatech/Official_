@@ -11,13 +11,13 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- SweetAlert2 -->
+    <!-- SweetAlert2 (For Custom Alerts) -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700;900&display=swap" rel="stylesheet">
 
-    <!-- Firebase SDKs -->
+    <!-- Firebase SDKs (Compat) -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
@@ -478,25 +478,15 @@
                 <h2 class="text-3xl font-bold mb-6 text-red-600">About APNA ADDA</h2>
                 <div class="space-y-4 text-gray-300 leading-relaxed text-justify">
                     <p>APNA ADDA is a technology-driven company committed to building smart, simple, and useful digital solutions for everyday life. We primarily focus on creating applications that support students, while also offering tools that benefit people from all walks of life.</p>
-                    
-                    <p>Our apps are designed to make daily tasks easier, improve productivity, and provide practical solutions through modern technology. At APNA ADDA, we believe that technology should be accessible, reliable, and purpose-driven.</p>
-                    
-                    <p>The company was founded and is owned by <strong>Premanshu Kumar</strong>, a passionate developer focused on creating meaningful digital products that solve real-world problems. This official website of APNA ADDA represents our mission, our products, and our commitment to quality and innovation.</p>
-                    
-                    <p>We continuously work to improve our applications and introduce new ideas that can make a positive impact on education and daily living.</p>
-                    
+                    <p>The company was founded and is owned by <strong>Premanshu Kumar</strong>, a passionate developer focused on creating meaningful digital products that solve real-world problems.</p>
                     <p class="font-bold text-white text-lg mt-4">APNA ADDA – Technology for Everyday Growth.</p>
                 </div>
-
                 <div class="mt-8 pt-8 border-t border-gray-800 flex flex-wrap gap-4 justify-center">
                     <a href="mailto:thepremanshu@gmail.com" class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-full font-bold transition flex items-center gap-2">
                         <i class="fas fa-envelope"></i> Email Us
                     </a>
                     <a href="https://t.me/apnaadda_official" target="_blank" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-full font-bold transition flex items-center gap-2">
                         <i class="fab fa-telegram"></i> Telegram Channel
-                    </a>
-                    <a href="https://whatsapp.com/channel/0029Va9Pj6s90x2q7r1r1r1r" target="_blank" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-full font-bold transition flex items-center gap-2">
-                        <i class="fab fa-whatsapp"></i> WhatsApp Channel
                     </a>
                 </div>
             </div>
@@ -515,34 +505,22 @@
                         <a href="https://t.me/apnaadda_official" target="_blank" class="flex items-center justify-center gap-3 w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded shadow transition">
                             <i class="fab fa-telegram"></i> Join Telegram Channel
                         </a>
-                        <a href="https://whatsapp.com/channel/0029Va9Pj6s90x2q7r1r1r1r" target="_blank" class="flex items-center justify-center gap-3 w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded shadow transition">
-                            <i class="fab fa-whatsapp"></i> Join WhatsApp Channel
-                        </a>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- 6. PRIVACY POLICY PAGE (Desktop Accessible) -->
+        <!-- 6. PRIVACY & DISCLAIMER (Desktop) -->
         <div id="section-privacy" class="hidden-section hidden md:block">
             <div class="max-w-4xl mx-auto bg-gray-900 border border-gray-800 rounded-lg p-12 shadow-2xl">
                 <h2 class="text-3xl font-bold mb-6 text-green-500">Privacy Policy</h2>
-                <div class="space-y-4 text-gray-300 leading-relaxed">
-                    <p>Your privacy is important to APNA ADDA. We respect your personal information and use it only to improve our services.</p>
-                    <p>We do not collect sensitive personal data without your consent. Any data collected is used solely for the purpose of providing better application experiences.</p>
-                    <p>We do not share, sell, or disclose your data to third parties unless required by law.</p>
-                </div>
+                <div class="space-y-4 text-gray-300"><p>Your privacy is important to APNA ADDA. We do not sell your data.</p></div>
             </div>
         </div>
-
-        <!-- 7. DISCLAIMER PAGE (Desktop Accessible) -->
         <div id="section-disclaimer" class="hidden-section hidden md:block">
             <div class="max-w-4xl mx-auto bg-gray-900 border border-gray-800 rounded-lg p-12 shadow-2xl">
                 <h2 class="text-3xl font-bold mb-6 text-yellow-500">Disclaimer</h2>
-                <div class="space-y-4 text-gray-300 leading-relaxed">
-                    <p>Information provided on APNA ADDA is for general informational purposes only. While we strive to keep the information up to date and correct, we make no representations or warranties of any kind, express or implied, about the completeness, accuracy, reliability, suitability, or availability with respect to the website or the information, products, services, or related graphics contained on the website for any purpose.</p>
-                    <p>Any reliance you place on such information is therefore strictly at your own risk. Use our applications at your own discretion.</p>
-                </div>
+                <div class="space-y-4 text-gray-300"><p>Use our applications at your own discretion. Information is for general purposes.</p></div>
             </div>
         </div>
 
@@ -574,19 +552,58 @@
                     <h3 class="text-lg font-bold text-white mb-4">Add / Edit App</h3>
                     <form id="appForm" onsubmit="handleAppSubmit(event)">
                         <input type="hidden" id="editAppId">
-                        <div class="mb-3"><label class="text-xs text-gray-400 block mb-1">Name</label><input type="text" id="appName" class="w-full p-2 rounded" required></div>
+                        
                         <div class="mb-3">
-                            <label class="text-xs text-gray-400 block mb-1">Status</label>
+                            <label class="text-xs text-gray-400 block mb-1">Name</label>
+                            <input type="text" id="appName" class="w-full p-2 rounded" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="text-xs text-gray-400 block mb-1">Status Type</label>
                             <select id="launchStatus" class="w-full p-2 rounded" onchange="toggleStatusFields()" required>
-                                <option value="Coming Soon">Coming Soon</option>
-                                <option value="Coming in selected date">Specific Date</option>
-                                <option value="Coming in selected weeks">Weeks</option>
                                 <option value="Launched">Launched</option>
+                                <option value="Coming Soon">Coming Soon (General)</option>
+                                <option value="come_tomorrow">Come Tomorrow</option>
+                                <option value="delay">Delay in Launch</option>
+                                <option value="date">Specific Date</option>
+                                <option value="weeks">In X Weeks</option>
+                                <option value="months">In X Months</option>
+                                <option value="hours">In X Hours</option>
+                                <option value="countdown">Live Countdown (Min:Sec)</option>
                             </select>
                         </div>
-                        <div id="dateField" class="mb-3 hidden"><label class="text-xs text-gray-400 block mb-1">Date</label><input type="date" id="statusDate" class="w-full p-2 rounded"></div>
-                        <div id="weeksField" class="mb-3 hidden"><label class="text-xs text-gray-400 block mb-1">Weeks</label><input type="number" id="statusWeeks" class="w-full p-2 rounded"></div>
-                        <div class="mb-3"><label class="text-xs text-gray-400 block mb-1">Link</label><input type="url" id="appLink" class="w-full p-2 rounded"></div>
+
+                        <!-- Dynamic Inputs -->
+                        <div id="dateField" class="mb-3 hidden">
+                            <label class="text-xs text-gray-400 block mb-1">Select Date</label>
+                            <input type="date" id="statusDate" class="w-full p-2 rounded">
+                        </div>
+                        <div id="weeksField" class="mb-3 hidden">
+                            <label class="text-xs text-gray-400 block mb-1">Number of Weeks</label>
+                            <input type="number" id="statusWeeks" class="w-full p-2 rounded" placeholder="e.g. 2">
+                        </div>
+                        <div id="monthsField" class="mb-3 hidden">
+                            <label class="text-xs text-gray-400 block mb-1">Number of Months</label>
+                            <input type="number" id="statusMonths" class="w-full p-2 rounded" placeholder="e.g. 6">
+                        </div>
+                        <div id="hoursField" class="mb-3 hidden">
+                            <label class="text-xs text-gray-400 block mb-1">Number of Hours</label>
+                            <input type="number" id="statusHours" class="w-full p-2 rounded" placeholder="e.g. 12">
+                        </div>
+                        <div id="countdownField" class="mb-3 hidden">
+                            <div class="p-2 bg-gray-800 rounded border border-gray-700 mb-2">
+                                <label class="text-xs text-red-400 block mb-1 font-bold">Auto Launch Settings:</label>
+                                <label class="text-xs text-gray-400 block mb-1">Target Launch Time</label>
+                                <input type="datetime-local" id="statusCountdown" class="w-full p-2 rounded text-black mb-2">
+                                <p class="text-[10px] text-gray-500">Ensure the 'Link' field below is filled. The app will NOT open automatically, but the button will become active.</p>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="text-xs text-gray-400 block mb-1">Link (Launch URL)</label>
+                            <input type="url" id="appLink" class="w-full p-2 rounded" placeholder="https://...">
+                        </div>
+                        
                         <div class="mb-4"><label class="text-xs text-gray-400 block mb-1">Image</label><input type="file" id="appImage" class="w-full text-xs text-gray-400" accept="image/*"></div>
                         <div class="flex gap-2">
                             <button type="submit" id="submitBtn" class="flex-1 bg-white text-black font-bold py-2 rounded hover:bg-gray-200">Save</button>
@@ -721,11 +738,12 @@
         let allSlides = [];
         let isSignupMode = false;
         let slideInterval = null;
+        let countdownInterval = null;
         let currentUserEmail = null;
         let currentAdminChatUser = null;
         const sections = ['home', 'apps', 'about', 'contact', 'login', 'admin', 'profile', 'privacy', 'disclaimer'];
 
-        // 3. INIT
+        // 3. INIT & NAVIGATION
         window.onload = function() {
             const savedSection = localStorage.getItem('apnaAddaCurrentSection') || 'home';
             if(savedSection !== 'admin') navigateTo(savedSection, true); 
@@ -744,30 +762,21 @@
 
             // Desktop Nav
             document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-            // About/Contact/Apps/Home links
             const navLink = document.getElementById(`link-${sectionId}`);
             if (navLink) navLink.classList.add('active');
 
-            // Mobile Bottom Nav Highlights
+            // Mobile Bottom Nav
             document.querySelectorAll('.bottom-nav-item').forEach(i => i.classList.remove('active'));
             if(sectionId === 'home') document.getElementById('bn-home').classList.add('active');
             else if(sectionId === 'apps') document.getElementById('bn-apps').classList.add('active');
-            // Profile covers Profile, Login, Admin, and the accordions (About/Contact/Privacy/Disclaimer on mobile)
             else if(['profile', 'login', 'admin', 'about', 'contact', 'privacy', 'disclaimer'].includes(sectionId)) {
                 document.getElementById('bn-profile').classList.add('active');
             }
 
-            // RESPONSIVE LOGIC:
-            // If user is on Mobile (width < 768) and tries to go to 'about', 'contact', 'privacy', or 'disclaimer',
-            // we should actually show the 'profile' section because that's where these live in accordions on mobile.
             if(window.innerWidth < 768 && ['about', 'contact', 'privacy', 'disclaimer'].includes(sectionId)) {
                 document.getElementById('section-profile').classList.remove('hidden-section');
-                // Optional: Auto-open the accordion. 
-                // Reset accordions first
                 document.querySelectorAll('.accordion-content').forEach(c => { c.style.maxHeight = '0'; });
                 document.querySelectorAll('.accordion-btn').forEach(b => { b.classList.remove('active'); });
-                
-                // Open specific
                 const accBtn = document.querySelector(`button[onclick="toggleAccordion('acc-${sectionId}', this)"]`);
                 const accContent = document.getElementById(`acc-${sectionId}`);
                 if(accBtn && accContent) {
@@ -775,11 +784,9 @@
                     accContent.style.maxHeight = accContent.scrollHeight + "px";
                 }
             } else {
-                // Desktop or standard sections
                 const target = document.getElementById(`section-${sectionId}`);
                 if(target) target.classList.remove('hidden-section');
             }
-
             window.scrollTo(0, 0);
         }
 
@@ -790,24 +797,59 @@
         function toggleAccordion(id, btn) {
             const content = document.getElementById(id);
             const isActive = btn.classList.contains('active');
-            
-            // Close all others
             document.querySelectorAll('.accordion-content').forEach(c => { c.style.maxHeight = '0'; });
             document.querySelectorAll('.accordion-btn').forEach(b => { b.classList.remove('active'); });
-
             if (!isActive) {
                 btn.classList.add('active');
                 content.style.maxHeight = content.scrollHeight + "px";
             }
         }
 
-        // 4. AUTH & CHAT INIT
+        // ============================================
+        // CUSTOM ALERTS (SWEETALERT2 STYLING)
+        // ============================================
+        
+        // 1. Toast for Success (Add/Edit/Upload)
+        const showToast = (title, icon = 'success') => {
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: icon,
+                title: title,
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                background: '#1a1a1a',
+                color: '#fff',
+                iconColor: '#E50914'
+            });
+        };
+
+        // 2. Custom Confirm Bar (Delete/Logout)
+        const showConfirm = (title, text, confirmBtnText = 'Yes, do it!') => {
+            return Swal.fire({
+                title: title,
+                text: text,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#E50914',
+                cancelButtonColor: '#333',
+                confirmButtonText: confirmBtnText,
+                background: '#141414',
+                color: '#fff',
+                iconColor: '#E50914'
+            });
+        };
+
+
+        // ============================================
+        // AUTH LOGIC
+        // ============================================
+
         auth.onAuthStateChanged((user) => {
             const navLoginBtn = document.getElementById('navLoginBtn');
             const navLogoutBtn = document.getElementById('navLogoutBtn');
             const navDashBtn = document.getElementById('navDashboardBtn');
-            
-            // Mobile Specifics
             const mobileHeaderLoginBtn = document.getElementById('mobileHeaderLoginBtn');
             const profileLoggedOut = document.getElementById('profileLoggedOut');
             const profileLoggedIn = document.getElementById('profileLoggedIn');
@@ -816,23 +858,16 @@
 
             if (user) {
                 currentUserEmail = user.email;
-                // Desktop
                 navLoginBtn.classList.add('hidden');
                 navLogoutBtn.classList.remove('hidden');
-                
-                // Mobile Header (Hide Login Btn)
                 mobileHeaderLoginBtn.classList.add('hidden');
-
-                // Profile Section
                 profileLoggedOut.classList.add('hidden');
                 profileLoggedIn.classList.remove('hidden');
                 profileEmail.innerText = user.email.split('@')[0];
-
                 initUserChat(user.email);
-
                 if (user.email === ADMIN_EMAIL) {
                     navDashBtn.classList.remove('hidden');
-                    profileAdminBtn.classList.remove('hidden'); // Mobile Profile
+                    profileAdminBtn.classList.remove('hidden');
                     fetchSupportChats(); 
                 } else {
                     navDashBtn.classList.add('hidden');
@@ -840,19 +875,13 @@
                 }
             } else {
                 currentUserEmail = null;
-                // Desktop
                 navLoginBtn.classList.remove('hidden');
                 navLogoutBtn.classList.add('hidden');
                 navDashBtn.classList.add('hidden');
-
-                // Mobile Header (Show Login Btn)
                 mobileHeaderLoginBtn.classList.remove('hidden');
-
-                // Profile Section
                 profileLoggedOut.classList.remove('hidden');
                 profileLoggedIn.classList.add('hidden');
             }
-
             const savedSection = localStorage.getItem('apnaAddaCurrentSection');
             if (user && savedSection === 'login') navigateTo(user.email === ADMIN_EMAIL ? 'admin' : 'home');
             if (!user && savedSection === 'admin') navigateTo('login');
@@ -890,12 +919,16 @@
         }
 
         function handleLogout() {
-            Swal.fire({title: 'Logout?', icon: 'warning', showCancelButton: true, confirmButtonColor: '#E50914', background: '#111', color: '#fff'})
-            .then((res) => { if(res.isConfirmed) { localStorage.setItem('apnaAddaCurrentSection', 'home'); auth.signOut().then(() => navigateTo('home')); } });
+            showConfirm('Logout?', 'Are you sure you want to log out?').then((result) => {
+                if(result.isConfirmed) {
+                    localStorage.setItem('apnaAddaCurrentSection', 'home'); 
+                    auth.signOut().then(() => navigateTo('home'));
+                }
+            });
         }
 
         // ============================================
-        // CHAT, APPS, SLIDES
+        // CHAT LOGIC
         // ============================================
         function sanitizeEmail(email) { return email.replace(/\./g, ','); }
         function toggleChatWindow() {
@@ -934,7 +967,7 @@
                 if(isFirst) setTimeout(() => { chatRef.child('messages').push({sender:'admin', text:"ONE TEAM MEMBER WILL SHORTLY ASSISTS YOU!", timestamp:firebase.database.ServerValue.TIMESTAMP}); chatRef.update({hasUnreadAdmin:true}); }, 500);
             });
         }
-        // Admin Chat functions
+        // Admin Chat
         function fetchSupportChats() {
             const list = document.getElementById('adminSupportUserList');
             db.ref('support_chats').orderByChild('lastMessageTime').on('value', s => {
@@ -952,18 +985,273 @@
         }
         function sendAdminReply(e){ e.preventDefault(); if(!currentAdminChatUser)return; const i=document.getElementById('adminChatInput'); const t=i.value.trim(); if(!t)return; 
             const r=db.ref(`support_chats/${currentAdminChatUser}`); r.child('messages').push({sender:'admin',text:t,timestamp:firebase.database.ServerValue.TIMESTAMP}); r.update({lastMessageTime:firebase.database.ServerValue.TIMESTAMP,hasUnreadAdmin:true}); i.value=''; }
-        function deleteUserChat(){ if(!currentAdminChatUser)return; Swal.fire({title:'Delete?',icon:'warning',showCancelButton:true,background:'#111',color:'#fff'}).then(r=>{if(r.isConfirmed)db.ref(`support_chats/${currentAdminChatUser}`).remove().then(()=>{document.getElementById('adminChatBody').innerHTML='';currentAdminChatUser=null;document.getElementById('adminChatFooter').classList.add('hidden');});}); }
+        function deleteUserChat(){ if(!currentAdminChatUser)return; showConfirm('Delete Chat?', 'This cannot be undone.').then(r=>{if(r.isConfirmed)db.ref(`support_chats/${currentAdminChatUser}`).remove().then(()=>{document.getElementById('adminChatBody').innerHTML='';currentAdminChatUser=null;document.getElementById('adminChatFooter').classList.add('hidden');});}); }
         
-        // App & Slide Logic
+        // ============================================
+        // APP LOGIC (ADMIN + USER)
+        // ============================================
+
         function fetchApps() { db.ref('apps').on('value', s => { allApps=[]; const d=s.val(); if(d)Object.keys(d).forEach(k=>allApps.push({id:k,...d[k]})); renderPublicGrid(); renderAdminTable(); }); }
-        function renderPublicGrid() { const g1=document.getElementById('homeAppsGrid'); const g2=document.getElementById('appsGrid'); document.getElementById('homeLoader').style.display='none'; g1.innerHTML=''; g2.innerHTML=''; allApps.forEach(a=>{ let c='bg-gray-600',b=a.status,l='#'; if(a.status==='Launched'){c='bg-green-600';l=a.link;} else if(a.status.includes('date')){c='bg-blue-600';b='Coming: '+a.statusDetail;} const h=`<div class="app-card rounded-lg overflow-hidden flex flex-col h-full relative"><div class="relative">${a.image?`<img src="${a.image}" class="w-full aspect-video object-cover">`:`<div class="w-full aspect-video bg-gray-800 flex items-center justify-center text-red-600 font-bold">ADDA</div>`}<span class="absolute top-2 right-2 ${c} text-white text-[10px] px-2 py-1 rounded">${b}</span></div><div class="p-4 bg-gray-900 flex flex-col flex-grow"><h3 class="font-bold text-white mb-4">${a.name}</h3><a href="${l}" class="mt-auto block text-center ${a.status==='Launched'?'bg-red-600 text-white':'bg-gray-800 text-gray-500'} font-bold py-2 rounded text-sm">${a.status==='Launched'?'OPEN':'WAIT'}</a></div></div>`; g1.innerHTML+=h; g2.innerHTML+=h; }); }
-        function fetchSlides() { db.ref('slides').on('value', s => { allSlides=[]; const d=s.val(); if(d)Object.keys(d).forEach(k=>allSlides.push({id:k,image:d[k].image})); const c=document.getElementById('heroSlideshow'); c.innerHTML=''; const l=document.getElementById('adminSlidesList'); l.innerHTML=''; allSlides.forEach((x,i)=>{ const m=document.createElement('img'); m.src=x.image; m.className='slide-image'+(i===0?' active':''); c.appendChild(m); l.innerHTML+=`<div class="flex justify-between bg-black p-2 border border-gray-700 mb-1"><img src="${x.image}" class="h-6 w-10 rounded"><button onclick="db.ref('slides/${x.id}').remove()" class="text-red-500 text-xs">DEL</button></div>`; }); if(slideInterval)clearInterval(slideInterval); let idx=0; const im=document.querySelectorAll('.slide-image'); slideInterval=setInterval(()=>{if(im.length){im[idx].classList.remove('active');idx=(idx+1)%im.length;im[idx].classList.add('active');}},5000); }); }
-        function toggleStatusFields() { const v=document.getElementById('launchStatus').value; document.getElementById('dateField').classList.toggle('hidden',!v.includes('date')); document.getElementById('weeksField').classList.toggle('hidden',!v.includes('weeks')); }
-        async function handleAppSubmit(e){ e.preventDefault(); const id=document.getElementById('editAppId').value; const f=document.getElementById('appImage').files[0]; let i=null; if(f)i=await new Promise(r=>{const d=new FileReader();d.onload=()=>r(d.result);d.readAsDataURL(f);}); else if(id){const o=allApps.find(x=>x.id===id);if(o)i=o.image;} const p={name:document.getElementById('appName').value,status:document.getElementById('launchStatus').value,statusDetail:document.getElementById('statusDate').value||document.getElementById('statusWeeks').value,link:document.getElementById('appLink').value,image:i||''}; if(id)db.ref('apps/'+id).update(p);else db.ref('apps').push(p); resetForm(); Swal.fire({icon:'success',title:'Saved',background:'#111',color:'#fff',timer:1000,showConfirmButton:false}); }
-        function resetForm(){document.getElementById('appForm').reset();document.getElementById('editAppId').value='';toggleStatusFields();}
-        async function uploadSlide(){const f=document.getElementById('slideUploadInput').files[0]; if(f){const i=await new Promise(r=>{const d=new FileReader();d.onload=()=>r(d.result);d.readAsDataURL(f);}); db.ref('slides').push({image:i});}}
-        function renderAdminTable(){const t=document.getElementById('adminAppsTable');t.innerHTML='';allApps.forEach(a=>{t.innerHTML+=`<tr class="border-b border-gray-800"><td class="p-3 text-white">${a.name}</td><td class="p-3 text-xs text-gray-400">${a.status}</td><td class="p-3 text-right"><button onclick="editApp('${a.id}')" class="text-blue-400 mr-2"><i class="fas fa-edit"></i></button><button onclick="db.ref('apps/${a.id}').remove()" class="text-red-500"><i class="fas fa-trash"></i></button></td></tr>`;});}
-        function editApp(id){const a=allApps.find(x=>x.id===id);if(!a)return;document.getElementById('editAppId').value=a.id;document.getElementById('appName').value=a.name;document.getElementById('launchStatus').value=a.status;document.getElementById('appLink').value=a.link||'';toggleStatusFields();if(a.status.includes('date'))document.getElementById('statusDate').value=a.statusDetail;if(a.status.includes('weeks'))document.getElementById('statusWeeks').value=a.statusDetail;}
+
+        function renderPublicGrid() {
+            const g1 = document.getElementById('homeAppsGrid');
+            const g2 = document.getElementById('appsGrid');
+            document.getElementById('homeLoader').style.display = 'none';
+            g1.innerHTML = '';
+            g2.innerHTML = '';
+
+            // Stop existing intervals
+            if(countdownInterval) clearInterval(countdownInterval);
+
+            allApps.forEach(a => {
+                let badgeColor = 'bg-gray-600';
+                let badgeText = '';
+                let btnText = 'WAIT';
+                let btnClass = 'bg-gray-800 text-gray-500 action-btn';
+                let link = '#';
+                let isClickable = false;
+
+                // --- STATUS LOGIC ---
+                if (a.status === 'Launched') {
+                    badgeColor = 'bg-green-600';
+                    badgeText = 'LAUNCHED';
+                    btnText = 'OPEN';
+                    btnClass = 'bg-red-600 text-white action-btn';
+                    link = a.link;
+                    isClickable = true;
+                } else if (a.status === 'Coming Soon') {
+                    badgeColor = 'bg-blue-600';
+                    badgeText = 'COMING SOON';
+                } else if (a.status === 'come_tomorrow') {
+                    badgeColor = 'bg-blue-500';
+                    badgeText = 'COME TOMORROW';
+                } else if (a.status === 'delay') {
+                    badgeColor = 'bg-yellow-600';
+                    badgeText = 'DELAY IN LAUNCH';
+                } else if (a.status === 'date') {
+                    badgeColor = 'bg-blue-600';
+                    badgeText = `COMING ON: ${a.statusDetail}`; 
+                } else if (a.status === 'weeks') {
+                    badgeColor = 'bg-purple-600';
+                    badgeText = `COMING IN ${a.statusDetail} WEEKS`;
+                } else if (a.status === 'months') {
+                    badgeColor = 'bg-indigo-600';
+                    badgeText = `COMING IN ${a.statusDetail} MONTHS`;
+                } else if (a.status === 'hours') {
+                    badgeColor = 'bg-orange-500';
+                    badgeText = `COMING IN ${a.statusDetail} HOURS`;
+                } else if (a.status === 'countdown') {
+                    // Pass the Link data to the span so the JS timer can grab it later
+                    badgeColor = 'bg-red-600 animate-pulse badge-container';
+                    badgeText = `LIVE: <span class="countdown-timer" data-target="${a.statusDetail}" data-link="${a.link || '#'}" data-id="${a.id}">...</span>`;
+                }
+
+                const html = `
+                <div class="app-card rounded-lg overflow-hidden flex flex-col h-full relative" id="card-${a.id}">
+                    <div class="relative">
+                        ${a.image ? `<img src="${a.image}" class="w-full aspect-video object-cover">` : `<div class="w-full aspect-video bg-gray-800 flex items-center justify-center text-red-600 font-bold">ADDA</div>`}
+                        <span class="absolute top-2 right-2 ${badgeColor} text-white text-[11px] font-black tracking-wider px-2 py-1 rounded shadow-md border border-white/20 badge-text">
+                            ${badgeText}
+                        </span>
+                    </div>
+                    <div class="p-4 bg-gray-900 flex flex-col flex-grow">
+                        <h3 class="font-bold text-white mb-4 text-lg">${a.name}</h3>
+                        <a href="${link}" ${!isClickable ? 'onclick="return false;"' : ''} class="mt-auto block text-center ${btnClass} font-bold py-2 rounded text-sm transition hover:scale-105">
+                            ${btnText}
+                        </a>
+                    </div>
+                </div>`;
+
+                g1.innerHTML += html;
+                g2.innerHTML += html;
+            });
+
+            startCountdownTimers();
+        }
+
+        function startCountdownTimers() {
+            const updateTimers = () => {
+                const timers = document.querySelectorAll('.countdown-timer');
+                timers.forEach(timer => {
+                    const targetStr = timer.getAttribute('data-target');
+                    const launchLink = timer.getAttribute('data-link');
+                    const appId = timer.getAttribute('data-id');
+                    
+                    if (!targetStr) return;
+                    
+                    const targetDate = new Date(targetStr).getTime();
+                    const now = new Date().getTime();
+                    const distance = targetDate - now;
+
+                    // --- TIMER FINISHED LOGIC ---
+                    if (distance < 0) {
+                        // 1. Update text to LAUNCHED
+                        timer.innerHTML = "LAUNCHED";
+                        
+                        // 2. Update Badge Styles (Remove Pulse, Change Color)
+                        const badgeContainer = timer.closest('.badge-container');
+                        if (badgeContainer) {
+                            badgeContainer.classList.remove('bg-red-600', 'animate-pulse');
+                            badgeContainer.classList.add('bg-green-600');
+                            badgeContainer.innerHTML = "LAUNCHED"; // Replaces span
+                        }
+
+                        // 3. Update the Button to "OPEN" and make it clickable
+                        const cards = document.querySelectorAll(`#card-${appId}`);
+                        cards.forEach(card => {
+                            const btn = card.querySelector('.action-btn');
+                            if (btn && btn.innerText !== 'OPEN') {
+                                btn.innerText = "OPEN";
+                                btn.classList.remove('bg-gray-800', 'text-gray-500');
+                                btn.classList.add('bg-red-600', 'text-white');
+                                btn.href = launchLink;
+                                btn.onclick = null; // Enable click
+                                // NOTE: Removed auto-launch logic here as requested
+                            }
+                        });
+                        return;
+                    }
+
+                    // Calculation
+                    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                    let display = `${minutes}m ${seconds}s`;
+                    if (hours > 0) display = `${hours}h ${display}`;
+                    if (days > 0) display = `${days}d ${display}`;
+                    timer.innerHTML = display;
+                });
+            };
+            updateTimers();
+            countdownInterval = setInterval(updateTimers, 1000);
+        }
+
+        function toggleStatusFields() {
+            const v = document.getElementById('launchStatus').value;
+            // Hide all first
+            ['dateField', 'weeksField', 'monthsField', 'hoursField', 'countdownField'].forEach(id => {
+                document.getElementById(id).classList.add('hidden');
+            });
+            // Show specific
+            if (v === 'date') document.getElementById('dateField').classList.remove('hidden');
+            if (v === 'weeks') document.getElementById('weeksField').classList.remove('hidden');
+            if (v === 'months') document.getElementById('monthsField').classList.remove('hidden');
+            if (v === 'hours') document.getElementById('hoursField').classList.remove('hidden');
+            if (v === 'countdown') document.getElementById('countdownField').classList.remove('hidden');
+        }
+
+        async function handleAppSubmit(e) {
+            e.preventDefault();
+            const id = document.getElementById('editAppId').value;
+            const f = document.getElementById('appImage').files[0];
+            let i = null;
+            if (f) {
+                i = await new Promise(r => {
+                    const d = new FileReader();
+                    d.onload = () => r(d.result);
+                    d.readAsDataURL(f);
+                });
+            } else if (id) {
+                const o = allApps.find(x => x.id === id);
+                if (o) i = o.image;
+            }
+
+            const statusType = document.getElementById('launchStatus').value;
+            let detail = '';
+            if (statusType === 'date') detail = document.getElementById('statusDate').value;
+            else if (statusType === 'weeks') detail = document.getElementById('statusWeeks').value;
+            else if (statusType === 'months') detail = document.getElementById('statusMonths').value;
+            else if (statusType === 'hours') detail = document.getElementById('statusHours').value;
+            else if (statusType === 'countdown') detail = document.getElementById('statusCountdown').value;
+
+            const p = {
+                name: document.getElementById('appName').value,
+                status: statusType, 
+                statusDetail: detail,
+                link: document.getElementById('appLink').value,
+                image: i || ''
+            };
+
+            if (id) {
+                db.ref('apps/' + id).update(p);
+                showToast('App updated successfully!');
+            } else {
+                db.ref('apps').push(p);
+                showToast('App added successfully!');
+            }
+
+            resetForm();
+        }
+
+        function deleteApp(id) {
+            showConfirm('Delete App?', 'This will permanently remove the app from the database.').then((result) => {
+                if (result.isConfirmed) {
+                    db.ref('apps/' + id).remove();
+                    showToast('App deleted.', 'info');
+                }
+            });
+        }
+
+        function editApp(id) {
+            const a = allApps.find(x => x.id === id);
+            if (!a) return;
+            document.getElementById('editAppId').value = a.id;
+            document.getElementById('appName').value = a.name;
+            document.getElementById('launchStatus').value = a.status;
+            document.getElementById('appLink').value = a.link || '';
+            toggleStatusFields();
+            
+            if (a.status === 'date') document.getElementById('statusDate').value = a.statusDetail;
+            if (a.status === 'weeks') document.getElementById('statusWeeks').value = a.statusDetail;
+            if (a.status === 'months') document.getElementById('statusMonths').value = a.statusDetail;
+            if (a.status === 'hours') document.getElementById('statusHours').value = a.statusDetail;
+            if (a.status === 'countdown') document.getElementById('statusCountdown').value = a.statusDetail;
+            
+            showToast('Editing App: ' + a.name, 'info');
+        }
+
+        function resetForm(){
+            document.getElementById('appForm').reset();
+            document.getElementById('editAppId').value='';
+            toggleStatusFields();
+        }
+
+        function fetchSlides() { db.ref('slides').on('value', s => { allSlides=[]; const d=s.val(); if(d)Object.keys(d).forEach(k=>allSlides.push({id:k,image:d[k].image})); const c=document.getElementById('heroSlideshow'); c.innerHTML=''; const l=document.getElementById('adminSlidesList'); l.innerHTML=''; allSlides.forEach((x,i)=>{ const m=document.createElement('img'); m.src=x.image; m.className='slide-image'+(i===0?' active':''); c.appendChild(m); l.innerHTML+=`<div class="flex justify-between bg-black p-2 border border-gray-700 mb-1"><img src="${x.image}" class="h-6 w-10 rounded"><button onclick="deleteSlide('${x.id}')" class="text-red-500 text-xs">DEL</button></div>`; }); if(slideInterval)clearInterval(slideInterval); let idx=0; const im=document.querySelectorAll('.slide-image'); slideInterval=setInterval(()=>{if(im.length){im[idx].classList.remove('active');idx=(idx+1)%im.length;im[idx].classList.add('active');}},5000); }); }
+        
+        async function uploadSlide(){
+            const f=document.getElementById('slideUploadInput').files[0]; 
+            if(f){
+                const i=await new Promise(r=>{const d=new FileReader();d.onload=()=>r(d.result);d.readAsDataURL(f);}); 
+                db.ref('slides').push({image:i});
+                showToast('Slide uploaded successfully!');
+                document.getElementById('slideUploadInput').value = '';
+            }
+        }
+
+        function deleteSlide(id) {
+            showConfirm('Delete Slide?', 'Remove this image from slideshow?').then((result) => {
+                if (result.isConfirmed) {
+                    db.ref('slides/' + id).remove();
+                    showToast('Slide deleted', 'info');
+                }
+            });
+        }
+
+        function renderAdminTable(){
+            const t=document.getElementById('adminAppsTable');t.innerHTML='';
+            allApps.forEach(a=>{
+                t.innerHTML+=`<tr class="border-b border-gray-800">
+                    <td class="p-3 text-white">${a.name}</td>
+                    <td class="p-3 text-xs text-gray-400">${a.status} (${a.statusDetail||''})</td>
+                    <td class="p-3 text-right">
+                        <button onclick="editApp('${a.id}')" class="text-blue-400 mr-2"><i class="fas fa-edit"></i></button>
+                        <button onclick="deleteApp('${a.id}')" class="text-red-500"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tr>`;
+            });
+        }
     </script>
 </body>
-</html>
+            </html>
