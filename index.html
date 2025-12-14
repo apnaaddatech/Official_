@@ -588,7 +588,8 @@
                         </div>
                         <div id="hoursField" class="mb-3 hidden">
                             <label class="text-xs text-gray-400 block mb-1">Number of Hours</label>
-                            <input type="number" id="statusHours" class="w-full p-2 rounded" placeholder="e.g. 12">
+                            <input type="number" id="statusHours" class="w-full p-2 rounded" placeholder="e.g. 17">
+                            <p class="text-[10px] text-gray-500 mt-1">This will create a countdown starting from now.</p>
                         </div>
                         <div id="countdownField" class="mb-3 hidden">
                             <div class="p-2 bg-gray-800 rounded border border-gray-700 mb-2">
@@ -1038,14 +1039,15 @@
                     badgeColor = 'bg-indigo-600';
                     badgeText = `COMING IN ${a.statusDetail} MONTHS`;
                 } else if (a.status === 'hours') {
-                    badgeColor = 'bg-orange-500';
-                    badgeText = `COMING IN ${a.statusDetail} HOURS`;
+                    // MODIFIED: Treat 'hours' as a dynamic countdown based on saved timestamp
+                    badgeColor = 'bg-orange-500 animate-pulse badge-container';
+                    badgeText = `LIVE: <span class="countdown-timer" data-target="${a.statusDetail}" data-link="${a.link || '#'}" data-id="${a.id}">...</span>`;
                 } else if (a.status === 'countdown') {
-                    // Pass the Link data to the span so the JS timer can grab it later
                     badgeColor = 'bg-red-600 animate-pulse badge-container';
                     badgeText = `LIVE: <span class="countdown-timer" data-target="${a.statusDetail}" data-link="${a.link || '#'}" data-id="${a.id}">...</span>`;
                 }
 
+                // MODIFIED: Added target="_blank"
                 const html = `
                 <div class="app-card rounded-lg overflow-hidden flex flex-col h-full relative" id="card-${a.id}">
                     <div class="relative">
@@ -1056,7 +1058,7 @@
                     </div>
                     <div class="p-4 bg-gray-900 flex flex-col flex-grow">
                         <h3 class="font-bold text-white mb-4 text-lg">${a.name}</h3>
-                        <a href="${link}" ${!isClickable ? 'onclick="return false;"' : ''} class="mt-auto block text-center ${btnClass} font-bold py-2 rounded text-sm transition hover:scale-105">
+                        <a href="${link}" target="_blank" ${!isClickable ? 'onclick="return false;"' : ''} class="mt-auto block text-center ${btnClass} font-bold py-2 rounded text-sm transition hover:scale-105">
                             ${btnText}
                         </a>
                     </div>
@@ -1091,7 +1093,7 @@
                         // 2. Update Badge Styles (Remove Pulse, Change Color)
                         const badgeContainer = timer.closest('.badge-container');
                         if (badgeContainer) {
-                            badgeContainer.classList.remove('bg-red-600', 'animate-pulse');
+                            badgeContainer.classList.remove('bg-red-600', 'bg-orange-500', 'animate-pulse');
                             badgeContainer.classList.add('bg-green-600');
                             badgeContainer.innerHTML = "LAUNCHED"; // Replaces span
                         }
@@ -1105,8 +1107,8 @@
                                 btn.classList.remove('bg-gray-800', 'text-gray-500');
                                 btn.classList.add('bg-red-600', 'text-white');
                                 btn.href = launchLink;
+                                btn.setAttribute('target', '_blank'); // Ensure target blank is set
                                 btn.onclick = null; // Enable click
-                                // NOTE: Removed auto-launch logic here as requested
                             }
                         });
                         return;
@@ -1160,11 +1162,25 @@
 
             const statusType = document.getElementById('launchStatus').value;
             let detail = '';
+            
+            // MODIFIED: Logic to handle 'hours' as a dynamic calculation
             if (statusType === 'date') detail = document.getElementById('statusDate').value;
             else if (statusType === 'weeks') detail = document.getElementById('statusWeeks').value;
             else if (statusType === 'months') detail = document.getElementById('statusMonths').value;
-            else if (statusType === 'hours') detail = document.getElementById('statusHours').value;
+            else if (statusType === 'hours') {
+                // Calculate future date based on hours input
+                const h = parseFloat(document.getElementById('statusHours').value);
+                if (!isNaN(h)) {
+                    const target = new Date(Date.now() + h * 60 * 60 * 1000);
+                    detail = target.toISOString(); // Save as full timestamp
+                }
+            }
             else if (statusType === 'countdown') detail = document.getElementById('statusCountdown').value;
+
+            // Only update detail inside this block if it's not hours (hours is handled specially above)
+            if (statusType !== 'hours' && statusType === 'hours_old') {
+                 detail = document.getElementById('statusHours').value; // legacy fallback
+            }
 
             const p = {
                 name: document.getElementById('appName').value,
@@ -1206,7 +1222,16 @@
             if (a.status === 'date') document.getElementById('statusDate').value = a.statusDetail;
             if (a.status === 'weeks') document.getElementById('statusWeeks').value = a.statusDetail;
             if (a.status === 'months') document.getElementById('statusMonths').value = a.statusDetail;
-            if (a.status === 'hours') document.getElementById('statusHours').value = a.statusDetail;
+            
+            // MODIFIED: Reverse calculate remaining hours for the Edit form
+            if (a.status === 'hours') {
+                const target = new Date(a.statusDetail).getTime();
+                const now = new Date().getTime();
+                let remainingHours = (target - now) / (1000 * 60 * 60);
+                if(remainingHours < 0) remainingHours = 0;
+                document.getElementById('statusHours').value = remainingHours.toFixed(2);
+            }
+            
             if (a.status === 'countdown') document.getElementById('statusCountdown').value = a.statusDetail;
             
             showToast('Editing App: ' + a.name, 'info');
@@ -1244,7 +1269,7 @@
             allApps.forEach(a=>{
                 t.innerHTML+=`<tr class="border-b border-gray-800">
                     <td class="p-3 text-white">${a.name}</td>
-                    <td class="p-3 text-xs text-gray-400">${a.status} (${a.statusDetail||''})</td>
+                    <td class="p-3 text-xs text-gray-400">${a.status}</td>
                     <td class="p-3 text-right">
                         <button onclick="editApp('${a.id}')" class="text-blue-400 mr-2"><i class="fas fa-edit"></i></button>
                         <button onclick="deleteApp('${a.id}')" class="text-red-500"><i class="fas fa-trash"></i></button>
@@ -1254,4 +1279,4 @@
         }
     </script>
 </body>
-            </html>
+    </html>
