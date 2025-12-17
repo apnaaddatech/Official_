@@ -115,18 +115,27 @@
             box-shadow: 0 5px 20px rgba(229, 9, 20, 0.3);
         }
 
-        /* Slideshow Styles */
+        /* Slideshow Styles - FIX FOR MOBILE */
         .slide-image {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: cover; /* Default for desktop */
             opacity: 0;
             transition: opacity 1s ease-in-out;
             z-index: 0;
         }
+        
+        /* Mobile Specific Slideshow Fix */
+        @media (max-width: 768px) {
+            .slide-image {
+                object-fit: contain; /* Shows full image on mobile */
+                background-color: #000; /* Black bars if ratios differ */
+            }
+        }
+
         .slide-image.active {
             opacity: 1;
         }
@@ -137,8 +146,9 @@
             width: 100%;
             height: 100%;
             background: rgba(0,0,0,0.7);
-            background: linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.8) 100%);
+            background: linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.8) 100%);
             z-index: 1;
+            pointer-events: none; /* Allows clicking through overlay */
         }
 
         /* Utility */
@@ -335,18 +345,18 @@
 
         <!-- 1. HOME SECTION -->
         <div id="section-home" class="animate-fade-in">
-            <!-- HERO WITH SLIDESHOW -->
-            <div class="relative w-full rounded-2xl overflow-hidden mb-8 border border-gray-800 h-[50vh] md:h-auto">
+            <!-- HERO WITH SLIDESHOW (Fixed Aspect Ratio for Mobile) -->
+            <div class="relative w-full rounded-2xl overflow-hidden mb-8 border border-gray-800 aspect-video md:aspect-auto md:h-[60vh]">
                 <div id="heroSlideshow" class="absolute inset-0 w-full h-full bg-gray-900"></div>
                 <div class="hero-overlay"></div>
-                <div class="relative z-10 flex flex-col items-center justify-center h-full py-20 md:py-32 text-center px-4">
+                <div class="relative z-10 flex flex-col items-center justify-center h-full py-10 md:py-32 text-center px-4">
                     <h1 class="text-4xl md:text-6xl lg:text-8xl font-black mb-4 md:mb-6 text-white tracking-tighter drop-shadow-2xl">
                         APNA <span class="text-red-600">ADDA</span>
                     </h1>
                     <p class="text-lg md:text-xl lg:text-2xl text-gray-200 font-light tracking-wide max-w-2xl mx-auto mb-8 md:mb-10 drop-shadow-md">
                         Technology for Everyday Growth.
                     </p>
-                    <button onclick="scrollToHomeApps()" class="px-6 py-3 md:px-8 md:py-4 bg-red-600/20 backdrop-blur-md border-2 border-red-600 text-white font-bold rounded-full hover:bg-red-600 transition transform hover:scale-105 shadow-lg text-sm md:text-base">
+                    <button onclick="scrollToHomeApps()" class="px-6 py-3 md:px-8 md:py-4 bg-red-600/20 backdrop-blur-md border-2 border-red-600 text-white font-bold rounded-full hover:bg-red-600 transition transform hover:scale-105 shadow-lg text-sm md:text-base cursor-pointer pointer-events-auto">
                         EXPLORE APPS
                     </button>
                 </div>
@@ -605,7 +615,7 @@
                             <input type="url" id="appLink" class="w-full p-2 rounded" placeholder="https://...">
                         </div>
                         
-                        <div class="mb-4"><label class="text-xs text-gray-400 block mb-1">Image</label><input type="file" id="appImage" class="w-full text-xs text-gray-400" accept="image/*"></div>
+                        <div class="mb-4"><label class="text-xs text-gray-400 block mb-1">Image (Auto-Resized)</label><input type="file" id="appImage" class="w-full text-xs text-gray-400" accept="image/*"></div>
                         <div class="flex gap-2">
                             <button type="submit" id="submitBtn" class="flex-1 bg-white text-black font-bold py-2 rounded hover:bg-gray-200">Save</button>
                             <button type="button" onclick="resetForm()" class="px-3 border border-gray-600 rounded text-white">Reset</button>
@@ -807,10 +817,9 @@
         }
 
         // ============================================
-        // CUSTOM ALERTS (SWEETALERT2 STYLING)
+        // CUSTOM ALERTS & HELPERS
         // ============================================
         
-        // 1. Toast for Success (Add/Edit/Upload)
         const showToast = (title, icon = 'success') => {
             Swal.fire({
                 toast: true,
@@ -826,7 +835,6 @@
             });
         };
 
-        // 2. Custom Confirm Bar (Delete/Logout)
         const showConfirm = (title, text, confirmBtnText = 'Yes, do it!') => {
             return Swal.fire({
                 title: title,
@@ -839,6 +847,48 @@
                 background: '#141414',
                 color: '#fff',
                 iconColor: '#E50914'
+            });
+        };
+
+        // --- NEW IMAGE COMPRESSION LOGIC ---
+        const compressImage = (file) => {
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = (event) => {
+                    const img = new Image();
+                    img.src = event.target.result;
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        let width = img.width;
+                        let height = img.height;
+                        
+                        // Max Dimensions (800px is enough for thumbnails & app)
+                        const MAX_WIDTH = 800;
+                        const MAX_HEIGHT = 800;
+
+                        if (width > height) {
+                            if (width > MAX_WIDTH) {
+                                height *= MAX_WIDTH / width;
+                                width = MAX_WIDTH;
+                            }
+                        } else {
+                            if (height > MAX_HEIGHT) {
+                                width *= MAX_HEIGHT / height;
+                                height = MAX_HEIGHT;
+                            }
+                        }
+
+                        canvas.width = width;
+                        canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+                        
+                        // Compress to JPEG with 70% quality (0.7)
+                        const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+                        resolve(dataUrl);
+                    };
+                };
             });
         };
 
@@ -1039,7 +1089,6 @@
                     badgeColor = 'bg-indigo-600';
                     badgeText = `COMING IN ${a.statusDetail} MONTHS`;
                 } else if (a.status === 'hours') {
-                    // MODIFIED: Treat 'hours' as a dynamic countdown based on saved timestamp
                     badgeColor = 'bg-orange-500 animate-pulse badge-container';
                     badgeText = `LIVE: <span class="countdown-timer" data-target="${a.statusDetail}" data-link="${a.link || '#'}" data-id="${a.id}">...</span>`;
                 } else if (a.status === 'countdown') {
@@ -1047,17 +1096,20 @@
                     badgeText = `LIVE: <span class="countdown-timer" data-target="${a.statusDetail}" data-link="${a.link || '#'}" data-id="${a.id}">...</span>`;
                 }
 
-                // MODIFIED: Added target="_blank"
+                // FIXED: Image Container
                 const html = `
                 <div class="app-card rounded-lg overflow-hidden flex flex-col h-full relative" id="card-${a.id}">
-                    <div class="relative">
-                        ${a.image ? `<img src="${a.image}" class="w-full aspect-video object-cover">` : `<div class="w-full aspect-video bg-gray-800 flex items-center justify-center text-red-600 font-bold">ADDA</div>`}
-                        <span class="absolute top-2 right-2 ${badgeColor} text-white text-[11px] font-black tracking-wider px-2 py-1 rounded shadow-md border border-white/20 badge-text">
+                    <div class="relative w-full h-48 bg-gray-900 border-b border-gray-800">
+                        ${a.image 
+                            ? `<img src="${a.image}" class="w-full h-full object-fill" alt="${a.name}">` 
+                            : `<div class="w-full h-full flex items-center justify-center text-red-600 font-bold text-2xl">ADDA</div>`
+                        }
+                        <span class="absolute top-2 right-2 ${badgeColor} text-white text-[10px] font-black tracking-wider px-2 py-1 rounded shadow-md border border-white/20 badge-text">
                             ${badgeText}
                         </span>
                     </div>
                     <div class="p-4 bg-gray-900 flex flex-col flex-grow">
-                        <h3 class="font-bold text-white mb-4 text-lg">${a.name}</h3>
+                        <h3 class="font-bold text-white mb-4 text-lg line-clamp-1">${a.name}</h3>
                         <a href="${link}" target="_blank" ${!isClickable ? 'onclick="return false;"' : ''} class="mt-auto block text-center ${btnClass} font-bold py-2 rounded text-sm transition hover:scale-105">
                             ${btnText}
                         </a>
@@ -1087,18 +1139,13 @@
 
                     // --- TIMER FINISHED LOGIC ---
                     if (distance < 0) {
-                        // 1. Update text to LAUNCHED
                         timer.innerHTML = "LAUNCHED";
-                        
-                        // 2. Update Badge Styles (Remove Pulse, Change Color)
                         const badgeContainer = timer.closest('.badge-container');
                         if (badgeContainer) {
                             badgeContainer.classList.remove('bg-red-600', 'bg-orange-500', 'animate-pulse');
                             badgeContainer.classList.add('bg-green-600');
-                            badgeContainer.innerHTML = "LAUNCHED"; // Replaces span
+                            badgeContainer.innerHTML = "LAUNCHED"; 
                         }
-
-                        // 3. Update the Button to "OPEN" and make it clickable
                         const cards = document.querySelectorAll(`#card-${appId}`);
                         cards.forEach(card => {
                             const btn = card.querySelector('.action-btn');
@@ -1107,14 +1154,12 @@
                                 btn.classList.remove('bg-gray-800', 'text-gray-500');
                                 btn.classList.add('bg-red-600', 'text-white');
                                 btn.href = launchLink;
-                                btn.setAttribute('target', '_blank'); // Ensure target blank is set
-                                btn.onclick = null; // Enable click
+                                btn.setAttribute('target', '_blank'); 
+                                btn.onclick = null;
                             }
                         });
                         return;
                     }
-
-                    // Calculation
                     const days = Math.floor(distance / (1000 * 60 * 60 * 24));
                     const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                     const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
@@ -1132,11 +1177,9 @@
 
         function toggleStatusFields() {
             const v = document.getElementById('launchStatus').value;
-            // Hide all first
             ['dateField', 'weeksField', 'monthsField', 'hoursField', 'countdownField'].forEach(id => {
                 document.getElementById(id).classList.add('hidden');
             });
-            // Show specific
             if (v === 'date') document.getElementById('dateField').classList.remove('hidden');
             if (v === 'weeks') document.getElementById('weeksField').classList.remove('hidden');
             if (v === 'months') document.getElementById('monthsField').classList.remove('hidden');
@@ -1148,13 +1191,17 @@
             e.preventDefault();
             const id = document.getElementById('editAppId').value;
             const f = document.getElementById('appImage').files[0];
+            
+            // --- NEW: AUTO COMPRESS IMAGE ---
             let i = null;
             if (f) {
-                i = await new Promise(r => {
-                    const d = new FileReader();
-                    d.onload = () => r(d.result);
-                    d.readAsDataURL(f);
-                });
+                try {
+                    i = await compressImage(f); // This compresses large files to < 1MB
+                } catch(err) {
+                    console.error("Compression failed", err);
+                    showToast('Image processing failed', 'error');
+                    return;
+                }
             } else if (id) {
                 const o = allApps.find(x => x.id === id);
                 if (o) i = o.image;
@@ -1163,24 +1210,17 @@
             const statusType = document.getElementById('launchStatus').value;
             let detail = '';
             
-            // MODIFIED: Logic to handle 'hours' as a dynamic calculation
             if (statusType === 'date') detail = document.getElementById('statusDate').value;
             else if (statusType === 'weeks') detail = document.getElementById('statusWeeks').value;
             else if (statusType === 'months') detail = document.getElementById('statusMonths').value;
             else if (statusType === 'hours') {
-                // Calculate future date based on hours input
                 const h = parseFloat(document.getElementById('statusHours').value);
                 if (!isNaN(h)) {
                     const target = new Date(Date.now() + h * 60 * 60 * 1000);
-                    detail = target.toISOString(); // Save as full timestamp
+                    detail = target.toISOString(); 
                 }
             }
             else if (statusType === 'countdown') detail = document.getElementById('statusCountdown').value;
-
-            // Only update detail inside this block if it's not hours (hours is handled specially above)
-            if (statusType !== 'hours' && statusType === 'hours_old') {
-                 detail = document.getElementById('statusHours').value; // legacy fallback
-            }
 
             const p = {
                 name: document.getElementById('appName').value,
@@ -1223,7 +1263,6 @@
             if (a.status === 'weeks') document.getElementById('statusWeeks').value = a.statusDetail;
             if (a.status === 'months') document.getElementById('statusMonths').value = a.statusDetail;
             
-            // MODIFIED: Reverse calculate remaining hours for the Edit form
             if (a.status === 'hours') {
                 const target = new Date(a.statusDetail).getTime();
                 const now = new Date().getTime();
@@ -1248,10 +1287,15 @@
         async function uploadSlide(){
             const f=document.getElementById('slideUploadInput').files[0]; 
             if(f){
-                const i=await new Promise(r=>{const d=new FileReader();d.onload=()=>r(d.result);d.readAsDataURL(f);}); 
-                db.ref('slides').push({image:i});
-                showToast('Slide uploaded successfully!');
-                document.getElementById('slideUploadInput').value = '';
+                // --- NEW: AUTO COMPRESS SLIDES TOO ---
+                try {
+                    const i = await compressImage(f);
+                    db.ref('slides').push({image:i});
+                    showToast('Slide uploaded successfully!');
+                    document.getElementById('slideUploadInput').value = '';
+                } catch(e) {
+                    showToast('Slide upload failed', 'error');
+                }
             }
         }
 
@@ -1279,4 +1323,4 @@
         }
     </script>
 </body>
-    </html>
+</html>
