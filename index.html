@@ -528,10 +528,7 @@
         <div id="section-login" class="hidden-section flex justify-center items-center h-full py-10">
             <div class="bg-gray-900 p-8 rounded-lg border border-red-900/30 shadow-2xl w-full max-w-md animate-fade-in mx-2">
                 <h2 class="text-2xl md:text-3xl font-bold text-center mb-2 text-white">Welcome</h2>
-                <div class="flex justify-center gap-8 mb-6 border-b border-gray-800 pb-2">
-                    <div id="tabLogin" class="cursor-pointer text-red-600 font-bold border-b-2 border-red-600 pb-1" onclick="toggleAuthMode('login')">Login</div>
-                    <div id="tabSignup" class="cursor-pointer text-gray-500 pb-1" onclick="toggleAuthMode('signup')">Sign Up</div>
-                </div>
+                <p class="text-gray-400 text-center mb-6 text-sm">Login or create an account automatically.</p>
                 
                 <!-- Google Login Button -->
                 <button onclick="handleGoogleLogin()" class="w-full bg-white text-black font-bold py-3 rounded hover:bg-gray-200 transition flex items-center justify-center gap-3 mb-6">
@@ -547,7 +544,7 @@
                 <form id="authForm" onsubmit="handleAuthSubmit(event)">
                     <div class="mb-4"><label class="block text-gray-400 mb-2 text-sm">Email</label><input type="email" id="authEmail" class="w-full p-3 rounded bg-black border-gray-700 focus:border-red-600 transition" required></div>
                     <div class="mb-6"><label class="block text-gray-400 mb-2 text-sm">Password</label><input type="password" id="authPassword" class="w-full p-3 rounded bg-black border-gray-700 focus:border-red-600 transition" required></div>
-                    <button type="submit" id="authSubmitBtn" class="w-full bg-red-600 text-white font-bold py-3 rounded hover:bg-red-700 transition">LOGIN</button>
+                    <button type="submit" id="authSubmitBtn" class="w-full bg-red-600 text-white font-bold py-3 rounded hover:bg-red-700 transition">CONTINUE</button>
                 </form>
             </div>
         </div>
@@ -582,6 +579,10 @@
                                 <option value="months">In X Months</option>
                                 <option value="hours">In X Hours</option>
                                 <option value="countdown">Live Countdown (Min:Sec)</option>
+                                <!-- NEW STATUS OPTIONS -->
+                                <option value="error">ERROR IN WEBSITE</option>
+                                <option value="emergency">EMERGENCY LAUNCH</option>
+                                <option value="none">No Status Badge</option>
                             </select>
                         </div>
 
@@ -749,7 +750,6 @@
         const ADMIN_EMAIL = "thepremanshu@gmail.com";
         let allApps = [];
         let allSlides = [];
-        let isSignupMode = false;
         let slideInterval = null;
         let countdownInterval = null;
         let currentUserEmail = null;
@@ -940,22 +940,6 @@
             if (!user && savedSection === 'admin') navigateTo('login');
         });
 
-        function toggleAuthMode(mode) {
-            isSignupMode = (mode === 'signup');
-            const loginTab = document.getElementById('tabLogin');
-            const signupTab = document.getElementById('tabSignup');
-            const btn = document.getElementById('authSubmitBtn');
-            if (isSignupMode) {
-                loginTab.classList.replace('text-red-600', 'text-gray-500'); loginTab.classList.remove('font-bold', 'border-b-2');
-                signupTab.classList.replace('text-gray-500', 'text-red-600'); signupTab.classList.add('font-bold', 'border-b-2', 'border-red-600');
-                btn.innerText = "SIGN UP";
-            } else {
-                signupTab.classList.replace('text-red-600', 'text-gray-500'); signupTab.classList.remove('font-bold', 'border-b-2');
-                loginTab.classList.replace('text-gray-500', 'text-red-600'); loginTab.classList.add('font-bold', 'border-b-2', 'border-red-600');
-                btn.innerText = "LOGIN";
-            }
-        }
-
         function handleGoogleLogin() {
             var provider = new firebase.auth.GoogleAuthProvider();
             auth.signInWithPopup(provider).then((result) => {
@@ -966,19 +950,52 @@
             });
         }
 
+        // AUTO-DETECT: LOGIN OR SIGNUP
         function handleAuthSubmit(e) {
             e.preventDefault();
             const email = document.getElementById('authEmail').value;
             const pass = document.getElementById('authPassword').value;
-            if (isSignupMode) {
-                auth.createUserWithEmailAndPassword(email, pass).then(() => { navigateTo('home'); })
-                .catch(err => Swal.fire({icon:'error', title:'Error', text:err.message, background:'#111', color:'#fff'}));
-            } else {
-                auth.signInWithEmailAndPassword(email, pass).then((cred) => {
+            const btn = document.getElementById('authSubmitBtn');
+            const originalText = btn.innerText;
+            
+            btn.innerText = "PROCESSING...";
+            btn.disabled = true;
+
+            // 1. Try to Login
+            auth.signInWithEmailAndPassword(email, pass)
+                .then((cred) => {
+                    // Login Success
                     if(cred.user.email === ADMIN_EMAIL) navigateTo('admin');
                     else navigateTo('home');
-                }).catch(err => Swal.fire({icon:'error', title:'Error', text:err.message, background:'#111', color:'#fff'}));
-            }
+                    btn.innerText = originalText;
+                    btn.disabled = false;
+                })
+                .catch((error) => {
+                    // 2. If user not found, Try to Sign Up
+                    if (error.code === 'auth/user-not-found') {
+                        auth.createUserWithEmailAndPassword(email, pass)
+                            .then((cred) => {
+                                showToast('Account created successfully!');
+                                if(cred.user.email === ADMIN_EMAIL) navigateTo('admin');
+                                else navigateTo('home');
+                                btn.innerText = originalText;
+                                btn.disabled = false;
+                            })
+                            .catch((createErr) => {
+                                Swal.fire({icon:'error', title:'Registration Failed', text:createErr.message, background:'#111', color:'#fff'});
+                                btn.innerText = originalText;
+                                btn.disabled = false;
+                            });
+                    } else if (error.code === 'auth/wrong-password') {
+                        Swal.fire({icon:'error', title:'Incorrect Password', text:'The password you entered is incorrect.', background:'#111', color:'#fff'});
+                        btn.innerText = originalText;
+                        btn.disabled = false;
+                    } else {
+                        Swal.fire({icon:'error', title:'Error', text:error.message, background:'#111', color:'#fff'});
+                        btn.innerText = originalText;
+                        btn.disabled = false;
+                    }
+                });
         }
 
         function handleLogout() {
@@ -1106,6 +1123,26 @@
                 } else if (a.status === 'countdown') {
                     badgeColor = 'bg-red-600 animate-pulse badge-container';
                     badgeText = `LIVE: <span class="countdown-timer" data-target="${a.statusDetail}" data-link="${a.link || '#'}" data-id="${a.id}">...</span>`;
+                } 
+                // --- NEW STATUSES ---
+                else if (a.status === 'error') {
+                    badgeColor = 'bg-red-800';
+                    badgeText = 'WEBSITE ERROR';
+                    btnText = 'WAIT FOR RELAUNCH';
+                    btnClass = 'bg-red-600 text-white action-btn'; // Same style as OPEN
+                    link = '#'; 
+                    isClickable = false;
+                }
+                else if (a.status === 'emergency') {
+                    badgeColor = 'bg-red-600 animate-pulse border-2 border-yellow-400';
+                    badgeText = 'EMERGENCY LAUNCH';
+                    btnText = 'OPEN';
+                    btnClass = 'bg-red-600 text-white action-btn';
+                    link = a.link;
+                    isClickable = true;
+                }
+                else if (a.status === 'none') {
+                    badgeText = ''; // This will trigger hidden check
                 }
 
                 // FIXED: Image Container
@@ -1116,9 +1153,10 @@
                             ? `<img src="${a.image}" class="w-full h-full object-fill" alt="${a.name}">` 
                             : `<div class="w-full h-full flex items-center justify-center text-red-600 font-bold text-2xl">ADDA</div>`
                         }
+                        ${badgeText ? `
                         <span class="absolute top-2 right-2 ${badgeColor} text-white text-[10px] font-black tracking-wider px-2 py-1 rounded shadow-md border border-white/20 badge-text">
                             ${badgeText}
-                        </span>
+                        </span>` : ''}
                     </div>
                     <div class="p-4 bg-gray-900 flex flex-col flex-grow">
                         <h3 class="font-bold text-white mb-4 text-lg line-clamp-1">${a.name}</h3>
@@ -1335,4 +1373,4 @@
         }
     </script>
 </body>
-                            </html>
+</html>
