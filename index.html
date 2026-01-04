@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>APNA ADDA - 2026 Edition</title>
+    <title>APNA ADDA</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -13,9 +13,6 @@
     
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-    <!-- Canvas Confetti (For New Year Celebration) -->
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700;900&display=swap" rel="stylesheet">
@@ -28,8 +25,6 @@
     <style>
         :root {
             --primary-red: #E50914; 
-            --gold-2026: #FFD700;
-            --gold-dark: #B8860B;
             --dark-black: #000000;
             --dark-gray: #141414;
             --light-text: #ffffff;
@@ -65,31 +60,9 @@
             100% { box-shadow: 0 0 5px #E50914; }
         }
 
-        @keyframes goldGlow {
-            0% { box-shadow: 0 0 5px #FFD700; border-color: #FFD700; }
-            50% { box-shadow: 0 0 25px #FFD700, 0 0 15px #FFA500; border-color: #FFF; }
-            100% { box-shadow: 0 0 5px #FFD700; border-color: #FFD700; }
-        }
-
         .glow-btn {
             animation: glow 2s infinite;
             background: linear-gradient(45deg, #E50914, #ff4b1f);
-        }
-
-        /* 2026 Special Classes */
-        .card-2026 {
-            animation: goldGlow 3s infinite;
-            border: 2px solid var(--gold-2026) !important;
-        }
-
-        .text-gold {
-            color: var(--gold-2026);
-            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-        }
-
-        .bg-gold-gradient {
-            background: linear-gradient(45deg, #B8860B, #FFD700, #B8860B);
-            color: black;
         }
 
         /* Navigation Links (Desktop) */
@@ -154,9 +127,10 @@
             transition: opacity 1s ease-in-out;
             z-index: 0;
         }
+        /* UPDATED: Mobile Slide Image Style */
         @media (max-width: 768px) {
             .slide-image {
-                object-fit: cover;
+                object-fit: cover; /* Changed from contain to cover to fill height */
                 background-position: center;
             }
         }
@@ -169,7 +143,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.9) 100%);
+            background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.8) 100%);
             z-index: 1;
             pointer-events: none;
         }
@@ -357,13 +331,13 @@
 </head>
 <body>
 
-    <!-- TOP NAVIGATION -->
+    <!-- TOP NAVIGATION (Unchanged) -->
     <nav class="w-full bg-black/95 backdrop-blur-sm border-b border-gray-900 sticky top-0 z-50">
         <div class="container mx-auto px-4 py-3 md:py-4 flex justify-between items-center">
             
             <!-- LOGO -->
-            <div class="text-2xl font-black tracking-widest cursor-pointer" onclick="navigateTo('home')">
-                <span class="text-white">APNA</span> <span class="text-red-600">ADDA</span>
+            <div class="text-2xl font-black tracking-widest text-red-600 cursor-pointer" onclick="navigateTo('home')">
+                APNA ADDA
             </div>
 
             <!-- DESKTOP MENU -->
@@ -395,35 +369,20 @@
 
         <!-- 1. HOME SECTION -->
         <div id="section-home" class="animate-fade-in">
-            <!-- HERO SECTION CONTAINER -->
+            <!-- UPDATED HERO SECTION CONTAINER FOR MOBILE -->
             <div class="relative w-full rounded-2xl overflow-hidden mb-8 border border-gray-800 h-[80vh] md:h-[60vh]">
                 <div id="heroSlideshow" class="absolute inset-0 w-full h-full bg-gray-900"></div>
                 <div class="hero-overlay"></div>
-                
-                <!-- NEW YEAR 2026 OVERLAY CONTENT -->
                 <div class="relative z-10 flex flex-col items-center justify-center h-full text-center px-4">
-                    
-                    <!-- 2026 Countdown Badge -->
-                    <div class="mb-4 bg-gray-900/80 backdrop-blur border border-gold-200 px-4 py-2 rounded-full flex items-center gap-2">
-                         <span class="text-gold text-xs md:text-sm font-bold tracking-widest">ROAD TO 2026</span>
-                         <span id="hero2026Timer" class="font-mono font-bold text-white text-xs md:text-sm">00d 00h 00m</span>
-                    </div>
-
-                    <h1 class="text-5xl md:text-6xl lg:text-8xl font-black mb-4 text-white tracking-tighter drop-shadow-2xl">
+                    <h1 class="text-5xl md:text-6xl lg:text-8xl font-black mb-6 md:mb-6 text-white tracking-tighter drop-shadow-2xl">
                         APNA <span class="text-red-600">ADDA</span>
                     </h1>
-                    <p class="text-xl md:text-xl lg:text-2xl text-gray-200 font-light tracking-wide max-w-2xl mx-auto mb-8 drop-shadow-md">
-                        Preparing for the Future of Technology.
+                    <p class="text-xl md:text-xl lg:text-2xl text-gray-200 font-light tracking-wide max-w-2xl mx-auto mb-10 md:mb-10 drop-shadow-md">
+                        Technology for Everyday Growth.
                     </p>
-                    
-                    <div class="flex flex-col md:flex-row gap-4">
-                        <button onclick="scrollToHomeApps()" class="px-8 py-3 bg-red-600 border border-red-600 text-white font-bold rounded-full hover:bg-red-700 transition transform hover:scale-105 shadow-lg">
-                            EXPLORE APPS
-                        </button>
-                        <button onclick="fireConfetti()" class="px-8 py-3 bg-gold-gradient border border-yellow-600 text-black font-black rounded-full hover:brightness-110 transition transform hover:scale-105 shadow-lg">
-                            CELEBRATE 2026 🎉
-                        </button>
-                    </div>
+                    <button onclick="scrollToHomeApps()" class="px-8 py-4 md:px-8 md:py-4 bg-red-600/20 backdrop-blur-md border-2 border-red-600 text-white font-bold rounded-full hover:bg-red-600 transition transform hover:scale-105 shadow-lg text-lg md:text-base cursor-pointer pointer-events-auto">
+                        EXPLORE APPS
+                    </button>
                 </div>
             </div>
 
@@ -447,7 +406,7 @@
             <div id="appsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"></div>
         </div>
 
-        <!-- 3. PROFILE SECTION -->
+        <!-- 3. PROFILE SECTION (Restored Original) -->
         <div id="section-profile" class="hidden-section animate-fade-in">
             <div class="max-w-lg mx-auto">
                 <!-- Profile Header / Auth State -->
@@ -479,7 +438,7 @@
                     </div>
                 </div>
 
-                <!-- Accordions -->
+                <!-- Accordions (About/Contact/etc for mobile) -->
                 <div class="space-y-3">
                     <div class="bg-gray-900 border border-gray-800 rounded-lg overflow-hidden">
                         <button class="accordion-btn w-full flex justify-between items-center p-4 text-left font-bold text-gray-300 hover:bg-gray-800 transition" onclick="toggleAccordion('acc-about', this)">
@@ -570,7 +529,7 @@
             </div>
         </div>
 
-        <!-- 8. LOGIN / SIGNUP SECTION -->
+        <!-- 8. LOGIN / SIGNUP SECTION (MODIFIED: SLIDING TABS) -->
         <div id="section-login" class="hidden-section flex justify-center items-center h-full py-10">
             <div class="bg-gray-900 p-8 rounded-lg border border-red-900/30 shadow-2xl w-full max-w-md animate-fade-in mx-2">
                 
@@ -618,7 +577,7 @@
             </div>
             <!-- Admin Content -->
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                 <!-- 1. Add/Edit App Form -->
+                 <!-- 1. Add/Edit App Form (Col 1-3) -->
                  <div class="lg:col-span-3 bg-gray-900 p-6 rounded-lg border border-gray-800 h-fit">
                     <h3 class="text-lg font-bold text-white mb-4">Add / Edit App</h3>
                     <form id="appForm" onsubmit="handleAppSubmit(event)">
@@ -642,9 +601,7 @@
                                 <option value="hours">In X Hours (Countdown)</option>
                                 <option value="countdown">Live Countdown (Min:Sec)</option>
                                 
-                                <!-- NEW 2026 STATUS -->
-                                <option value="new_year_2026">🎉 NEW YEAR 2026 LAUNCH</option>
-
+                                <!-- NEW STATUS OPTIONS -->
                                 <option value="relaunch_date">RELAUNCH SPECIFIC DATE</option>
                                 <option value="relaunch_weeks">RELAUNCH SPECIFIC WEEK</option>
                                 <option value="relaunch_hours">RELAUNCH IN X HOURS (RUNNING)</option>
@@ -694,7 +651,7 @@
                     </form>
                 </div>
 
-                <!-- 2. Slideshow -->
+                <!-- 2. Slideshow (Col 4-6) -->
                 <div class="lg:col-span-3 bg-gray-900 p-6 rounded-lg border border-gray-800 h-fit">
                     <h3 class="text-lg font-bold text-white mb-4">Slideshow</h3>
                     <div class="mb-4">
@@ -704,7 +661,7 @@
                     <div id="adminSlidesList" class="space-y-2 max-h-60 overflow-y-auto"></div>
                 </div>
 
-                <!-- 3. App List -->
+                <!-- 3. App List (Col 7-12) -->
                 <div class="lg:col-span-6 bg-gray-900 rounded-lg border border-gray-800 overflow-hidden h-fit mb-6">
                     <div class="p-4 bg-black border-b border-gray-800"><h3 class="font-bold">App Database</h3></div>
                     <div class="overflow-x-auto max-h-80 overflow-y-auto">
@@ -715,7 +672,7 @@
                     </div>
                 </div>
 
-                <!-- 4. Support -->
+                <!-- 4. Support (Full) -->
                 <div class="lg:col-span-12 bg-gray-900 rounded-lg border border-gray-800 overflow-hidden mt-2">
                     <div class="p-4 bg-black border-b border-gray-800 flex justify-between">
                         <h3 class="font-bold text-white">Support Messages</h3>
@@ -819,7 +776,6 @@
         let allSlides = [];
         let slideInterval = null;
         let countdownInterval = null;
-        let heroTimerInterval = null;
         let currentUserEmail = null;
         let currentAdminChatUser = null;
         const sections = ['home', 'apps', 'about', 'contact', 'login', 'admin', 'profile', 'privacy', 'disclaimer'];
@@ -830,47 +786,7 @@
             if(savedSection !== 'admin') navigateTo(savedSection, true); 
             fetchApps();
             fetchSlides();
-            startHero2026Timer();
         };
-
-        // --- NEW: CONFETTI FUNCTION ---
-        function fireConfetti() {
-            var duration = 3 * 1000;
-            var animationEnd = Date.now() + duration;
-            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 9999 };
-
-            var random = function(min, max) { return Math.random() * (max - min) + min; };
-
-            var interval = setInterval(function() {
-                var timeLeft = animationEnd - Date.now();
-                if (timeLeft <= 0) { return clearInterval(interval); }
-                var particleCount = 50 * (timeLeft / duration);
-                confetti(Object.assign({}, defaults, { particleCount, origin: { x: random(0.1, 0.3), y: Math.random() - 0.2 } }));
-                confetti(Object.assign({}, defaults, { particleCount, origin: { x: random(0.7, 0.9), y: Math.random() - 0.2 } }));
-            }, 250);
-        }
-
-        // --- NEW: HERO 2026 TIMER ---
-        function startHero2026Timer() {
-            const el = document.getElementById('hero2026Timer');
-            const targetDate = new Date("2026-01-01T00:00:00").getTime();
-            
-            heroTimerInterval = setInterval(() => {
-                const now = new Date().getTime();
-                const diff = targetDate - now;
-
-                if (diff < 0) {
-                    el.innerText = "WELCOME 2026!";
-                    return;
-                }
-
-                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                
-                el.innerText = `${days}d ${hours}h ${minutes}m`;
-            }, 1000);
-        }
 
         function navigateTo(sectionId, isInitialLoad = false) {
             if(!isInitialLoad) localStorage.setItem('apnaAddaCurrentSection', sectionId);
@@ -990,7 +906,7 @@
 
 
         // ============================================
-        // AUTH LOGIC
+        // AUTH LOGIC (WITH SLIDING TABS)
         // ============================================
 
         function switchAuthTab(mode) {
@@ -1205,7 +1121,6 @@
                 let btnClass = 'bg-gray-800 text-gray-500 action-btn';
                 let link = '#';
                 let isClickable = false;
-                let extraCardClass = '';
 
                 // --- STATUS LOGIC ---
                 if (a.status === 'Launched') {
@@ -1229,6 +1144,7 @@
                     badgeColor = 'bg-red-600 animate-pulse badge-container';
                     badgeText = `LIVE: <span class="countdown-timer" data-target="${a.statusDetail}" data-link="${a.link || '#'}" data-id="${a.id}" data-type="${a.status}">...</span>`;
                 } 
+                // --- NEW STATUSES ---
                 else if (a.status === 'relaunch_date') {
                     badgeColor = 'bg-pink-700'; badgeText = `RELAUNCH: ${a.statusDetail}`;
                 }
@@ -1243,13 +1159,6 @@
                     badgeColor = 'bg-pink-600 animate-pulse badge-container';
                     badgeText = `RELAUNCH: <span class="countdown-timer" data-target="${a.statusDetail}" data-link="${a.link || '#'}" data-id="${a.id}" data-type="${a.status}">...</span>`;
                 }
-                // --- NEW 2026 STATUS ---
-                else if (a.status === 'new_year_2026') {
-                    badgeColor = 'bg-yellow-500 text-black font-black animate-pulse shadow-lg shadow-yellow-500/50'; 
-                    badgeText = '🚀 2026 SPECIAL';
-                    btnText = 'COMING 2026';
-                    extraCardClass = 'card-2026'; // Gold Border
-                }
                 else if (a.status === 'error') {
                     badgeColor = 'bg-red-800'; badgeText = 'WEBSITE ERROR'; btnText = 'WAIT FOR RELAUNCH'; btnClass = 'bg-red-600 text-white action-btn'; link = '#'; isClickable = false;
                 }
@@ -1262,7 +1171,7 @@
 
                 // FIXED: Image Container
                 const html = `
-                <div class="app-card rounded-lg overflow-hidden flex flex-col h-full relative ${extraCardClass}" id="card-${a.id}">
+                <div class="app-card rounded-lg overflow-hidden flex flex-col h-full relative" id="card-${a.id}">
                     <div class="relative w-full h-48 bg-gray-900 border-b border-gray-800">
                         ${a.image 
                             ? `<img src="${a.image}" class="w-full h-full object-fill" alt="${a.name}">` 
